@@ -64,7 +64,7 @@ const IndexPage = () => {
 
 	const tabs = [
 		{ label: 'Tab 1', sidebar: <SidebarContent1 />, content: <Chart1 /> },
-		{ label: 'Tab 2', sidebar: <SidebarContent2 />, content: <Chart2 /> },
+		{ label: 'Tab 2', sidebar: null, content: <Chart2 /> },
 		{ label: 'Tab 3', sidebar: null, content: <ChartComponent /> }, // 新增的Tab，没有Sidebar
 	];
 

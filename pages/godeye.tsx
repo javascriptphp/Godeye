@@ -58,14 +58,14 @@ const Footer = styled.footer`
   border-top: 1px solid #ddd;
   font-size: 14px;
 `;
-const IndexPage = () => {
+const GodeyeIndexPage = () => {
 	const [activeTab, setActiveTab] = useState(0);
 	const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
 	const tabs = [
-		{ label: 'Tab 1', sidebar: <SidebarContent1 />, content: <Chart1 /> },
-		{ label: 'Tab 2', sidebar: null, content: <Chart2 /> },
-		{ label: 'Tab 3', sidebar: null, content: <ChartComponent /> }, // 新增的Tab，没有Sidebar
+		{ label: 'BTC', sidebar: <SidebarContent1 />, content: <Chart1 /> },
+		{ label: 'ETH', sidebar: null, content: <Chart2 /> },
+		{ label: 'SOL', sidebar: null, content: <ChartComponent /> }, // 新增的Tab，没有Sidebar
 	];
 
 	const toggleSidebar = () => {
@@ -94,9 +94,9 @@ const IndexPage = () => {
 				</MainContent>
 			</MainContentWrapper>
 			<Footer>
-				© 2024 Your Company. All rights reserved.
+				© 2024 Godeye Ltd. All rights reserved.
 			</Footer>
 		</PageContainer>
 	);
 };
-export default IndexPage;
+export default GodeyeIndexPage;

@@ -62,13 +62,13 @@ const AuthButtons = styled.div`
 const Header = () => {
 	return (
 		<HeaderContainer>
-			<Logo>Looknode</Logo>
+			<Logo>Godeye</Logo>
 			<NavLinks>
-				<a href="#">Bitcoin</a>
-				<a href="#">ETH搬砖</a>
+				<a href="#">核心指标</a>
+				<a href="#">免费指标</a>
 				<a href="#">价格</a>
-				<a href="#">联系</a>
-				<a href="#">帮助</a>
+				<a href="#">联系我们</a>
+				<a href="#">推特</a>
 			</NavLinks>
 			<AuthButtons>
 				<button className="login">登录</button>

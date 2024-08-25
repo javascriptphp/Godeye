@@ -1,0 +1,35 @@
+kind: pipeline
+type: docker
+name: godeye-frontend构建
+
+steps:
+  - name: build_docker_image
+    image: docker:20
+    environment:
+      DOCKER_BUILDKIT: 1
+    volumes:
+      - name: docker_sock
+        path: /var/run/docker.sock
+    commands:
+      - docker build -t godeye-frontend:latest .
+
+  - name: deploy
+    image: docker:20
+    volumes:
+      - name: docker_sock
+        path: /var/run/docker.sock
+    commands:
+      - docker stop godeye-frontend  || true
+      - docker rm godeye-frontend  || true
+      - docker run -d --name godeye-frontend  -p 8000:3000 godeye-frontend:latest
+
+volumes:
+  - name: docker_sock
+    host:
+      path: /var/run/docker.sock
+
+trigger:
+  event:
+    - push
+  branch:
+    - master

@@ -1,78 +1,37 @@
-FROM node:18-alpine AS base
+# 使用官方的 Node.js 作为基础镜像
+FROM node:18-alpine AS builder
 
-# Install dependencies only when needed
-FROM base AS deps
-# Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
-RUN apk add --no-cache libc6-compat
-RUN apk add git
-WORKDIR /
-COPY ./godeye-frontend.git ./godeye-frontend.git
-WORKDIR /godeye-frontend.git
-RUN git bundle create ./godeye-frontend.bundle --all
+# 设置工作目录
+WORKDIR /app
 
-RUN git clone -b master ./godeye-frontend.bundle ../godeye-frontend
+# 复制 package.json 和 package-lock.json 并安装依赖
+COPY package.json package-lock.json ./
+RUN npm install
+
+# 复制源代码到容器
+COPY . .
+
+# 构建应用
+RUN npm run build
+
+# 仅拷贝构建产物（例如 .next 文件夹）
+# 多阶段构建，减小最终镜像大小
+FROM node:18-alpine AS runner
 
 WORKDIR /app
 
-RUN mv /godeye-frontend ./
+# 复制构建结果到 runner 阶段的镜像中
+COPY --from=builder /app/.next ./.next
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/package.json ./package.json
+COPY --from=builder /app/node_modules ./node_modules
 
-WORKDIR /app/godeye-frontend
-# Install dependencies based on the preferred package manager
-# COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
-RUN \
-  if [ -f yarn.lock ]; then yarn --frozen-lockfile; \
-  elif [ -f package-lock.json ]; then npm ci; \
-  elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm i --frozen-lockfile; \
-  else echo "Lockfile not found." && exit 1; \
-  fi
-
-
-# Rebuild the source code only when needed
-# FROM base AS builder
-# WORKDIR /app
-# COPY --from=deps /app/godeye-frontend/* ./
-# COPY . .
-
-# Next.js collects completely anonymous telemetry data about general usage.
-# Learn more here: https://nextjs.org/telemetry
-# Uncomment the following line in case you want to disable telemetry during the build.
-# ENV NEXT_TELEMETRY_DISABLED 1
-
-RUN \
-  if [ -f yarn.lock ]; then yarn run build; \
-  elif [ -f package-lock.json ]; then npm run build; \
-  elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm run build; \
-  else echo "Lockfile not found." && exit 1; \
-  fi
-
-# Production image, copy all the files and run next
-FROM base AS runner
-WORKDIR /app
-
+# 环境变量
 ENV NODE_ENV production
-# Uncomment the following line in case you want to disable telemetry during runtime.
-# ENV NEXT_TELEMETRY_DISABLED 1
 
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
-
-COPY --from=deps /app/godeye-frontend/public ./public
-
-# Set the correct permission for prerender cache
-RUN mkdir .next
-RUN chown nextjs:nodejs .next
-
-# Automatically leverage output traces to reduce image size
-# https://nextjs.org/docs/advanced-features/output-file-tracing
-COPY --from=deps --chown=nextjs:nodejs /app/godeye-frontend/.next/standalone ./
-COPY --from=deps --chown=nextjs:nodejs /app/godeye-frontend/.next/static ./.next/static
-
-USER nextjs
-
+# 暴露端口
 EXPOSE 8000
 
 ENV PORT=8000
-
-# server.js is created by next build from the standalone output
-# https://nextjs.org/docs/pages/api-reference/next-config-js/output
-CMD HOSTNAME="0.0.0.0" node server.js
+# 启动 Next.js 应用
+CMD ["npm", "run", "start"]

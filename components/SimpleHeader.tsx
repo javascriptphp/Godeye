@@ -25,7 +25,7 @@ const Logo = styled.div`
 const SimpleHeader = () => {
 	return (
 		<HeaderContainer>
-			<Link href="/" style={{ textDecoration: 'none', color: 'inherit' }}>
+			<Link href="/" style={{ textDecoration: 'none', color: '#f0b90b' }}>
 				<Logo>Godeye</Logo>
 			</Link>
 		</HeaderContainer>

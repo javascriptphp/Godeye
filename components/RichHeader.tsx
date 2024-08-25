@@ -59,7 +59,7 @@ const AuthButtons = styled.div`
   }
 `;
 
-const Header = () => {
+const RichHeader = () => {
 	return (
 		<HeaderContainer>
 			<Logo>Godeye</Logo>
@@ -78,4 +78,4 @@ const Header = () => {
 	);
 };
 
-export default Header;
+export default RichHeader;

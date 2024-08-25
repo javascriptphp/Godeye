@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import Header from '../components/Header';
+import RichHeader from '../components/RichHeader';
 import Tabs from '../components/Tabs';
 import SidebarContent1 from '../components/SidebarContent1';
 import SidebarContent2 from '../components/SidebarContent2';
 import Chart1 from '../components/Chart1';
 import Chart2 from '../components/Chart2';
 import {ChartComponent} from "@/components/ChartComponent";
+import RealtimeChart from "@/components/charts/RealtimeChart";
 
 const PageContainer = styled.div`
     display: flex;
@@ -64,7 +65,7 @@ const GodeyeIndexPage = () => {
 
 	const tabs = [
 		{ label: 'BTC', sidebar: <SidebarContent1 />, content: <Chart1 /> },
-		{ label: 'ETH', sidebar: null, content: <Chart2 /> },
+		{ label: 'ETH', sidebar: null, content: <RealtimeChart /> },
 		{ label: 'SOL', sidebar: null, content: <ChartComponent /> }, // 新增的Tab，没有Sidebar
 	];
 
@@ -74,7 +75,7 @@ const GodeyeIndexPage = () => {
 	
 	return (
 		<PageContainer>
-			<Header />
+			<RichHeader />
 			<TabsWrapper>
 				<Tabs tabs={tabs} activeTab={activeTab} setActiveTab={setActiveTab} />
 			</TabsWrapper>

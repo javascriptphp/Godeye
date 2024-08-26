@@ -1,35 +1,42 @@
 kind: pipeline
 type: docker
-name: godeye-frontend构建
+name: default
+
+clone:
+  disable: true
+
 
 steps:
+  - name: clone
+    image: alpine/git
+    commands:
+      - git clone http://47.236.100.38:32768/godeye/godeye-frontend.git .
+      - git checkout $DRONE_COMMIT
+
   - name: build_docker_image
-    image: docker:20
-    environment:
-      DOCKER_BUILDKIT: 1
+    image: docker:rc-dind
     volumes:
-      - name: docker_sock
+      - name: docker-sock
         path: /var/run/docker.sock
     commands:
       - docker build -t godeye-frontend:latest .
 
   - name: deploy
-    image: docker:20
+    image: docker:rc-dind
     volumes:
-      - name: docker_sock
+      - name: docker-sock
         path: /var/run/docker.sock
     commands:
-      - docker stop godeye-frontend  || true
-      - docker rm godeye-frontend  || true
-      - docker run -d --name godeye-frontend  -p 8000:3000 godeye-frontend:latest
+      - docker stop godeye-frontend || true
+      - docker rm godeye-frontend || true
+      - docker run -d --name godeye-frontend  -p 8000:8000 godeye-frontend:latest
+  - name: greeting
+    image: alpine
+    commands:
+      - echo hello
+      - echo world
 
 volumes:
-  - name: docker_sock
+  - name: docker-sock
     host:
       path: /var/run/docker.sock
-
-trigger:
-  event:
-    - push
-  branch:
-    - master

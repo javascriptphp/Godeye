@@ -140,6 +140,12 @@ const ThreeMonthHistoricalChart = ({symbol}: { symbol: string }) => {
 						},
 						max: (value:any) => {
 							return value.max * 1.05;  // Y 轴最小值为数据最小值的 90%
+						},
+						axisLabel: {
+							formatter: (value:any) => {
+								// 保留3位小数
+								return value.toFixed(3);
+							}
 						}
 					},
 					{
@@ -152,7 +158,7 @@ const ThreeMonthHistoricalChart = ({symbol}: { symbol: string }) => {
 						},
 						max: (value:any) => {
 							return value.max * 1.05;  // Y 轴最小值为数据最小值的 90%
-						}
+						},
 					}
 				],
 				series: [

@@ -13,3 +13,15 @@ export type BaseMetric = {
 	price: number;
 	timestamp: Date;
 }
+export type RealtimeDataResponse = {
+	message?: string;
+	websocket_url?: string;
+}
+export type RealtimeData = {
+	timestamp: Date;
+	symbol: string;
+	price: number;
+	metric: string;
+	metric_value: number;
+	threshold: number;
+}

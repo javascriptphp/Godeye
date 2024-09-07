@@ -30,8 +30,8 @@ const Chart1 = () => {
 			},
 			tooltip: {
 				trigger: 'axis',
-				formatter: function (params) {
-					params = params[0];
+				formatter: function (parameters:{name:string, value: string}[]) {
+					let params = parameters[0];
 					var date = new Date(params.name);
 					return (
 						date.getDate() +

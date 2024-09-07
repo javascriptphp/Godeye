@@ -70,14 +70,44 @@ const ThreeMonthHistoricalChart = ({symbol}: { symbol: string }) => {
 				},
 				tooltip: {
 					trigger: 'axis',
+					axisPointer: {
+						type: 'cross',
+						animation: false,
+						label: {
+							backgroundColor: '#505765'
+						}
+					},
 					formatter: function (params: any) {
-						const date = new Date(params[0].name);
-						return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} : ${params[0].value.toFixed(4)}`;
+						let result = '<div>';
+						result += '<strong>' + params[0].name + '</strong><br/>';
+						params.forEach(function (item: any) {
+							result += '<div style="display: flex; justify-content: space-between;">' +
+								'<span>' + item.marker + item.seriesName + ':</span>' +
+								'<span style="font-weight: bold; text-align: right; min-width: 60px;">' +
+								(item.seriesName.toLowerCase().includes('price') ? item.value : item.value.toFixed(4)) + '</span>' +
+								'</div>';
+						});
+						result += '</div>';
+						return result;
 					},
 				},
 				grid: {
 					bottom: 80
 				},
+				dataZoom: [
+					{
+						show: true,
+						realtime: true,
+						start: 65,
+						end: 100
+					},
+					{
+						type: 'inside',
+						realtime: true,
+						start: 65,
+						end: 100
+					}
+				],
 				toolbox: {
 					feature: {
 						dataZoom: {
@@ -104,14 +134,25 @@ const ThreeMonthHistoricalChart = ({symbol}: { symbol: string }) => {
 				yAxis: [
 					{
 						name: 'metric',
-						type: 'value'
+						type: 'value',
+						min: (value:any) => {
+							return value.min * 0.95;  // Y 轴最小值为数据最小值的 90%
+						},
+						max: (value:any) => {
+							return value.max * 1.05;  // Y 轴最小值为数据最小值的 90%
+						}
 					},
 					{
 						name: 'price',
 						nameLocation: 'start',
 						// alignTicks: true,
 						type: 'value',
-						// inverse: true
+						min: (value:any) => {
+							return value.min * 0.95;  // Y 轴最小值为数据最小值的 90%
+						},
+						max: (value:any) => {
+							return value.max * 1.05;  // Y 轴最小值为数据最小值的 90%
+						}
 					}
 				],
 				series: [

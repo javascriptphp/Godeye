@@ -8,19 +8,16 @@ import useWebSocket from "react-use-websocket";
 
 const RealtimeChart = ({metric, symbol}: { metric: string, symbol: string }) => {
 	const containerRef = useRef<HTMLDivElement>(null);
-	const [data, setData] = useState<{ name: string, value: number }[]>([]);
-	const [buyMetricData, setBuyMetricData] = useState<{ name: string, value: number }[]>([]);
-	const [buyPriceData, setBuyPriceData] = useState<{ name: string, value: number }[]>([]);
-	const [buyThreshold, setBuyThreshold] = useState<number>(0);
+	// const [data, setData] = useState<{ name: string, value: number }[]>([]);
+	const [metricData, setMetricData] = useState<number[]>([]);
+	const [priceData, setPriceData] = useState<number[]>([]);
+	const [threshold, setThreshold] = useState<number>(0);
 	const [timestamps, setTimestamps] = useState<string[]>([]);
-	const [sellMetricData, setSellMetricData] = useState<{ name: string, value: number }[]>([]);
-	const [sellPriceData, setSellPriceData] = useState<{ name: string, value: number }[]>([]);
-	const [sellThreshold, setSellThreshold] = useState<number>(0);
 
 	const chartRef = useRef<echarts.ECharts | null>(null);  // Store chart instance in a ref
 	const hasFetchedData = useRef(false);  // Track if data has been fetched
 	// const [message, setMessage] = useState<RealtimeData>();
-	const [realtimeData, setRealtimeData] = useState<RealtimeData>();
+	// const [realtimeData, setRealtimeData] = useState<RealtimeData>();
 
 	const [websocketUrl, setWebsocketUrl] = useState<string>('');
 	// 请求websocket url
@@ -39,33 +36,33 @@ const RealtimeChart = ({metric, symbol}: { metric: string, symbol: string }) => 
 			return true;
 		},  // 自动重连
 	}, websocketUrl !== '');
-	useEffect(() => {
-		if (lastMessage !== null) {
-			// setRealtimeData(lastMessage.data);
-			const copyData = displayData;
-			copyData.push(lastMessage.data)
-			setDisplayData(copyData)
-			console.log("lastmessage",lastMessage)
-			console.log(displayData);
-			displayData.push(lastMessage.data)
-		}
-	}, [lastMessage]);
+	// useEffect(() => {
+	// 	if (lastMessage !== null) {
+	// 		// setRealtimeData(lastMessage.data);
+	// 		const copyData = displayData;
+	// 		copyData.push(lastMessage.data)
+	// 		setDisplayData(copyData)
+	// 		console.log("lastmessage",lastMessage)
+	// 		console.log(displayData);
+	// 		displayData.push(lastMessage.data)
+	// 	}
+	// }, [lastMessage]);
 
 	useEffect(() => {
 		if (!lastMessage) return;
 		const realtimeData : RealtimeData = JSON.parse(lastMessage.data);
-		let timeStamp = new Date(realtimeData.timestamp).toISOString().split('T')[0];
+		let timeStamp = new Date(realtimeData.timestamp).toLocaleTimeString();
 		const _timestamps = timestamps;
 		_timestamps.push(timeStamp);
 		setTimestamps(_timestamps);
-		if (realtimeData.metric === 'buy') {
-			const _buyMetricData = buyMetricData;
-			_buyMetricData.push({name: timeStamp, value: realtimeData.metric_value});
-			setBuyMetricData(_buyMetricData);
+		if (realtimeData.metric === metric) {
+			const _metricData = metricData;
+			_metricData.push(realtimeData.metric_value);
+			setMetricData(_metricData);
 		}
-		const _buyPriceData = buyPriceData;
-		_buyPriceData.push({name: timeStamp, value: realtimeData.price});
-		setBuyPriceData(_buyPriceData);
+		const _priceData = priceData;
+		_priceData.push(realtimeData.price);
+		setPriceData(_priceData);
 		chartRef.current?.setOption({
 			xAxis: {
 				type: 'category',
@@ -78,7 +75,7 @@ const RealtimeChart = ({metric, symbol}: { metric: string, symbol: string }) => 
 					type: 'line',
 					showSymbol: false,
 					yAxisIndex: 0,
-					data: buyMetricData,
+					data: metricData,
 					emphasis: {
 						focus: 'series'
 					},
@@ -107,7 +104,7 @@ const RealtimeChart = ({metric, symbol}: { metric: string, symbol: string }) => 
 					emphasis: {
 						focus: 'series'
 					},
-					data: buyPriceData
+					data: priceData
 				},
 			],
 		})
@@ -158,13 +155,13 @@ const RealtimeChart = ({metric, symbol}: { metric: string, symbol: string }) => 
 					{
 						show: true,
 						realtime: true,
-						start: 65,
+						start: 0,
 						end: 100
 					},
 					{
 						type: 'inside',
 						realtime: true,
-						start: 65,
+						start: 0,
 						end: 100
 					}
 				],
@@ -196,10 +193,10 @@ const RealtimeChart = ({metric, symbol}: { metric: string, symbol: string }) => 
 						name: 'metric',
 						type: 'value',
 						min: (value:any) => {
-							return value.min * 0.95;  // Y 轴最小值为数据最小值的 90%
+							return value.min * 0.999;  // Y 轴最小值为数据最小值的 90%
 						},
 						max: (value:any) => {
-							return value.max * 1.05;  // Y 轴最小值为数据最小值的 90%
+							return value.max * 1.001;  // Y 轴最小值为数据最小值的 90%
 						},
 						axisLabel: {
 							formatter: (value:any) => {
@@ -214,10 +211,10 @@ const RealtimeChart = ({metric, symbol}: { metric: string, symbol: string }) => 
 						// alignTicks: true,
 						type: 'value',
 						min: (value:any) => {
-							return value.min * 0.95;  // Y 轴最小值为数据最小值的 90%
+							return value.min * 0.999;  // Y 轴最小值为数据最小值的 90%
 						},
 						max: (value:any) => {
-							return value.max * 1.05;  // Y 轴最小值为数据最小值的 90%
+							return value.max * 1.0001;  // Y 轴最小值为数据最小值的 90%
 						},
 						axisLabel: {
 							formatter: (value:any) => {
@@ -233,7 +230,7 @@ const RealtimeChart = ({metric, symbol}: { metric: string, symbol: string }) => 
 						type: 'line',
 						showSymbol: false,
 						yAxisIndex: 0,
-						data: buyMetricData,
+						data: metricData,
 						emphasis: {
 							focus: 'series'
 						},
@@ -241,7 +238,7 @@ const RealtimeChart = ({metric, symbol}: { metric: string, symbol: string }) => 
 							symbol: 'none',
 							data: [
 								{
-									yAxis: buyThreshold, // 这里设置阈值线的 y 轴位置
+									yAxis: threshold, // 这里设置阈值线的 y 轴位置
 									label: {
 										position: 'start'
 										// formatter: 'threshold', // 显示的文本
@@ -262,7 +259,7 @@ const RealtimeChart = ({metric, symbol}: { metric: string, symbol: string }) => 
 						emphasis: {
 							focus: 'series'
 						},
-						data: buyPriceData
+						data: priceData
 					},
 				],
 			};
@@ -282,7 +279,7 @@ const RealtimeChart = ({metric, symbol}: { metric: string, symbol: string }) => 
 			chartRef.current?.dispose();  // Dispose of the chart instance on component unmount
 			chartRef.current = null;
 		};
-	}, [data, symbol]);  // Update chart when `data` or `symbol` changes
+	}, [metricData, priceData, symbol]);  // Update chart when `data` or `symbol` changes
 
 	return (
 		<div>

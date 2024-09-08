@@ -5,16 +5,12 @@ import {getThreeMonthData} from "@/service";
 import {message} from "antd";
 
 
-const ThreeMonthHistoricalChart = ({symbol}: { symbol: string }) => {
+const ThreeMonthChart = ({symbol, metric}: { symbol: string, metric: string }) => {
 	const containerRef = useRef<HTMLDivElement>(null);
-	const [data, setData] = useState<{ name: string, value: number }[]>([]);
-	const [buyMetricData, setBuyMetricData] = useState<{ name: string, value: number }[]>([]);
-	const [buyPriceData, setBuyPriceData] = useState<{ name: string, value: number }[]>([]);
-	const [buyThreshold, setBuyThreshold] = useState<number>(0);
+	const [metricData, setMetricData] = useState<number[]>([]);
+	const [priceData, setPriceData] = useState<number[]>([]);
+	const [threshold, setThreshold] = useState<number>(0);
 	const [timestamps, setTimestamps] = useState<string[]>([]);
-	const [sellMetricData, setSellMetricData] = useState<{ name: string, value: number }[]>([]);
-	const [sellPriceData, setSellPriceData] = useState<{ name: string, value: number }[]>([]);
-	const [sellThreshold, setSellThreshold] = useState<number>(0);
 
 	const chartRef = useRef<echarts.ECharts | null>(null);  // Store chart instance in a ref
 	const hasFetchedData = useRef(false);  // Track if data has been fetched
@@ -22,42 +18,32 @@ const ThreeMonthHistoricalChart = ({symbol}: { symbol: string }) => {
 	// Fetch data and update the state
 	useEffect(() => {
 		const fetchData = async () => {
-			const result = await getThreeMonthData(symbol);
-			const processedData = result.buy.map((item: BaseMetric) => ({
-				name: new Date(item.timestamp).toISOString().split('T')[0],
-				value: item.price,
-			}));
-
-			setData(processedData);
-			const _timestamps = result.buy.map((item: BaseMetric) => (
-				new Date(item.timestamp).toISOString().split('T')[0]
+			const result = await getThreeMonthData(symbol, metric);
+			
+			const _timestamps = result[metric].map((item: BaseMetric) => (
+				new Date(item.timestamp).toLocaleDateString()
 			));
 			setTimestamps(_timestamps);
-			const _buyMetricData = result.buy.map((item: BaseMetric) => ({
-				name: new Date(item.timestamp).toISOString().split('T')[0],
-				value: item.metric_value,
-			}));
-			setBuyMetricData(_buyMetricData);
-			setBuyThreshold(result.buy_threshold)
-			const _buyPriceData = result.buy.map((item: BaseMetric) => ({
-				name: new Date(item.timestamp).toISOString().split('T')[0],
-				value: item.price,
-			}));
-			setBuyPriceData(_buyPriceData);
+			const _buyMetricData = result[metric].map((item: BaseMetric) => (item.metric_value));
+			setMetricData(_buyMetricData);
+			setThreshold(result[`${metric}_threshold`])
+			console.log(threshold)
+			console.log(`${metric}_threshold`);
+			
+			console.log(result)
+			const _buyPriceData = result[metric].map((item: BaseMetric) => (item.price));
+			setPriceData(_buyPriceData);
 		};
 
-		// Prevent the request from being sent twice
 		if (!hasFetchedData.current) {
 			hasFetchedData.current = true;
 			fetchData().catch((error) => {
 				message.error("Error in fetchData:", error);
 			});
 		}
-	}, [symbol]);  // Update data when `symbol` changes
+	}, [symbol]); 
 
-	// Initialize and update the chart when data or symbol changes
 	useEffect(() => {
-		// Initialize chart if it hasn't been initialized yet
 		if (!chartRef.current && containerRef.current) {
 			chartRef.current = echarts.init(containerRef.current);
 		}
@@ -118,7 +104,7 @@ const ThreeMonthHistoricalChart = ({symbol}: { symbol: string }) => {
 					}
 				},
 				legend: {
-					data: ['Price','Metric'],
+					data: ['Metric','Price'],
 					left: 20,
 				},
 				xAxis: {
@@ -126,17 +112,12 @@ const ThreeMonthHistoricalChart = ({symbol}: { symbol: string }) => {
 					splitLine: {show: false},
 					data: timestamps
 				},
-				// yAxis: {
-				// 	type: 'value',
-				// 	boundaryGap: [0, '100%'],
-				// 	splitLine: {show: true},
-				// },
 				yAxis: [
 					{
 						name: 'metric',
 						type: 'value',
 						min: (value:any) => {
-							return value.min * 0.95;  // Y 轴最小值为数据最小值的 90%
+							return Math.min(threshold*0.9, value.min * 0.95);  // Y 轴最小值为数据最小值的 90%
 						},
 						max: (value:any) => {
 							return value.max * 1.05;  // Y 轴最小值为数据最小值的 90%
@@ -144,7 +125,7 @@ const ThreeMonthHistoricalChart = ({symbol}: { symbol: string }) => {
 						axisLabel: {
 							formatter: (value:any) => {
 								// 保留3位小数
-								return value.toFixed(3);
+								return value.toFixed(2);
 							}
 						}
 					},
@@ -159,6 +140,12 @@ const ThreeMonthHistoricalChart = ({symbol}: { symbol: string }) => {
 						max: (value:any) => {
 							return value.max * 1.05;  // Y 轴最小值为数据最小值的 90%
 						},
+						axisLabel: {
+							formatter: (value:any) => {
+								// 保留3位小数
+								return value.toFixed(2);
+							}
+						}
 					}
 				],
 				series: [
@@ -167,7 +154,7 @@ const ThreeMonthHistoricalChart = ({symbol}: { symbol: string }) => {
 						type: 'line',
 						showSymbol: false,
 						yAxisIndex: 0,
-						data: buyMetricData,
+						data: metricData,
 						emphasis: {
 							focus: 'series'
 						},
@@ -175,9 +162,9 @@ const ThreeMonthHistoricalChart = ({symbol}: { symbol: string }) => {
 							symbol: 'none',
 							data: [
 								{
-									yAxis: buyThreshold, // 这里设置阈值线的 y 轴位置
+									yAxis: threshold, // 这里设置阈值线的 y 轴位置
 									label: {
-										position: 'start'
+										position: 'insideStartTop'
 										// formatter: 'threshold', // 显示的文本
 									},
 									lineStyle: {
@@ -196,7 +183,7 @@ const ThreeMonthHistoricalChart = ({symbol}: { symbol: string }) => {
 						emphasis: {
 							focus: 'series'
 						},
-						data: buyPriceData
+						data: priceData
 					},
 				],
 			};
@@ -216,13 +203,13 @@ const ThreeMonthHistoricalChart = ({symbol}: { symbol: string }) => {
 			chartRef.current?.dispose();  // Dispose of the chart instance on component unmount
 			chartRef.current = null;
 		};
-	}, [data, symbol]);  // Update chart when `data` or `symbol` changes
+	}, [metricData, priceData, symbol]);  // Update chart when `data` or `symbol` changes
 
 	return (
 		<div>
-			<div ref={containerRef} style={{width: '800px', height: '600px'}}></div>
+			<div ref={containerRef} style={{width: '700px', height: '600px'}}></div>
 		</div>
 	);
 };
 
-export default ThreeMonthHistoricalChart;
+export default ThreeMonthChart;

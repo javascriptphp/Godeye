@@ -1,10 +1,12 @@
 export type ThreeMonthResponse = {
 	message?: string;
-	data: ThreeMonthData;
+	data: ThreeMonthBuyData | ThreeMonthSellData;
 };
-export type ThreeMonthData = {
+export type ThreeMonthBuyData = {
 	buy: BaseMetric[];
 	buy_threshold: number;
+};
+export type ThreeMonthSellData = {
 	sell: BaseMetric[];
 	sell_threshold: number;
 };

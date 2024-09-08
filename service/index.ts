@@ -1,4 +1,4 @@
-import {RealtimeDataResponse, ThreeMonthData} from "@/types";
+import {ThreeMonthBuyData, ThreeMonthSellData} from "@/types";
 import {message} from "antd";
 import axios, {AxiosResponse} from "axios";
 
@@ -11,9 +11,13 @@ export const request = function(url: string, data: any) : Promise<AxiosResponse>
 	})
 
 }
-export const getThreeMonthData = async function (symbol: string) : Promise<ThreeMonthData> {
+function capitalizeFirstLetter(str: string) {
+	if (!str) return str; // 确保字符串非空
+	return str.charAt(0).toUpperCase() + str.slice(1);
+}
+export const getThreeMonthData = async function (symbol: string, metric: string) : Promise<ThreeMonthBuyData | ThreeMonthSellData> {
 	let data = null;
-	const response = await request("/api/getThreeMonthData", {
+	const response = await request("/api/getThreeMonth"+capitalizeFirstLetter(metric)+"Data", {
 		"symbol": symbol
 	});
 	if (response.status === 200) {

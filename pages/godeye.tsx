@@ -9,6 +9,7 @@ import Chart2 from '../components/Chart2';
 import {ChartComponent} from "@/components/ChartComponent";
 import RealtimeChart from "@/components/charts/RealtimeChart";
 import ThreeMonthHistoricalChart from "@/components/charts/ThreeMonthHistoricalChart";
+import BARealtimeChart from "@/components/charts/BARealtimeChart";
 const MainContentWrapper = styled.div`
     display: flex;
     flex: 1;
@@ -65,8 +66,9 @@ const GodeyeIndexPage = () => {
 
 	const tabs = [
 		{ label: 'BTC', sidebar: <SidebarContent1 />, content: <ThreeMonthHistoricalChart symbol={"BTC"} /> },
-		{ label: 'ETH', sidebar: null, content: <RealtimeChart /> },
+		{ label: 'ETH', sidebar: null, content: <RealtimeChart metric={'buy'} symbol={"BTC"} /> },
 		{ label: 'SOL', sidebar: null, content: <ChartComponent /> }, // 新增的Tab，没有Sidebar
+		{ label: '币安', sidebar: null, content: <BARealtimeChart metric={'buy'} symbol={"BTC"} /> }, // 新增的Tab，没有Sidebar
 	];
 
 	const toggleSidebar = () => {

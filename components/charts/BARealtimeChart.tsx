@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from "react";
 import * as echarts from 'echarts';
-import {BaseMetric, RealtimeData} from "@/types";
+import {BARealtimeData, BaseMetric, RealtimeData} from "@/types";
 import {getRealtimeDataUrl, getThreeMonthData} from "@/service";
 import {message} from "antd";
 import useWebSocket from "react-use-websocket";
@@ -10,7 +10,7 @@ const RealtimeChart = ({metric, symbol}: { metric: string, symbol: string }) => 
 	const containerRef = useRef<HTMLDivElement>(null);
 	const [data, setData] = useState<{ name: string, value: number }[]>([]);
 	const [buyMetricData, setBuyMetricData] = useState<{ name: string, value: number }[]>([]);
-	const [buyPriceData, setBuyPriceData] = useState<{ name: string, value: number }[]>([]);
+	const [buyPriceData, setBuyPriceData] = useState<number[]>([]);
 	const [buyThreshold, setBuyThreshold] = useState<number>(0);
 	const [timestamps, setTimestamps] = useState<string[]>([]);
 	const [sellMetricData, setSellMetricData] = useState<{ name: string, value: number }[]>([]);
@@ -22,11 +22,7 @@ const RealtimeChart = ({metric, symbol}: { metric: string, symbol: string }) => 
 	// const [message, setMessage] = useState<RealtimeData>();
 	const [realtimeData, setRealtimeData] = useState<RealtimeData>();
 
-	const [websocketUrl, setWebsocketUrl] = useState<string>('');
-	// 请求websocket url
-	useEffect(() => {
-		getRealtimeDataUrl(metric, symbol).then(url => setWebsocketUrl(url));
-	}, []);
+	const [websocketUrl, setWebsocketUrl] = useState<string>('wss://stream.binance.com:9443/ws/btcusdt@kline_1s@+08:00');
 	  // socketUrl 存在时才启动 WebSocket
 	const [displayData, setDisplayData] = useState<RealtimeData[]>([]);
 	const { sendMessage, lastMessage, readyState } = useWebSocket(websocketUrl, {
@@ -39,70 +35,45 @@ const RealtimeChart = ({metric, symbol}: { metric: string, symbol: string }) => 
 			return true;
 		},  // 自动重连
 	}, websocketUrl !== '');
-	useEffect(() => {
-		if (lastMessage !== null) {
-			// setRealtimeData(lastMessage.data);
-			const copyData = displayData;
-			copyData.push(lastMessage.data)
-			setDisplayData(copyData)
-			console.log("lastmessage",lastMessage)
-			console.log(displayData);
-			displayData.push(lastMessage.data)
-		}
-	}, [lastMessage]);
-
+	// useEffect(() => {
+	// 	if (lastMessage !== null) {
+	// 		// setRealtimeData(lastMessage.data);
+	// 		const copyData = displayData;
+	// 		copyData.push(lastMessage.data)
+	// 		setDisplayData(copyData)
+	// 		console.log("lastmessage",lastMessage)
+	// 		console.log(displayData);
+	// 		displayData.push(lastMessage.data)
+	// 	}
+	// }, [lastMessage]);
+	const xAxisType = 'category';
 	useEffect(() => {
 		if (!lastMessage) return;
-		const realtimeData : RealtimeData = JSON.parse(lastMessage.data);
-		let timeStamp = new Date(realtimeData.timestamp).toISOString().split('T')[0];
+		const realtimeData : BARealtimeData = JSON.parse(lastMessage.data);
+		const date = new Date(realtimeData.E);
+		let timeStamp = date.toLocaleTimeString();
 		const _timestamps = timestamps;
 		_timestamps.push(timeStamp);
 		setTimestamps(_timestamps);
-		if (realtimeData.metric === 'buy') {
-			const _buyMetricData = buyMetricData;
-			_buyMetricData.push({name: timeStamp, value: realtimeData.metric_value});
-			setBuyMetricData(_buyMetricData);
-		}
+		console.log(_timestamps)
+		// if (realtimeData.metric === 'buy') {
+		// 	const _buyMetricData = buyMetricData;
+		// 	_buyMetricData.push({name: timeStamp, value: realtimeData.metric_value});
+		// 	setBuyMetricData(_buyMetricData);
+		// }
 		const _buyPriceData = buyPriceData;
-		_buyPriceData.push({name: timeStamp, value: realtimeData.price});
+		_buyPriceData.push(Number(realtimeData.k.o));
 		setBuyPriceData(_buyPriceData);
 		chartRef.current?.setOption({
 			xAxis: {
-				type: 'category',
+				type: xAxisType,
 				splitLine: {show: false},
 				data: timestamps
 			},
 			series: [
 				{
-					name: 'Metric',
-					type: 'line',
-					showSymbol: false,
-					yAxisIndex: 0,
-					data: buyMetricData,
-					emphasis: {
-						focus: 'series'
-					},
-					markLine: {
-						symbol: 'none',
-						data: [
-							{
-								yAxis: realtimeData.threshold, // 这里设置阈值线的 y 轴位置
-								label: {
-									position: 'start'
-									// formatter: 'threshold', // 显示的文本
-								},
-								lineStyle: {
-									color: 'red', // 阈值线的颜色
-									type: 'dashed', // 阈值线的样式，'dashed' 表示虚线
-								},
-							},
-						],
-					},
-				},
-				{
 					name: 'Price',
 					type: 'line',
-					yAxisIndex: 1,
 					showSymbol: false,
 					emphasis: {
 						focus: 'series'
@@ -158,13 +129,13 @@ const RealtimeChart = ({metric, symbol}: { metric: string, symbol: string }) => 
 					{
 						show: true,
 						realtime: true,
-						start: 65,
+						start: 0,
 						end: 100
 					},
 					{
 						type: 'inside',
 						realtime: true,
-						start: 65,
+						start: 0,
 						end: 100
 					}
 				],
@@ -182,7 +153,7 @@ const RealtimeChart = ({metric, symbol}: { metric: string, symbol: string }) => 
 					left: 20,
 				},
 				xAxis: {
-					type: 'category',
+					type: xAxisType,
 					splitLine: {show: false},
 					data: timestamps
 				},
@@ -193,71 +164,28 @@ const RealtimeChart = ({metric, symbol}: { metric: string, symbol: string }) => 
 				// },
 				yAxis: [
 					{
-						name: 'metric',
-						type: 'value',
-						min: (value:any) => {
-							return value.min * 0.95;  // Y 轴最小值为数据最小值的 90%
-						},
-						max: (value:any) => {
-							return value.max * 1.05;  // Y 轴最小值为数据最小值的 90%
-						},
-						axisLabel: {
-							formatter: (value:any) => {
-								// 保留3位小数
-								return value.toFixed(3);
-							}
-						}
-					},
-					{
 						name: 'price',
 						nameLocation: 'start',
 						// alignTicks: true,
 						type: 'value',
 						min: (value:any) => {
-							return value.min * 0.95;  // Y 轴最小值为数据最小值的 90%
+							return value.min * 0.9999;  // Y 轴最小值为数据最小值的 90%
 						},
 						max: (value:any) => {
-							return value.max * 1.05;  // Y 轴最小值为数据最小值的 90%
+							return value.max * 1.0001;  // Y 轴最小值为数据最小值的 90%
 						},
 						axisLabel: {
 							formatter: (value:any) => {
 								// 保留3位小数
-								return value.toFixed(3);
+								return value.toFixed(1);
 							}
 						}
 					}
 				],
 				series: [
 					{
-						name: 'Metric',
-						type: 'line',
-						showSymbol: false,
-						yAxisIndex: 0,
-						data: buyMetricData,
-						emphasis: {
-							focus: 'series'
-						},
-						markLine: {
-							symbol: 'none',
-							data: [
-								{
-									yAxis: buyThreshold, // 这里设置阈值线的 y 轴位置
-									label: {
-										position: 'start'
-										// formatter: 'threshold', // 显示的文本
-									},
-									lineStyle: {
-										color: 'red', // 阈值线的颜色
-										type: 'dashed', // 阈值线的样式，'dashed' 表示虚线
-									},
-								},
-							],
-						},
-					},
-					{
 						name: 'Price',
 						type: 'line',
-						yAxisIndex: 1,
 						showSymbol: false,
 						emphasis: {
 							focus: 'series'

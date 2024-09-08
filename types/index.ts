@@ -25,3 +25,15 @@ export type RealtimeData = {
 	metric_value: number;
 	threshold: number;
 }
+export type BARealtimeData = {
+	e: string,
+	E: Date,
+	s: string,
+	k: {
+		t: Date,
+		T: Date,
+		s: string,
+		i: string,
+		o: string,
+	}
+}

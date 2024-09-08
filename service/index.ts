@@ -23,7 +23,7 @@ export const getThreeMonthData = async function (symbol: string) : Promise<Three
 	}
 	return data;
 }
-export const getRealtimeDataUrl = async function (metric: string, symbol: string) : Promise<String> {
+export const getRealtimeDataUrl = async function (metric: string, symbol: string) : Promise<string> {
 	let data = null;
 	const response = await request("/api/getRealtimeDataUrl", {
 		"metric": metric,

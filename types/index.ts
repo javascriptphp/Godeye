@@ -2,13 +2,21 @@ export type ThreeMonthResponse = {
 	message?: string;
 	data: ThreeMonthBuyData | ThreeMonthSellData;
 };
-export type ThreeMonthBuyData = {
-	buy: BaseMetric[];
+export type HistoricalBuyData = {
 	buy_threshold: number;
+	[buy: string]: BaseMetric[] | number;
+};
+export type ThreeMonthBuyData = {
+	buy_threshold: number;
+	[buy: string] : BaseMetric[] | number;
 };
 export type ThreeMonthSellData = {
-	sell: BaseMetric[];
 	sell_threshold: number;
+	[sell: string]: BaseMetric[] | number;
+};
+export type HistoricalSellData = {
+	sell_threshold: number;
+	[sell: string]: BaseMetric[] | number;
 };
 export type BaseMetric = {
 	metric_value: number;

@@ -1,7 +1,7 @@
 import React, {useEffect, useRef, useState} from "react";
 import * as echarts from 'echarts';
 import {BaseMetric} from "@/types";
-import {getThreeMonthData} from "@/service";
+import {getHistoricalData, getThreeMonthData} from "@/service";
 import {message} from "antd";
 import {
 	buildChartWithMetricAndPriceOptionForCreate,
@@ -11,7 +11,7 @@ import {
 } from "@/utils/global_constant";
 
 
-const ThreeMonthChart = ({symbol, metric}: { symbol: string, metric: string }) => {
+const HistoricalChart = ({symbol, metric}: { symbol: string, metric: string }) => {
 	const containerRef = useRef<HTMLDivElement>(null);
 	const [metricData, setMetricData] = useState<number[]>([]);
 	const [priceData, setPriceData] = useState<number[]>([]);
@@ -24,7 +24,7 @@ const ThreeMonthChart = ({symbol, metric}: { symbol: string, metric: string }) =
 	// Fetch data and update the state
 	useEffect(() => {
 		const fetchData = async () => {
-			const result = await getThreeMonthData(symbol, metric);
+			const result = await getHistoricalData(symbol, metric);
 			if (Array.isArray(result[metric])) {
 				const _timestamps = result[metric].map((item: BaseMetric) => (
 					new Date(item.timestamp).toLocaleDateString()
@@ -49,7 +49,7 @@ const ThreeMonthChart = ({symbol, metric}: { symbol: string, metric: string }) =
 	}, [symbol]);
 	useEffect(() => {
 		const echartsOption = buildChartWithMetricAndPriceOptionForCreate({
-			title: `${symbol} 三个月数据`,
+			title: `${symbol} 历史数据`,
 			timestamps: timestamps,
 			threshold: threshold,
 			metricData: metricData,
@@ -67,4 +67,4 @@ const ThreeMonthChart = ({symbol, metric}: { symbol: string, metric: string }) =
 	);
 };
 
-export default ThreeMonthChart;
+export default HistoricalChart;

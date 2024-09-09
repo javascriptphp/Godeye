@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from "react";
 import * as echarts from 'echarts';
-import {BaseMetric} from "@/types";
+import {BaseMetric, MetricEnum} from "@/types";
 import {getThreeMonthData} from "@/service";
 import {message} from "antd";
 import {
@@ -50,6 +50,7 @@ const ThreeMonthChart = ({symbol, metric}: { symbol: string, metric: string }) =
 	useEffect(() => {
 		const echartsOption = buildChartWithMetricAndPriceOptionForCreate({
 			title: `${symbol} 三个月数据`,
+			metric: MetricEnum.buy,
 			timestamps: timestamps,
 			threshold: threshold,
 			metricData: metricData,

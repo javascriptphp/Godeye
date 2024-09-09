@@ -34,6 +34,9 @@ export type RealtimeData = {
 	metric: string;
 	metric_value: number;
 	threshold: number;
+};
+export enum MetricEnum {
+	buy, sell
 }
 export type BARealtimeData = {
 	e: string,

@@ -1,7 +1,7 @@
 import React, {useEffect, useRef, useState} from "react";
 import * as echarts from 'echarts';
 import {EChartsOption} from 'echarts';
-import {RealtimeData} from "@/types";
+import {MetricEnum, RealtimeData} from "@/types";
 import {getRealtimeDataUrl} from "@/service";
 import {message} from "antd";
 import useWebSocket from "react-use-websocket";
@@ -31,20 +31,20 @@ const customerOption = {
 		{
 			name: 'metric',
 			type: 'value',
-			min: (value:any) => value.min * 0.999,
-			max: (value:any) => value.max * 1.001,
+			min: (value: any) => value.min * 0.999,
+			max: (value: any) => value.max * 1.001,
 			axisLabel: {
-				formatter: (value:any) => value.toFixed(3)
+				formatter: (value: any) => value.toFixed(3)
 			}
 		},
 		{
 			name: 'price',
 			nameLocation: 'start',
 			type: 'value',
-			min: (value:any) => value.min * 0.999,
-			max: (value:any) => value.max * 1.0001,
+			min: (value: any) => value.min * 0.999,
+			max: (value: any) => value.max * 1.0001,
 			axisLabel: {
-				formatter: (value:any) => value.toFixed(3)
+				formatter: (value: any) => value.toFixed(3)
 			}
 		}
 	],
@@ -64,7 +64,7 @@ const RealtimeChart = ({metric, symbol}: { metric: string, symbol: string }) => 
 	useEffect(() => {
 		getRealtimeDataUrl(metric, symbol).then(url => setWebsocketUrl(url));
 	}, []);
-	const { lastMessage } = useWebSocket(websocketUrl, {
+	const {lastMessage} = useWebSocket(websocketUrl, {
 		onOpen: () => console.log('WebSocket connected!'),
 		onClose: () => console.log('WebSocket disconnected!'),
 		shouldReconnect: (e) => {
@@ -75,7 +75,7 @@ const RealtimeChart = ({metric, symbol}: { metric: string, symbol: string }) => 
 
 	useEffect(() => {
 		if (!lastMessage) return;
-		const realtimeData : RealtimeData = JSON.parse(lastMessage.data);
+		const realtimeData: RealtimeData = JSON.parse(lastMessage.data);
 		let timeStamp = new Date(realtimeData.timestamp).toLocaleTimeString();
 		const _timestamps = timestamps;
 		_timestamps.push(timeStamp);
@@ -90,17 +90,18 @@ const RealtimeChart = ({metric, symbol}: { metric: string, symbol: string }) => 
 		_priceData.push(realtimeData.price);
 		setPriceData(_priceData);
 	}, [lastMessage]);
-	
+
 
 	// Initialize and update the chart when data or symbol changes
 	useEffect(() => {
 		const _option = buildChartWithMetricAndPriceOptionForCreate({
-		title: `${symbol} 实时数据`,
-		timestamps: timestamps,
-		threshold: threshold,
-		metricData: metricData,
-		priceData: priceData,
-	});
+			title: `${symbol} 实时数据`,
+			metric: MetricEnum.buy,
+			timestamps: timestamps,
+			threshold: threshold,
+			metricData: metricData,
+			priceData: priceData,
+		});
 		const echartsOption = {
 			..._option,
 			...customerOption

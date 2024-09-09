@@ -1,6 +1,7 @@
+import * as echarts from "echarts";
 import {EChartsOption} from "echarts";
-import React, {useEffect, useRef, useState} from "react";
-import * as echarts from 'echarts';
+import React from "react";
+import {MetricEnum} from "@/types";
 
 export const sidebarWidth = '200px';
 export const chartWidth = '700px';
@@ -9,6 +10,7 @@ export const introductionWidth = '600px';
 
 type optionBuilderParam = { 
 	title: string,
+	metric: MetricEnum,
 	timestamps: string[],
 	threshold: number,
 	metricData: number[],
@@ -42,7 +44,7 @@ export const createChart = function ({chartRef, containerRef, echartsOption} : {
 	};
 }
 export const buildChartWithMetricAndPriceOptionForCreate =
-	function ({title, timestamps, threshold, metricData, priceData}: optionBuilderParam): EChartsOption {
+	function ({title, metric, timestamps, threshold, metricData, priceData}: optionBuilderParam): EChartsOption {
 	return {
 		title: {
 			text: title,
@@ -152,6 +154,9 @@ export const buildChartWithMetricAndPriceOptionForCreate =
 				emphasis: {
 					focus: 'series'
 				},
+				itemStyle: {
+					color: '#e98734',
+				},
 				markLine: {
 					symbol: 'none',
 					data: [
@@ -162,7 +167,7 @@ export const buildChartWithMetricAndPriceOptionForCreate =
 								// formatter: 'threshold', // 显示的文本
 							},
 							lineStyle: {
-								color: 'red', // 阈值线的颜色
+								color: metric === MetricEnum.buy ? '#44ee11' : '#ec3939', // 阈值线的颜色
 								type: 'dashed', // 阈值线的样式，'dashed' 表示虚线
 							},
 						},
@@ -176,6 +181,9 @@ export const buildChartWithMetricAndPriceOptionForCreate =
 				showSymbol: false,
 				emphasis: {
 					focus: 'series'
+				},
+				itemStyle: {
+					color: '#939393',
 				},
 				data: priceData
 			},

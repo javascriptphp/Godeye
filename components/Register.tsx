@@ -48,7 +48,7 @@ const Checkbox = styled.input`
 `;
 
 const TermsLink = styled.a`
-    color: #ff8c00;
+    color: #1677FF;
     text-decoration: none;
 `;
 
@@ -80,7 +80,7 @@ const LoginLink = styled.p`
     font-size: 14px;
 
     a {
-        color: #ff8c00;
+        color: #1677FF;
         text-decoration: none;
     }
 `;

@@ -1,14 +1,17 @@
 import styled from 'styled-components';
+import {useRouter} from "next/router";
+import {Button, Flex} from "antd";
 
 const HeaderContainer = styled.header`
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
+		min-width: 1000px;
     height: 60px;
     display: flex;
     justify-content: space-between;
-    padding: 10px 20px;
+    padding: 10px 100px 10px 40px;
     background-color: #fff;
     border-bottom: 1px solid #ddd;
     z-index: 1000;
@@ -30,50 +33,23 @@ const NavLinks = styled.div`
     }
 `;
 
-const AuthButtons = styled.div`
-  display: flex;
-  align-items: center;
-
-  button {
-    margin-left: 20px;
-    padding: 5px 15px;
-    font-size: 16px;
-    border: 1px solid #333;
-    background-color: transparent;
-    cursor: pointer;
-    border-radius: 3px;
-
-    &:hover {
-      background-color: #f0f0f0;
-    }
-  }
-
-  .register {
-    background-color: #0070f3;
-    color: white;
-    border: none;
-
-    &:hover {
-      background-color: #005bb5;
-    }
-  }
-`;
-
 const RichHeader = () => {
+	const router = useRouter();
+	const handleSignup = async () => {
+		await router.push('/signup')
+	}
 	return (
 		<HeaderContainer>
 			<Logo>Godeye</Logo>
 			<NavLinks>
-				<a href="#">核心指标</a>
-				<a href="#">免费指标</a>
 				<a href="#">价格</a>
 				<a href="#">联系我们</a>
 				<a href="#">推特</a>
 			</NavLinks>
-			<AuthButtons>
-				<button className="login">登录</button>
-				<button className="register">注册</button>
-			</AuthButtons>
+			<Flex gap={"middle"} justify="center" align="center">
+				<Button>登 录</Button>
+				<Button type="primary" onClick={handleSignup}>注 册</Button>
+			</Flex>
 		</HeaderContainer>
 	);
 };

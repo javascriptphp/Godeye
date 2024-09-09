@@ -6,9 +6,10 @@ import ThreeMonthChart from "@/components/charts/ThreeMonthChart";
 import BARealtimeChart from "@/components/charts/BARealtimeChart";
 import Sidebar from "@/components/Sidebar";
 import {MetricIntroduction} from "@/components/MetricIntroduction";
-import {Flex} from "antd";
+import {Flex, Space} from "antd";
 import Tabs from "@/components/Tabs";
 import HistoricalChart from "@/components/charts/HistoricalChart";
+import {footerText} from "@/utils/global_constant";
 
 const MainContentWrapper = styled.div`
     margin-top: 50px;
@@ -18,7 +19,7 @@ const PageContainer = styled.div`
     display: flex;
     flex-direction: column;
     height: 100vh;
-		min-width: 1000px;
+    min-width: 1000px;
 `;
 
 const TabsWrapper = styled.div`
@@ -51,7 +52,13 @@ const GodeyeIndexPage = () => {
 		{
 			label: '核心指标',
 			sidebar: <Sidebar/>,
-			content: <div><ThreeMonthChart symbol={"BTC"} metric={"buy"}/> <RealtimeChart symbol={"BTC"} metric={"buy"}/> <HistoricalChart symbol={"BTC"} metric={"buy"}/>
+			content: <div>
+				<Space align={"center"} size={100} direction={"vertical"}>
+					<ThreeMonthChart symbol={"BTC"} metric={"buy"}/>
+					<RealtimeChart symbol={"BTC"} metric={"buy"}/>
+					<HistoricalChart symbol={"BTC"} metric={"buy"}/>
+					<MetricIntroduction/>
+				</Space>
 			</div>
 		},
 		{label: '免费指标', sidebar: <Sidebar/>, content: <BARealtimeChart metric={'buy'} symbol={"BTC"}/>},
@@ -72,10 +79,9 @@ const GodeyeIndexPage = () => {
 			<MainContentWrapper>
 				<Flex justify={"center"} align={"center"} vertical={true}>
 					{tabs[activeTab].content}
-					<MetricIntroduction/>
 				</Flex>
 				<Footer>
-					© 2024 Godeye Ltd. All rights reserved.
+					{footerText}
 				</Footer>
 			</MainContentWrapper>
 		</PageContainer>

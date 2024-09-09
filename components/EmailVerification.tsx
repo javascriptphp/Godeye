@@ -66,7 +66,7 @@ const SubmitButton = styled.button`
 `;
 
 const ResendLink = styled.a`
-  color: #ff8c00;
+  color: #1677FF;
   text-decoration: none;
   margin-top: 20px;
   font-size: 14px;

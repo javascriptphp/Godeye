@@ -7,7 +7,7 @@ export const sidebarWidth = '200px';
 export const chartWidth = '700px';
 export const chartHeight = '600px';
 export const introductionWidth = '600px';
-
+export const footerText = `\u00A9 2024 Godeye Ltd. All rights reserved.`;
 type optionBuilderParam = { 
 	title: string,
 	metric: MetricEnum,

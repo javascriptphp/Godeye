@@ -19,11 +19,11 @@ const Container = styled.div`
 `;
 
 const LoginBox = styled.div`
-		flex: 1;
+    flex: 1;
     max-width: 400px;
     width: 100%;
     padding: 0 40px;
-		margin-top: 80px;
+    margin-top: 80px;
 `;
 
 const Title = styled.h1`
@@ -68,7 +68,8 @@ const LinkContainer = styled.div`
 
 const Link = styled.a`
     color: #2388ff;
-		font-size: 14px;
+    font-size: 14px;
+
     &:hover {
         text-decoration: underline;
     }
@@ -94,9 +95,9 @@ const Login: React.FC = () => {
 	};
 
 	return (
-
-		<Wrapper>
+		<>
 			<RichHeader/>
+			<Wrapper>
 				<LoginBox>
 					<Title>Godeye 帐户登录</Title>
 					<Subtitle>欢迎回来！请使用您的邮箱登录</Subtitle>
@@ -104,8 +105,8 @@ const Login: React.FC = () => {
 						style={alterStyle}
 						description={<div>
 							<p><span style={{fontSize: '18px'}}>⚠️</span>
-							本网站已设置防外传水印，付费购买后仅限自己使用，禁止外传，否则永久封禁，原因是指标使用人数越多，指标准确度越低。希望理解和支持。
-						</p>
+								本网站已设置防外传水印，付费购买后仅限自己使用，禁止外传，否则永久封禁，原因是指标使用人数越多，指标准确度越低。希望理解和支持。
+							</p>
 							<p><span style={{fontSize: '18px'}}>⚠️</span>同时为了保证指标的精准度，当指标付费用户达到一定人数，我们将停止对外出售指标，仅服务老用户。
 							</p>
 						</div>}
@@ -136,8 +137,9 @@ const Login: React.FC = () => {
 					</LinkContainer>
 				</LoginBox>
 
-			<FooterContainer>{footerText}</FooterContainer>
-		</Wrapper>
+				<FooterContainer>{footerText}</FooterContainer>
+			</Wrapper>
+		</>
 	);
 };
 

@@ -1,7 +1,7 @@
 import React, {useEffect, useRef, useState} from "react";
 import * as echarts from 'echarts';
-import {BaseMetric, MetricEnum} from "@/types";
-import {getHistoricalData, getThreeMonthData} from "@/service";
+import {BaseMetric, BUY} from "@/types";
+import {getHistoricalData} from "@/service";
 import {message} from "antd";
 import {
 	buildChartWithMetricAndPriceOptionForCreate,
@@ -46,11 +46,11 @@ const HistoricalChart = ({symbol, metric}: { symbol: string, metric: string }) =
 				message.error("Error in fetchData:", error);
 			});
 		}
-	}, [symbol]);
+	}, [symbol, metric]);
 	useEffect(() => {
 		const echartsOption = buildChartWithMetricAndPriceOptionForCreate({
 			title: `${symbol} 历史数据`,
-			metric: MetricEnum.buy,
+			metric: BUY,
 			timestamps: timestamps,
 			threshold: threshold,
 			metricData: metricData,
@@ -59,7 +59,7 @@ const HistoricalChart = ({symbol, metric}: { symbol: string, metric: string }) =
 		createChart({chartRef, containerRef, echartsOption})
 
 		// 用对象包装依赖对象，可以保证在所有元素都变化之后才执行副作用
-	}, [{timestamps, threshold, metricData, priceData}]);  // Update chart when `data` or `symbol` changes
+	}, [timestamps, threshold, metricData, priceData]);  // Update chart when `data` or `symbol` changes
 
 	return (
 		<div>

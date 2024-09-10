@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
-import { Layout, Menu, Radio } from 'antd';
-import { sidebarWidth } from "@/utils/global_constant";
+import React, {useState} from 'react';
+import {Layout, Menu, Radio, RadioChangeEvent} from 'antd';
+import {sidebarWidth} from "@/utils/global_constant";
+import {MetricTypeEnum, SymbolAndMetric} from "@/types";
 
 const { Sider } = Layout;
 const { SubMenu } = Menu;
@@ -21,116 +22,136 @@ const scrollStyle: React.CSSProperties = {
 	height: 'calc(100vh - 72px)'
 }
 
-const Sidebar = () => {
+const Sidebar = ({symbolToggledHandler} : {symbolToggledHandler: (type: SymbolAndMetric) => void}) => {
 	// 定义按钮组状态来控制显示的菜单
-	const [selectedGroup, setSelectedGroup] = useState('group1');
+	const [selectedGroup, setSelectedGroup] = useState<MetricTypeEnum>(MetricTypeEnum.free);
 
 	// 不同按钮组对应的数据
-	const dataGroup1 = [
+	const freeMetrics = [
 		{
 			symbol: 'BTC',
-			metrics: ['买入指标', '卖出指标']
+			metrics: [
+				{
+					key: 'buy',
+					metric: '买入指标'
+				},
+				{
+					key: 'sell',
+					metric: '卖出指标'
+				}
+				]
 		},
 		{
 			symbol: 'ETH',
-			metrics: ['买入指标', '卖出指标']
+			metrics: [
+				{
+					key: 'buy',
+					metric: '买入指标'
+				},
+				{
+					key: 'sell',
+					metric: '卖出指标'
+				}
+				]
 		},
 		{
 			symbol: 'SOL',
-			metrics: ['买入指标', '卖出指标']
+			metrics: [
+				{
+					key: 'buy',
+					metric: '买入指标'
+				},
+				{
+					key: 'sell',
+					metric: '卖出指标'
+				}
+				]
 		},
 		{
-			symbol: 'ABC',
-			metrics: ['买入指标', '卖出指标']
-		},
-		{
-			symbol: 'BTC',
-			metrics: ['买入指标', '卖出指标']
-		},
-		{
-			symbol: 'ETH',
-			metrics: ['买入指标', '卖出指标']
-		},
-		{
-			symbol: 'SOL',
-			metrics: ['买入指标', '卖出指标']
-		},
-		{
-			symbol: 'ABC',
-			metrics: ['买入指标', '卖出指标']
-		},
-		{
-			symbol: 'BTC',
-			metrics: ['买入指标', '卖出指标']
-		},
-		{
-			symbol: 'ETH',
-			metrics: ['买入指标', '卖出指标']
-		},
-		{
-			symbol: 'SOL',
-			metrics: ['买入指标', '卖出指标']
-		},
-		{
-			symbol: 'ABC',
-			metrics: ['买入指标', '卖出指标']
-		},
-		{
-			symbol: 'BTC',
-			metrics: ['买入指标', '卖出指标']
-		},
-		{
-			symbol: 'ETH',
-			metrics: ['买入指标', '卖出指标']
-		},
-		{
-			symbol: 'SOL',
-			metrics: ['买入指标', '卖出指标']
-		},
-		{
-			symbol: 'ABC',
-			metrics: ['买入指标', '卖出指标']
-		},
-		{
-			symbol: 'BTC',
-			metrics: ['买入指标', '卖出指标']
-		},
-		{
-			symbol: 'ETH',
-			metrics: ['买入指标', '卖出指标']
-		},
-		{
-			symbol: 'SOL',
-			metrics: ['买入指标', '卖出指标']
-		},
-		{
-			symbol: 'ABC',
-			metrics: ['买入指标', '卖出指标']
+			symbol: 'OP',
+			metrics: [
+				{
+					key: 'buy',
+					metric: '买入指标'
+				},
+				{
+					key: 'sell',
+					metric: '卖出指标'
+				}
+				]
 		},
 	];
 
-	const dataGroup2 = [
+	const payMetrics = [
 		{
-			symbol: 'LTC',
-			metrics: ['买入建议', '卖出建议']
+			symbol: 'BTC',
+			metrics: [
+				{
+					key: 'buy',
+					metric: '买入指标'
+				},
+				{
+					key: 'sell',
+					metric: '卖出指标'
+				}
+			]
 		},
 		{
-			symbol: 'XRP',
-			metrics: ['买入建议', '卖出建议']
+			symbol: 'ETH',
+			metrics: [
+				{
+					key: 'buy',
+					metric: '买入指标'
+				},
+				{
+					key: 'sell',
+					metric: '卖出指标'
+				}
+			]
 		},
 		{
-			symbol: 'DOGE',
-			metrics: ['买入建议', '卖出建议']
+			symbol: 'SOL',
+			metrics: [
+				{
+					key: 'buy',
+					metric: '买入指标'
+				},
+				{
+					key: 'sell',
+					metric: '卖出指标'
+				}
+			]
 		},
 		{
-			symbol: 'BNB',
-			metrics: ['买入建议', '卖出建议']
+			symbol: 'OP',
+			metrics: [
+				{
+					key: 'buy',
+					metric: '买入指标'
+				},
+				{
+					key: 'sell',
+					metric: '卖出指标'
+				}
+			]
 		},
 	];
 
+	const [currentSymbol, setCurrentSymbol] = useState<string>(freeMetrics[0].symbol);
+	const [currentMetric, setCurrentMetric] = useState<string>(freeMetrics[0].metrics[0].metric);
 	// 根据 selectedGroup 的值选择要渲染的菜单数据
-	const data = selectedGroup === 'group1' ? dataGroup1 : dataGroup2;
+	const data = selectedGroup === MetricTypeEnum.free ? freeMetrics : payMetrics;
 
+	const metricTypeToggled = (e: RadioChangeEvent) => {
+		setSelectedGroup(e.target.value);
+	}
+	const symbolToggled = (symbol: string, metric: string) => {
+		if (symbol !== currentSymbol || metric !== currentMetric) {
+			symbolToggledHandler({symbol, metric});
+			setCurrentSymbol(symbol);
+			setCurrentMetric(metric);
+		}
+	};
 	return (
 		<Sider
 			width={sidebarWidth}
@@ -148,11 +169,11 @@ const Sidebar = () => {
 			>
 				<Radio.Group
 					value={selectedGroup}
-					onChange={(e) => setSelectedGroup(e.target.value)}
+					onChange={(e) => metricTypeToggled(e)}
 					buttonStyle="solid"
 				>
-					<Radio.Button value="group1">核心指标</Radio.Button>
-					<Radio.Button value="group2">免费指标</Radio.Button>
+					<Radio.Button value={MetricTypeEnum.free}>免费指标</Radio.Button>
+					<Radio.Button value={MetricTypeEnum.pay}>核心指标</Radio.Button>
 				</Radio.Group>
 			</div>
 
@@ -167,8 +188,8 @@ const Sidebar = () => {
 					{data.map((symbolValue, symbolIndex) => (
 						<SubMenu key={'symbol_' + symbolIndex} title={symbolValue.symbol}>
 							{symbolValue.metrics.map((metricValue, metricIndex) => (
-								<Menu.Item key={'metrics_' + symbolIndex + '_' + metricIndex}>
-									{metricValue}
+								<Menu.Item key={'metrics_' + symbolIndex + '_' + metricIndex} onClick={() => symbolToggled(symbolValue.symbol, metricValue.key)}>
+									{metricValue.metric}
 								</Menu.Item>
 							))}
 						</SubMenu>

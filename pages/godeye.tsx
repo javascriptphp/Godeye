@@ -6,13 +6,14 @@ import ThreeMonthChart from "@/components/charts/ThreeMonthChart";
 import BARealtimeChart from "@/components/charts/BARealtimeChart";
 import Sidebar from "@/components/Sidebar";
 import {MetricIntroduction} from "@/components/MetricIntroduction";
-import {Flex, Space} from "antd";
+import {Alert, Col, Flex, Row, Space} from "antd";
 import Tabs from "@/components/Tabs";
 import HistoricalChart from "@/components/charts/HistoricalChart";
 import {footerText} from "@/utils/global_constant";
+import {SymbolAndMetric} from "@/types";
 
 const MainContentWrapper = styled.div`
-    margin-top: 50px;
+    margin-top: 150px;
     margin-left: 200px;
 `;
 const PageContainer = styled.div`
@@ -37,54 +38,46 @@ const ToggleButton = styled.button`
     font-size: 14px;
     align-self: flex-start;
 `;
-const Footer = styled.footer`
+const Footer = styled.div`
     padding: 10px 20px;
     background-color: #f5f5f5;
     text-align: center;
     border-top: 1px solid #ddd;
     font-size: 14px;
+    z-index: 99;
+    height: 150px;
 `;
+
 const GodeyeIndexPage = () => {
-	const [activeTab, setActiveTab] = useState(0);
-	const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
 
-	const tabs = [
-		{
-			label: '核心指标',
-			sidebar: <Sidebar/>,
-			content: <div>
-				<Space align={"center"} size={100} direction={"vertical"}>
-					<ThreeMonthChart symbol={"BTC"} metric={"buy"}/>
-					<RealtimeChart symbol={"BTC"} metric={"buy"}/>
-					<HistoricalChart symbol={"BTC"} metric={"buy"}/>
-					<MetricIntroduction/>
-				</Space>
-			</div>
-		},
-		{label: '免费指标', sidebar: <Sidebar/>, content: <BARealtimeChart metric={'buy'} symbol={"BTC"}/>},
-		{label: 'Test', sidebar: <Sidebar/>, content: <RealtimeChart metric={'buy'} symbol={"BTC"}/>},
-	];
-
-	const toggleSidebar = () => {
-		setIsSidebarCollapsed(!isSidebarCollapsed);
-	};
-
+	const [symbol, setSymbol] = useState('BTC');
+	const [metric, setMetric] = useState('buy');
+	const symbolSwitchedHandler = ({symbol, metric}: SymbolAndMetric) => {
+		setSymbol(symbol);
+		setMetric(metric);
+	}
 	return (
-		<PageContainer>
-			<RichHeader/>
-			<TabsWrapper>
-				{/*<Tabs tabs={tabs} activeTab={activeTab} setActiveTab={setActiveTab} />*/}
-			</TabsWrapper>
-			{tabs[activeTab].sidebar}
-			<MainContentWrapper>
-				<Flex justify={"center"} align={"center"} vertical={true}>
-					{tabs[activeTab].content}
-				</Flex>
+		<>
+
+			
+			<PageContainer>
+				<RichHeader/>
+				<Sidebar symbolToggledHandler={symbolSwitchedHandler}/>
+				<MainContentWrapper>
+					<Flex justify={"center"} align={"center"} vertical={true}>
+						<Space align={"center"} size={100} direction={"vertical"}>
+							<ThreeMonthChart symbol={symbol} metric={metric}/>
+							<RealtimeChart symbol={symbol} metric={metric}/>
+							<HistoricalChart symbol={symbol} metric={metric}/>
+							<MetricIntroduction/>
+						</Space>
+					</Flex>
+				</MainContentWrapper>
 				<Footer>
 					{footerText}
 				</Footer>
-			</MainContentWrapper>
-		</PageContainer>
+			</PageContainer>
+		</>
 	);
 };
 export default GodeyeIndexPage;

@@ -1,7 +1,7 @@
 import * as echarts from "echarts";
 import {EChartsOption} from "echarts";
 import React from "react";
-import {MetricEnum} from "@/types";
+import {BUY} from "@/types";
 
 export const sidebarWidth = '200px';
 export const chartWidth = '700px';
@@ -10,11 +10,12 @@ export const introductionWidth = '600px';
 export const footerText = `\u00A9 2024 Godeye Ltd. All rights reserved.`;
 type optionBuilderParam = { 
 	title: string,
-	metric: MetricEnum,
+	metric: string,
 	timestamps: string[],
 	threshold: number,
 	metricData: number[],
-	priceData: number[] 
+	priceData: number[],
+	watermark?: string,
 }
 export const createChart = function ({chartRef, containerRef, echartsOption} : {
 	chartRef:  React.MutableRefObject<echarts.ECharts | null>,
@@ -44,7 +45,7 @@ export const createChart = function ({chartRef, containerRef, echartsOption} : {
 	};
 }
 export const buildChartWithMetricAndPriceOptionForCreate =
-	function ({title, metric, timestamps, threshold, metricData, priceData}: optionBuilderParam): EChartsOption {
+	function ({title, metric, timestamps, threshold, metricData, priceData, watermark}: optionBuilderParam): EChartsOption {
 	return {
 		title: {
 			text: title,
@@ -73,6 +74,34 @@ export const buildChartWithMetricAndPriceOptionForCreate =
 				return result;
 			},
 		},
+		graphic: (function () {
+			const graphics = [];
+			const text = '水印文字'; // 你想要的水印文本
+			const gap = 100; // 间隔
+
+			// 计算行和列
+			const cols = Math.ceil(parseInt(chartWidth) / gap);
+			const rows = Math.ceil(parseInt(chartHeight) / gap);
+
+			// 循环生成多个水印文字
+			for (let i = 0; i < rows; i++) {
+				for (let j = 0; j < cols; j++) {
+					graphics.push({
+						type: 'text',
+						left: j * gap,
+						top: i * gap,
+						style: {
+							text: text,
+							fontSize: 14,
+							fill: 'rgba(0, 0, 0, 0.1)', // 设置文字颜色和透明度
+						},
+						rotation: Math.PI / 4, // 逆时针旋转 45 度
+					});
+				}
+			}
+
+			return graphics;
+		})(),
 		grid: {
 			bottom: 80
 		},
@@ -167,7 +196,7 @@ export const buildChartWithMetricAndPriceOptionForCreate =
 								// formatter: 'threshold', // 显示的文本
 							},
 							lineStyle: {
-								color: metric === MetricEnum.buy ? '#44ee11' : '#ec3939', // 阈值线的颜色
+								color: metric === BUY ? '#44ee11' : '#ec3939', // 阈值线的颜色
 								type: 'dashed', // 阈值线的样式，'dashed' 表示虚线
 							},
 						},

@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from "react";
 import * as echarts from 'echarts';
-import {BaseMetric, MetricEnum} from "@/types";
+import {BaseMetric, BUY, MetricTypeEnum} from "@/types";
 import {getThreeMonthData} from "@/service";
 import {message} from "antd";
 import {
@@ -23,6 +23,7 @@ const ThreeMonthChart = ({symbol, metric}: { symbol: string, metric: string }) =
 
 	// Fetch data and update the state
 	useEffect(() => {
+		console.log("three month chart",symbol, metric)
 		const fetchData = async () => {
 			const result = await getThreeMonthData(symbol, metric);
 			if (Array.isArray(result[metric])) {
@@ -40,17 +41,18 @@ const ThreeMonthChart = ({symbol, metric}: { symbol: string, metric: string }) =
 			}
 		};
 
-		if (!hasFetchedData.current) {
-			hasFetchedData.current = true;
-			fetchData().catch((error) => {
+		// if (!hasFetchedData.current) {
+		// 	hasFetchedData.current = true;
+			fetchData().then(data => console.log(metricData))
+				.catch((error) => {
 				message.error("Error in fetchData:", error);
 			});
-		}
-	}, [symbol]);
+		// }
+	}, [symbol, metric]);
 	useEffect(() => {
 		const echartsOption = buildChartWithMetricAndPriceOptionForCreate({
 			title: `${symbol} 三个月数据`,
-			metric: MetricEnum.buy,
+			metric: BUY,
 			timestamps: timestamps,
 			threshold: threshold,
 			metricData: metricData,
@@ -59,7 +61,7 @@ const ThreeMonthChart = ({symbol, metric}: { symbol: string, metric: string }) =
 		createChart({chartRef, containerRef, echartsOption})
 
 		// 用对象包装依赖对象，可以保证在所有元素都变化之后才执行副作用
-	}, [{timestamps, threshold, metricData, priceData}]);  // Update chart when `data` or `symbol` changes
+	}, [timestamps, threshold, metricData, priceData]);  // Update chart when `data` or `symbol` changes
 
 	return (
 		<div>

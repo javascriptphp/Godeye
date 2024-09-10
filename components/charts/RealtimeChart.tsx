@@ -1,7 +1,7 @@
 import React, {useEffect, useRef, useState} from "react";
 import * as echarts from 'echarts';
 import {EChartsOption} from 'echarts';
-import {MetricEnum, RealtimeData} from "@/types";
+import {BUY, RealtimeData} from "@/types";
 import {getRealtimeDataUrl} from "@/service";
 import {message} from "antd";
 import useWebSocket from "react-use-websocket";
@@ -63,7 +63,7 @@ const RealtimeChart = ({metric, symbol}: { metric: string, symbol: string }) => 
 	// 请求websocket url
 	useEffect(() => {
 		getRealtimeDataUrl(metric, symbol).then(url => setWebsocketUrl(url));
-	}, []);
+	}, [symbol, metric]);
 	const {lastMessage} = useWebSocket(websocketUrl, {
 		onOpen: () => console.log('WebSocket connected!'),
 		onClose: () => console.log('WebSocket disconnected!'),
@@ -96,7 +96,7 @@ const RealtimeChart = ({metric, symbol}: { metric: string, symbol: string }) => 
 	useEffect(() => {
 		const _option = buildChartWithMetricAndPriceOptionForCreate({
 			title: `${symbol} 实时数据`,
-			metric: MetricEnum.buy,
+			metric: BUY,
 			timestamps: timestamps,
 			threshold: threshold,
 			metricData: metricData,
@@ -109,7 +109,7 @@ const RealtimeChart = ({metric, symbol}: { metric: string, symbol: string }) => 
 		createChart({
 			chartRef, containerRef, echartsOption
 		});
-	}, [{timestamps, threshold, metricData, priceData}]);  // Update chart when `data` or `symbol` changes
+	}, [timestamps, threshold, metricData, priceData]);  // Update chart when `data` or `symbol` changes
 
 	return (
 		<div>

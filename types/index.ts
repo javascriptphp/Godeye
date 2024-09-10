@@ -1,3 +1,5 @@
+import {string} from "prop-types";
+
 export type ThreeMonthResponse = {
 	message?: string;
 	data: ThreeMonthBuyData | ThreeMonthSellData;
@@ -35,9 +37,8 @@ export type RealtimeData = {
 	metric_value: number;
 	threshold: number;
 };
-export enum MetricEnum {
-	buy, sell
-}
+export const BUY = 'buy';
+export const SELL = 'sell';
 export type BARealtimeData = {
 	e: string,
 	E: Date,
@@ -49,4 +50,11 @@ export type BARealtimeData = {
 		i: string,
 		o: string,
 	}
+}
+export enum MetricTypeEnum {
+	free, pay
+}
+export type SymbolAndMetric = {
+	symbol: string;
+	metric: string;
 }

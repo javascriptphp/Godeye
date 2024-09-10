@@ -1,5 +1,5 @@
 import React from 'react';
-import {Button, Input, Form} from 'antd';
+import {Button, Input, Form, Alert, Space} from 'antd';
 import styled from 'styled-components';
 import {footerText} from "@/utils/global_constant";
 import RichHeader from "@/components/RichHeader";
@@ -22,8 +22,8 @@ const LoginBox = styled.div`
 		flex: 1;
     max-width: 400px;
     width: 100%;
-    padding: 40px;
-		margin-top: 120px;
+    padding: 0 40px;
+		margin-top: 80px;
 `;
 
 const Title = styled.h1`
@@ -35,7 +35,7 @@ const Title = styled.h1`
 const Subtitle = styled.p`
     text-align: center;
     color: #888;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
 `;
 
 const StyledForm = styled(Form)`
@@ -80,6 +80,14 @@ const FooterContainer = styled.footer`
     color: #999;
     font-family: Arial, sans-serif;
 `;
+const alterStyle: React.CSSProperties = {
+	paddingLeft: 14,
+	paddingRight: 14,
+	paddingTop: 0,
+	paddingBottom: 0,
+	marginBottom: 20,
+	fontSize: 12,
+}
 const Login: React.FC = () => {
 	const onFinish = (values: any) => {
 		console.log('Success:', values);
@@ -91,7 +99,20 @@ const Login: React.FC = () => {
 			<RichHeader/>
 				<LoginBox>
 					<Title>Godeye 帐户登录</Title>
-					<Subtitle>欢迎回来！用您的邮箱登录</Subtitle>
+					<Subtitle>欢迎回来！请使用您的邮箱登录</Subtitle>
+					<Alert
+						style={alterStyle}
+						description={<div>
+							<p><span style={{fontSize: '18px'}}>⚠️</span>
+							本网站已设置防外传水印，付费购买后仅限自己使用，禁止外传，否则永久封禁，原因是指标使用人数越多，指标准确度越低。希望理解和支持。
+						</p>
+							<p><span style={{fontSize: '18px'}}>⚠️</span>同时为了保证指标的精准度，当指标付费用户达到一定人数，我们将停止对外出售指标，仅服务老用户。
+							</p>
+						</div>}
+
+						// showIcon
+						type="info"
+					/>
 					<StyledForm onFinish={onFinish}>
 						<Form.Item
 							name="email"

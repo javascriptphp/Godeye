@@ -1,8 +1,8 @@
 import React, {useState} from 'react';
 import styled from 'styled-components';
 import SimpleHeader from "@/components/SimpleHeader";
-import EmailVerification from "@/components/EmailVerification";
-import Register from "@/components/Register";
+import EmailVerification from "@/components/login/EmailVerification";
+import Register from "@/components/login/Register";
 import {footerText} from "@/utils/global_constant";
 import RichHeader from "@/components/RichHeader";
 import {Col, Row, Steps} from "antd";
@@ -37,8 +37,8 @@ const RegistrationForm = () => {
 	const [isRegistered, setIsRegistered] = useState(false);
 	const [curStep, setCurStep] = useState(0);
 
-	const description = 'fjdslkfjds';
 	const handleRegister = () => {
+		setCurStep(1);
 		setIsRegistered(true); // 切换到验证页面
 	};
 	return (

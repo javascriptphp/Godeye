@@ -58,8 +58,8 @@ const PageContainer = styled.div`
     height: 100vh;
 `;
 const Button = styled.button`
-    background-color: #ffd700;
-    color: #000;
+    background-color: #2388ff;
+    color: #fff;
     padding: 10px 20px;
     border: none;
     cursor: pointer;
@@ -93,7 +93,7 @@ const Footer = styled.footer`
     font-size: 14px;
 `;
 
-const Register = ({onRegister}) => {
+const Register = ({onRegister} : {onRegister: VoidFunction}) => {
 	const [email, setEmail] = useState('');
 	const [password, setPassword] = useState('');
 	const [agreeTerms, setAgreeTerms] = useState(false);
@@ -146,7 +146,7 @@ const Register = ({onRegister}) => {
 								checked={agreeTerms}
 								onChange={handleAgreeTermsChange}
 							/>
-							我已阅读并同意 Looknode 的 <TermsLink href="#">用户服务条款</TermsLink>
+							我已阅读并同意 Godeye 的 <TermsLink href="#">用户服务条款</TermsLink>
 						</CheckboxLabel>
 					</CheckboxContainer>
 					<Button type="submit" disabled={!agreeTerms} >
@@ -154,7 +154,7 @@ const Register = ({onRegister}) => {
 					</Button>
 				</Form>
 				<LoginLink>
-					已经注册了？ <a href="#">登录</a>
+					已经注册了？ <a href="/signin">登录</a>
 				</LoginLink>
 			</Container>
 	);

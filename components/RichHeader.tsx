@@ -7,7 +7,7 @@ import React from "react";
 const HeaderContainer = styled.header`
     display: flex;
     justify-content: space-between;
-    padding: 10px 100px 10px 40px;
+    padding: 10px 40px 10px 40px;
 `;
 
 const Wrapper = styled.div`
@@ -30,7 +30,7 @@ const NavLinks = styled.div`
     align-items: center;
 
     a {
-        margin-left: 20px;
+        margin: 0 20px;
         text-decoration: none;
         color: #333;
     }
@@ -68,9 +68,8 @@ const RichHeader = () => {
 					<Logo>Godeye</Logo>
 				</Link>
 				<NavLinks>
-					<a href="#">价格</a>
-					<a href="#">联系我们</a>
-					<a href="#">推特</a>
+					<a href="/pay">价格</a>
+					<a href="/contact">联系我们</a>
 				</NavLinks>
 				<Flex gap={"middle"} justify="center" align="center">
 					<Button onClick={handleSignin}>登 录</Button>

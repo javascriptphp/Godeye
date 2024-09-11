@@ -67,8 +67,8 @@ const GodeyeIndexPage = () => {
 					<Flex justify={"center"} align={"center"} vertical={true}>
 						<Space align={"center"} size={100} direction={"vertical"}>
 							<ThreeMonthChart symbol={symbol} metric={metric}/>
-							<RealtimeChart symbol={symbol} metric={metric}/>
 							<HistoricalChart symbol={symbol} metric={metric}/>
+							<RealtimeChart symbol={symbol} metric={metric}/>
 							<MetricIntroduction/>
 						</Space>
 					</Flex>

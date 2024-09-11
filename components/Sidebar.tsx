@@ -172,8 +172,8 @@ const Sidebar = ({symbolToggledHandler} : {symbolToggledHandler: (type: SymbolAn
 					onChange={(e) => metricTypeToggled(e)}
 					buttonStyle="solid"
 				>
-					<Radio.Button value={MetricTypeEnum.free}>免费指标</Radio.Button>
 					<Radio.Button value={MetricTypeEnum.pay}>核心指标</Radio.Button>
+					<Radio.Button value={MetricTypeEnum.free}>免费指标</Radio.Button>
 				</Radio.Group>
 			</div>
 

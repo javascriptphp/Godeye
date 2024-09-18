@@ -10,7 +10,6 @@ const siderStyle: React.CSSProperties = {
 	overflow: 'hidden',  // 禁止整个 Sider 滚动
 	height: '100vh',
 	position: 'fixed',
-	insetInlineStart: 0,
 	top: 0,  // 从顶部开始布局
 	bottom: 0,
 	marginTop: '80px',

@@ -75,20 +75,16 @@ const RealtimeChart = ({metric, symbol}: { metric: string, symbol: string }) => 
 
 	useEffect(() => {
 		if (!lastMessage) return;
-		const realtimeData: RealtimeData = JSON.parse(lastMessage.data);
-		let timeStamp = new Date(realtimeData.timestamp).toLocaleTimeString();
-		const _timestamps = timestamps;
-		_timestamps.push(timeStamp);
-		setTimestamps(_timestamps);
-		if (realtimeData.metric === metric) {
-			const _metricData = metricData;
-			_metricData.push(realtimeData.metric_value);
-			setMetricData(_metricData);
-		}
-		setThreshold(realtimeData.threshold);
-		const _priceData = priceData;
-		_priceData.push(realtimeData.price);
-		setPriceData(_priceData);
+		const realtimeDataArray: RealtimeData[] = JSON.parse(lastMessage.data);
+		if (!Array.isArray(realtimeDataArray) || realtimeDataArray.length <= 0) return;
+		
+		const _timestamps : Array<string> = realtimeDataArray.map(data => new Date(data.timestamp).toLocaleTimeString())
+		const _metricValues : Array<number> = realtimeDataArray.map(data => data.metric_value)
+		const _prices : Array<number> = realtimeDataArray.map(data => data.price);
+		setTimestamps((prevTimeStamps) => [...prevTimeStamps, ..._timestamps]);
+		setMetricData((prevMetricData) => [...prevMetricData, ..._metricValues]);
+		setThreshold(realtimeDataArray[0].threshold);
+		setPriceData((prevPriceData) => [...prevPriceData, ..._prices]);
 	}, [lastMessage]);
 
 

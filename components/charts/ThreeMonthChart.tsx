@@ -19,7 +19,7 @@ const ThreeMonthChart = ({symbol, metric}: { symbol: string, metric: string }) =
 	const [timestamps, setTimestamps] = useState<string[]>([]);
 
 	const chartRef = useRef<echarts.ECharts | null>(null);  // Store chart instance in a ref
-	const hasFetchedData = useRef(false);  // Track if data has been fetched
+	const [messageApi, contextHolder] = message.useMessage();
 
 	// Fetch data and update the state
 	useEffect(() => {
@@ -45,7 +45,11 @@ const ThreeMonthChart = ({symbol, metric}: { symbol: string, metric: string }) =
 		// 	hasFetchedData.current = true;
 			fetchData().then(data => console.log(metricData))
 				.catch((error) => {
-				message.error("Error in fetchData:", error);
+					messageApi.open({
+						type: "error",
+						content: "Error in fetching Three-Month Data",
+						duration: 1500
+					})
 			});
 		// }
 	}, [symbol, metric]);
@@ -65,6 +69,7 @@ const ThreeMonthChart = ({symbol, metric}: { symbol: string, metric: string }) =
 
 	return (
 		<div>
+			{contextHolder}
 			<div ref={containerRef} style={{width: chartWidth, height: chartHeight}}></div>
 		</div>
 	);

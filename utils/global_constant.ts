@@ -4,9 +4,9 @@ import React from "react";
 import {BUY} from "@/types";
 
 export const sidebarWidth = '200px';
-export const chartWidth = '700px';
-export const chartHeight = '600px';
-export const introductionWidth = '600px';
+export const chartWidth = '1100px';
+export const chartHeight = '650px';
+export const introductionWidth = parseInt(chartWidth)/2;
 export const footerText = `\u00A9 2024 Godeye Ltd. All rights reserved.`;
 type optionBuilderParam = { 
 	title: string,
@@ -49,13 +49,16 @@ export const buildChartWithMetricAndPriceOptionForCreate =
 	return {
 		title: {
 			text: title,
+			textStyle: {
+				fontSize: '26px',
+			},
 			left: 'center',
 			top: 0,
 		},
 		legend: {
 			data: ['Metric', 'Price'],
 			left: 20,
-			top: 30,
+			top: 20,
 		},
 		grid: {
 			top: '80', // 将图表的绘制区域向下移动，避免与legend重叠
@@ -109,6 +112,19 @@ export const buildChartWithMetricAndPriceOptionForCreate =
 					});
 				}
 			}
+			
+			// 添加公司名称水印
+			graphics.push({
+				type: 'text',
+				left: parseInt(chartWidth)*0.32,
+				top: parseInt(chartHeight)*0.38,
+				style: {
+					text: 'G o d e y e',
+					fontSize: 56,
+					fill: 'rgba(0, 0, 0, 0.1)', // 设置文字颜色和透明度
+				},
+				rotation: 0, // 逆时针旋转 45 度
+			});
 
 			return graphics;
 		})(),

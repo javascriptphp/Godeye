@@ -95,7 +95,7 @@ const RealtimeChart = ({metric, symbol}: { metric: string, symbol: string }) => 
 	// Initialize and update the chart when data or symbol changes
 	useEffect(() => {
 		const _option = buildChartWithMetricAndPriceOptionForCreate({
-			title: `${symbol} 实时数据`,
+			title: `T3—实时数据`,
 			metric: BUY,
 			timestamps: timestamps,
 			threshold: threshold,

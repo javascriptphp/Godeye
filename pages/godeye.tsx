@@ -3,11 +3,9 @@ import styled from 'styled-components';
 import RichHeader from '../components/RichHeader';
 import RealtimeChart from "@/components/charts/RealtimeChart";
 import ThreeMonthChart from "@/components/charts/ThreeMonthChart";
-import BARealtimeChart from "@/components/charts/BARealtimeChart";
 import Sidebar from "@/components/Sidebar";
 import {MetricIntroduction} from "@/components/MetricIntroduction";
-import {Alert, Col, Flex, Row, Space} from "antd";
-import Tabs from "@/components/Tabs";
+import {Flex, Space} from "antd";
 import HistoricalChart from "@/components/charts/HistoricalChart";
 import {footerText} from "@/utils/global_constant";
 import {SymbolAndMetric} from "@/types";
@@ -69,7 +67,7 @@ const GodeyeIndexPage = () => {
 							<ThreeMonthChart symbol={symbol} metric={metric}/>
 							<HistoricalChart symbol={symbol} metric={metric}/>
 							<RealtimeChart symbol={symbol} metric={metric}/>
-							<MetricIntroduction/>
+							<MetricIntroduction metric={metric}/>
 						</Space>
 					</Flex>
 				</MainContentWrapper>

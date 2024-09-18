@@ -51,7 +51,7 @@ const ThreeMonthChart = ({symbol, metric}: { symbol: string, metric: string }) =
 	}, [symbol, metric]);
 	useEffect(() => {
 		const echartsOption = buildChartWithMetricAndPriceOptionForCreate({
-			title: `${symbol} 三个月数据`,
+			title: `T1—部分历史数据`,
 			metric: BUY,
 			timestamps: timestamps,
 			threshold: threshold,

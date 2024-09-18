@@ -49,7 +49,7 @@ const HistoricalChart = ({symbol, metric}: { symbol: string, metric: string }) =
 	}, [symbol, metric]);
 	useEffect(() => {
 		const echartsOption = buildChartWithMetricAndPriceOptionForCreate({
-			title: `${symbol} 历史数据`,
+			title: `T2—全部数据`,
 			metric: BUY,
 			timestamps: timestamps,
 			threshold: threshold,

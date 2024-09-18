@@ -60,6 +60,7 @@ const FooterContainer = styled.footer`
 const Pricing = () => {
 	const plans = [
 		{
+			code: 'primary',
 			title: '普通版',
 			price: '0 美元/年',
 			description: '为加密爱好者提供基本的链上和加密市场数据。仅包括 核心指标的免费历史数据和免费指标。',
@@ -70,6 +71,7 @@ const Pricing = () => {
 			],
 		},
 		{
+			code: 'ultimate',
 			title: '上帝视角版',
 			price: '199 美元/年',
 			description: '为小白投资者提供最精准的加密市场趋势预测数据。让普通人也能通过大数据开启上帝视角，明牌操作。所有图表均可访问。',
@@ -113,7 +115,7 @@ const Pricing = () => {
 										</List.Item>
 									)}
 								/>
-								<CustomButton type="primary">注册</CustomButton>
+								<CustomButton type="primary">{plan.code === 'primary' ? '注册' : '升级'}</CustomButton>
 							</CustomCard>
 						</Col>
 					))}

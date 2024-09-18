@@ -30,6 +30,7 @@ const ContactPage = () => {
 							fontSize: '16px',
 						}}
 						className="custom-button"
+						onClick={() => { window.open('https://x.com/btcnnn199?t=sTvR8AI1MmiIkx6OepZuRQ&s=09', '_blank')}}
 					>
 						点击关注 Twitter
 					</Button>

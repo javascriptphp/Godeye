@@ -50,6 +50,16 @@ export const buildChartWithMetricAndPriceOptionForCreate =
 		title: {
 			text: title,
 			left: 'center',
+			top: 0,
+		},
+		legend: {
+			data: ['Metric', 'Price'],
+			left: 20,
+			top: 30,
+		},
+		grid: {
+			top: '80', // 将图表的绘制区域向下移动，避免与legend重叠
+			bottom: '80'
 		},
 		tooltip: {
 			trigger: 'axis',
@@ -102,9 +112,6 @@ export const buildChartWithMetricAndPriceOptionForCreate =
 
 			return graphics;
 		})(),
-		grid: {
-			bottom: 80
-		},
 		dataZoom: [
 			{
 				show: true,
@@ -127,10 +134,6 @@ export const buildChartWithMetricAndPriceOptionForCreate =
 				restore: {},
 				saveAsImage: {}
 			}
-		},
-		legend: {
-			data: ['Metric', 'Price'],
-			left: 20,
 		},
 		xAxis: {
 			type: 'category',

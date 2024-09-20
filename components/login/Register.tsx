@@ -95,11 +95,15 @@ const Footer = styled.footer`
 
 const Register = ({onRegister} : {onRegister: VoidFunction}) => {
 	const [email, setEmail] = useState('');
+	const [username, setUsername] = useState('');
 	const [password, setPassword] = useState('');
 	const [agreeTerms, setAgreeTerms] = useState(false);
 
 	const handleEmailChange = (e) => {
 		setEmail(e.target.value);
+	};
+	const handleUsernameChange = (e) => {
+		setUsername(e.target.value);
 	};
 
 	const handlePasswordChange = (e) => {
@@ -124,6 +128,14 @@ const Register = ({onRegister} : {onRegister: VoidFunction}) => {
 				<Description>输入您帐户的详细信息和强密码以保护您的帐户</Description>
 				<Form onSubmit={handleSubmit}>
 					<Label>
+						用户名
+						<Input
+							type="text"
+							value={username}
+							onChange={handleUsernameChange}
+						/>
+					</Label>
+					<Label>
 						邮箱
 						<Input
 							type="email"
@@ -137,6 +149,7 @@ const Register = ({onRegister} : {onRegister: VoidFunction}) => {
 							type="password"
 							value={password}
 							onChange={handlePasswordChange}
+							required
 						/>
 					</Label>
 					<CheckboxContainer>
@@ -149,7 +162,7 @@ const Register = ({onRegister} : {onRegister: VoidFunction}) => {
 							我已阅读并同意 Godeye 的 <TermsLink href="#">用户服务条款</TermsLink>
 						</CheckboxLabel>
 					</CheckboxContainer>
-					<Button type="submit" disabled={!agreeTerms} >
+					<Button type="submit" disabled={!username || !email || !password || !agreeTerms} >
 						下一步
 					</Button>
 				</Form>

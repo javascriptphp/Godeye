@@ -54,7 +54,7 @@ const RegistrationForm = () => {
 							current={curStep}
 							items={[
 								{
-									title: "输入账户详细信息",
+									title: "输入邮箱",
 								},
 								{
 									title: "邮箱验证",

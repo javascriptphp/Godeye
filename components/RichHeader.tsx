@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import {useRouter} from "next/router";
-import {Alert, Button, Flex} from "antd";
+import {Alert, Button, Flex, Space} from "antd";
 import Link from "next/link";
 import React from "react";
 
@@ -65,7 +65,12 @@ const RichHeader = () => {
 			/>
 			<HeaderContainer>
 				<Link href={"/"}>
+					<Space direction={"horizontal"} align={"baseline"} size={"middle"}>
 					<Logo>Godeye</Logo>
+						<div style={{ width: 350, alignItems: 'center' }}>
+					<span style={{fontSize: 12, background: 'linear-gradient(to right, red, blue)', color: 'transparent', WebkitBackgroundClip: 'text'}}>普通人能接触到的<span style={{fontSize: 16}}>最精准</span>预警指标，多家对冲基金已购买本产品</span>
+						</div>
+					</Space>
 				</Link>
 				<NavLinks>
 					<a href="/pay">价格</a>

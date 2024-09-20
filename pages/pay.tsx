@@ -1,5 +1,5 @@
 import React from 'react';
-import {Row, Col, Card, Button, List, Divider} from 'antd';
+import {Row, Col, Card, Button, List, Divider, Alert} from 'antd';
 import {CheckOutlined, CloseOutlined} from '@ant-design/icons';
 import styled from 'styled-components';
 import RichHeader from "@/components/RichHeader";
@@ -56,7 +56,14 @@ const FooterContainer = styled.footer`
     color: #999;
     font-family: Arial, sans-serif;
 `;
-
+const alterStyle: React.CSSProperties = {
+	paddingLeft: 14,
+	paddingRight: 14,
+	paddingTop: 0,
+	paddingBottom: 0,
+	marginBottom: 20,
+	fontSize: 12,
+}
 const Pricing = () => {
 	const plans = [
 		{
@@ -87,6 +94,21 @@ const Pricing = () => {
 		<PageFrame>
 			<Container>
 				<Heading>选择适合您需求的计划</Heading>
+				<Row>
+					<Col span={11} offset={7}>
+						<Alert
+							style={alterStyle}
+							description={<div>
+								<p><span style={{fontSize: '18px'}}>⚠️</span>
+									本产品是普通人能接触到的最精准的市场趋势提前预警指标，多家对冲基金已购买本产品用于加密市场趋势判断。
+								</p>
+							</div>}
+
+							// showIcon
+							type="info"
+						/>
+					</Col>
+				</Row>
 				<Row gutter={[32,32]} justify="center">
 					{plans.map((plan, index) => (
 						<Col xs={24} sm={12} md={7} key={index}>

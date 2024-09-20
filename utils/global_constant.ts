@@ -6,7 +6,7 @@ import {BUY} from "@/types";
 export const sidebarWidth = '200px';
 export const chartWidth = '1100px';
 export const chartHeight = '650px';
-export const introductionWidth = parseInt(chartWidth)/2;
+export const introductionWidth = 2*parseInt(chartWidth)/3;
 export const footerText = `\u00A9 2024 Godeye Ltd. All rights reserved.`;
 type optionBuilderParam = { 
 	title: string,
@@ -57,8 +57,8 @@ export const buildChartWithMetricAndPriceOptionForCreate =
 		},
 		legend: {
 			data: ['Metric', 'Price'],
-			left: 20,
-			top: 20,
+			left: 'center',
+			top: 40,
 		},
 		grid: {
 			top: '80', // 将图表的绘制区域向下移动，避免与legend重叠
@@ -159,6 +159,10 @@ export const buildChartWithMetricAndPriceOptionForCreate =
 		yAxis: [
 			{
 				name: 'metric',
+				nameLocation: 'end',
+				nameTextStyle: {
+					fontSize: 14
+				},
 				type: 'value',
 				min: (value: any) => {
 					return Math.min(threshold * 0.9, value.min * 0.95);  // Y 轴最小值为数据最小值的 90%
@@ -175,7 +179,10 @@ export const buildChartWithMetricAndPriceOptionForCreate =
 			},
 			{
 				name: 'price',
-				nameLocation: 'start',
+				nameLocation: 'end',
+				nameTextStyle: {
+					fontSize: 14
+				},
 				// alignTicks: true,
 				type: 'value',
 				min: (value: any) => {
@@ -211,10 +218,11 @@ export const buildChartWithMetricAndPriceOptionForCreate =
 						{
 							yAxis: threshold, // 这里设置阈值线的 y 轴位置
 							label: {
-								position: 'insideStartTop'
-								// formatter: 'threshold', // 显示的文本
+								position: 'start',
+								formatter: '指标阈值', // 显示的文本
 							},
 							lineStyle: {
+								width: 2,
 								color: metric === BUY ? '#44ee11' : '#ec3939', // 阈值线的颜色
 								type: 'dashed', // 阈值线的样式，'dashed' 表示虚线
 							},

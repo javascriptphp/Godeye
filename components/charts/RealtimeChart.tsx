@@ -1,7 +1,7 @@
 import React, {useEffect, useRef, useState} from "react";
 import * as echarts from 'echarts';
 import {EChartsOption} from 'echarts';
-import {BUY, RealtimeData} from "@/types";
+import {BUY, RealtimeData, RealtimeResponse} from "@/types";
 import {getRealtimeDataUrl} from "@/service";
 import {message} from "antd";
 import useWebSocket from "react-use-websocket";
@@ -11,43 +11,53 @@ import {
 	chartWidth,
 	createChart
 } from "@/utils/global_constant";
+import useStore from "@/utils/store";
 
-const customerOption = {
-	dataZoom: [
-		{
-			show: true,
-			realtime: true,
-			start: 0,
-			end: 100
-		},
-		{
-			type: 'inside',
-			realtime: true,
-			start: 0,
-			end: 100
-		}
-	],
-	yAxis: [
-		{
-			name: 'metric',
-			type: 'value',
-			min: (value: any) => value.min * 0.999,
-			max: (value: any) => value.max * 1.001,
-			axisLabel: {
-				formatter: (value: any) => value.toFixed(3)
+const buildCustomerOption = function (symbol: string) {
+	return {
+		dataZoom: [
+			{
+				show: true,
+				realtime: true,
+				start: 0,
+				end: 100
+			},
+			{
+				type: 'inside',
+				realtime: true,
+				start: 0,
+				end: 100
 			}
-		},
-		{
-			name: 'price',
-			nameLocation: 'start',
-			type: 'value',
-			min: (value: any) => value.min * 0.999,
-			max: (value: any) => value.max * 1.0001,
-			axisLabel: {
-				formatter: (value: any) => value.toFixed(3)
+		],
+		yAxis: [
+			{
+				name: '指标',
+				nameLocation: 'end',
+				nameTextStyle: {
+					fontSize: 14
+				},
+				type: 'value',
+				min: (value: any) => value.min * 0.999,
+				max: (value: any) => value.max * 1.001,
+				axisLabel: {
+					formatter: (value: any) => value.toFixed(3)
+				}
+			},
+			{
+				name: `${symbol}价格`,
+				nameLocation: 'end',
+				nameTextStyle: {
+					fontSize: 14
+				},
+				type: 'value',
+				min: (value: any) => value.min * 0.999,
+				max: (value: any) => value.max * 1.0001,
+				axisLabel: {
+					formatter: (value: any) => value.toFixed(3)
+				}
 			}
-		}
-	],
+		],
+	};
 }
 
 const RealtimeChart = ({metric, symbol}: { metric: string, symbol: string }) => {
@@ -58,29 +68,37 @@ const RealtimeChart = ({metric, symbol}: { metric: string, symbol: string }) => 
 	const [timestamps, setTimestamps] = useState<string[]>([]);
 
 	const chartRef = useRef<echarts.ECharts | null>(null);  // Store chart instance in a ref
+	const {userContext} = useStore();
 
 	const [websocketUrl, setWebsocketUrl] = useState<string>('');
 	// 请求websocket url
 	useEffect(() => {
-		getRealtimeDataUrl(metric, symbol).then(url => setWebsocketUrl(url));
+		getRealtimeDataUrl(metric, symbol).then(url => {
+			if (url) {
+				setWebsocketUrl(url);
+			}
+		});
 	}, [symbol, metric]);
 	const {lastMessage} = useWebSocket(websocketUrl, {
+		reconnectInterval: 5000,
+		reconnectAttempts: 5,
 		onOpen: () => console.log('WebSocket connected!'),
 		onClose: () => console.log('WebSocket disconnected!'),
 		shouldReconnect: (e) => {
-			message.error(e.reason)
-			return true;
+			return !!websocketUrl;
 		},  // 自动重连
 	}, websocketUrl !== '');
 
 	useEffect(() => {
 		if (!lastMessage) return;
-		const realtimeDataArray: RealtimeData[] = JSON.parse(lastMessage.data);
-		if (!Array.isArray(realtimeDataArray) || realtimeDataArray.length <= 0) return;
-		
-		const _timestamps : Array<string> = realtimeDataArray.map(data => new Date(data.timestamp).toLocaleTimeString())
-		const _metricValues : Array<number> = realtimeDataArray.map(data => data.metric_value)
-		const _prices : Array<number> = realtimeDataArray.map(data => data.price);
+		const response: RealtimeResponse = JSON.parse(lastMessage.data);
+		if (response.code !== 200) return;
+		const realtimeDataArray: RealtimeData[] = response.data;
+		if (realtimeDataArray.length <= 0) return;
+
+		const _timestamps: Array<string> = realtimeDataArray.map(data => new Date(data.timestamp).toLocaleTimeString())
+		const _metricValues: Array<number> = realtimeDataArray.map(data => data.metric_value)
+		const _prices: Array<number> = realtimeDataArray.map(data => data.price);
 		setTimestamps((prevTimeStamps) => [...prevTimeStamps, ..._timestamps]);
 		setMetricData((prevMetricData) => [...prevMetricData, ..._metricValues]);
 		setThreshold(realtimeDataArray[0].threshold);
@@ -92,15 +110,17 @@ const RealtimeChart = ({metric, symbol}: { metric: string, symbol: string }) => 
 	useEffect(() => {
 		const _option = buildChartWithMetricAndPriceOptionForCreate({
 			title: `T3—实时数据`,
+			symbol: symbol,
 			metric: BUY,
 			timestamps: timestamps,
 			threshold: threshold,
 			metricData: metricData,
 			priceData: priceData,
+			watermark: (userContext && userContext.email) || "水印文字",
 		});
 		const echartsOption = {
 			..._option,
-			...customerOption
+			...buildCustomerOption(symbol)
 		} as EChartsOption;
 		createChart({
 			chartRef, containerRef, echartsOption

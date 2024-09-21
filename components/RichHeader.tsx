@@ -3,6 +3,8 @@ import {useRouter} from "next/router";
 import {Alert, Button, Flex, Space} from "antd";
 import Link from "next/link";
 import React from "react";
+import LoginedAvatar from "@/components/login/LoginedAvatar";
+import useStore from "@/utils/store";
 
 const HeaderContainer = styled.header`
     display: flex;
@@ -48,6 +50,7 @@ const alterStyle: React.CSSProperties = {
 }
 const RichHeader = () => {
 	const router = useRouter();
+	const {userContext} = useStore();
 	const handleSignup = async () => {
 		await router.push('/signup')
 	}
@@ -66,9 +69,14 @@ const RichHeader = () => {
 			<HeaderContainer>
 				<Link href={"/"}>
 					<Space direction={"horizontal"} align={"baseline"} size={"middle"}>
-					<Logo>Godeye</Logo>
-						<div style={{ width: 350, alignItems: 'center' }}>
-					<span style={{fontSize: 12, background: 'linear-gradient(to right, red, blue)', color: 'transparent', WebkitBackgroundClip: 'text'}}>普通人能接触到的<span style={{fontSize: 16}}>最精准</span>预警指标，多家对冲基金已购买本产品</span>
+						<Logo>Godeye</Logo>
+						<div style={{width: 350, alignItems: 'center'}}>
+							<span style={{
+								fontSize: 12,
+								background: 'linear-gradient(to right, red, blue)',
+								color: 'transparent',
+								WebkitBackgroundClip: 'text'
+							}}>普通人能接触到的<span style={{fontSize: 16}}>最精准</span>预警指标，多家对冲基金已购买本产品</span>
 						</div>
 					</Space>
 				</Link>
@@ -77,8 +85,15 @@ const RichHeader = () => {
 					<a href="/contact">联系我们</a>
 				</NavLinks>
 				<Flex gap={"middle"} justify="center" align="center">
-					<Button onClick={handleSignin}>登 录</Button>
-					<Button type="primary" onClick={handleSignup}>注 册</Button>
+					{
+						(userContext && userContext.logined) ? 
+							<LoginedAvatar/>
+							:
+							<>
+								<Button onClick={handleSignin}>登 录</Button>
+								<Button type="primary" onClick={handleSignup}>注 册</Button>
+							</>
+					}
 				</Flex>
 			</HeaderContainer>
 		</Wrapper>

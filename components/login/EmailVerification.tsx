@@ -3,8 +3,9 @@ import styled from 'styled-components';
 import {UserInfo} from "@/pages/signup";
 import {Checkbox, Form, Input, message} from "antd";
 import {SubmitButton} from "@/components/login/SubmitButton";
-import {getVerificationCode, invokeRegister} from "@/service";
+import {getVerificationCode, invokeLogin, invokeRegister} from "@/service";
 import {useRouter} from "next/router";
+import useStore from "@/utils/store";
 
 const VerificationWrapper = styled.div`
     padding: 20px;
@@ -76,6 +77,7 @@ const tailFormItemLayout = {
 const EmailVerification = ({userInfo}: { userInfo: UserInfo }) => {
 
 	const [form] = Form.useForm();
+	const {loginHandler} = useStore();
 	const [verificationCode, setVerificationCode] = useState('');
 	const [timer, setTimer] = useState(60);
 	const [canResend, setCanResend] = useState(false);
@@ -120,7 +122,11 @@ const EmailVerification = ({userInfo}: { userInfo: UserInfo }) => {
 			.then((isSuccess) => {
 				if (isSuccess) {
 					// 注册且登录成功，返回主页
-					router.push("/").then(r => r);
+					invokeLogin(userInfo, loginHandler).then((isSuccess) => {
+						if (isSuccess) {
+							router.push("/").then(r => r);
+						}
+					})
 				}
 			});
 	};

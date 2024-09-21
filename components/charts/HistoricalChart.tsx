@@ -1,6 +1,14 @@
 import React, {useEffect, useRef, useState} from "react";
 import * as echarts from 'echarts';
-import {BaseMetric, BUY} from "@/types";
+import {
+	BaseMetric,
+	BUY,
+	HistoricalBuyData,
+	HistoricalBuyValues,
+	HistoricalData,
+	HistoricalSellData,
+	HistoricalSellValues, isErrorTypeEnum
+} from "@/types";
 import {getHistoricalData} from "@/service";
 import {message} from "antd";
 import {
@@ -9,6 +17,7 @@ import {
 	chartWidth,
 	createChart
 } from "@/utils/global_constant";
+import useStore from "@/utils/store";
 
 
 const HistoricalChart = ({symbol, metric}: { symbol: string, metric: string }) => {
@@ -21,45 +30,46 @@ const HistoricalChart = ({symbol, metric}: { symbol: string, metric: string }) =
 
 	const chartRef = useRef<echarts.ECharts | null>(null);  // Store chart instance in a ref
 	const hasFetchedData = useRef(false);  // Track if data has been fetched
+	
+	const {userContext} = useStore();
 
 	// Fetch data and update the state
 	useEffect(() => {
 		const fetchData = async () => {
 			const result = await getHistoricalData(symbol, metric);
-			if (Array.isArray(result[metric])) {
-				const _timestamps = result[metric].map((item: BaseMetric) => (
+			if (isErrorTypeEnum(result)) {
+
+			}else{
+				const nonNullResult = result as HistoricalData;
+				const _timestamps = nonNullResult.values.map((item: HistoricalBuyValues | HistoricalSellValues) => (
 					new Date(item.timestamp).toLocaleDateString()
 				));
 				setTimestamps(_timestamps);
-				const _buyMetricData = result[metric].map((item: BaseMetric) => (item.metric_value));
+				const _buyMetricData = nonNullResult.values.map((item: HistoricalBuyValues | HistoricalSellValues) => (item.metric_value));
 				setMetricData(_buyMetricData);
-				const _buyPriceData = result[metric].map((item: BaseMetric) => (item.price));
+				// todo 处理sell data
+				const buyResult = nonNullResult as HistoricalBuyData;
+				const _buyPriceData = buyResult.values.map((item: HistoricalBuyValues) => (item.price));
 				setPriceData(_buyPriceData);
-			}
-			if (typeof result[`${metric}_threshold`] === 'number') {
-				setThreshold(result[`${metric}_threshold`] as number);
+				setThreshold(nonNullResult.threshold);
 			}
 		};
 
 		if (!hasFetchedData.current) {
 			hasFetchedData.current = true;
-			fetchData().catch((error) => {
-				messageApi.open({
-					type: "error",
-					content: "Error in fetching Historical Data",
-					duration: 1500
-				})
-			});
+			fetchData().then(r => r)
 		}
 	}, [symbol, metric]);
 	useEffect(() => {
 		const echartsOption = buildChartWithMetricAndPriceOptionForCreate({
 			title: `T2—全部数据`,
+			symbol: symbol,
 			metric: BUY,
 			timestamps: timestamps,
 			threshold: threshold,
 			metricData: metricData,
 			priceData: priceData,
+			watermark: (userContext && userContext.email) || "水印文字",
 		});
 		createChart({chartRef, containerRef, echartsOption})
 

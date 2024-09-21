@@ -2,20 +2,23 @@ import * as echarts from "echarts";
 import {EChartsOption} from "echarts";
 import React from "react";
 import {BUY} from "@/types";
+import {symbol} from "prop-types";
 
 export const sidebarWidth = '200px';
 export const chartWidth = '1100px';
 export const chartHeight = '650px';
 export const introductionWidth = 2*parseInt(chartWidth)/3;
 export const footerText = `\u00A9 2024 Godeye Ltd. All rights reserved.`;
+
 type optionBuilderParam = { 
 	title: string,
+	symbol: string,
 	metric: string,
 	timestamps: string[],
 	threshold: number,
 	metricData: number[],
 	priceData: number[],
-	watermark?: string,
+	watermark?: string|null,
 }
 export const createChart = function ({chartRef, containerRef, echartsOption} : {
 	chartRef:  React.MutableRefObject<echarts.ECharts | null>,
@@ -45,7 +48,7 @@ export const createChart = function ({chartRef, containerRef, echartsOption} : {
 	};
 }
 export const buildChartWithMetricAndPriceOptionForCreate =
-	function ({title, metric, timestamps, threshold, metricData, priceData, watermark}: optionBuilderParam): EChartsOption {
+	function ({title, symbol, metric, timestamps, threshold, metricData, priceData, watermark}: optionBuilderParam): EChartsOption {
 	return {
 		title: {
 			text: title,
@@ -56,7 +59,7 @@ export const buildChartWithMetricAndPriceOptionForCreate =
 			top: 0,
 		},
 		legend: {
-			data: ['Metric', 'Price'],
+			data: ['指标', `${symbol}价格`],
 			left: 'center',
 			top: 40,
 		},
@@ -89,8 +92,8 @@ export const buildChartWithMetricAndPriceOptionForCreate =
 		},
 		graphic: (function () {
 			const graphics = [];
-			const text = '水印文字'; // 你想要的水印文本
-			const gap = 100; // 间隔
+			const text = watermark; // 你想要的水印文本
+			const gap = 150; // 间隔
 
 			// 计算行和列
 			const cols = Math.ceil(parseInt(chartWidth) / gap);
@@ -158,7 +161,7 @@ export const buildChartWithMetricAndPriceOptionForCreate =
 		},
 		yAxis: [
 			{
-				name: 'metric',
+				name: '指标',
 				nameLocation: 'end',
 				nameTextStyle: {
 					fontSize: 14
@@ -178,7 +181,7 @@ export const buildChartWithMetricAndPriceOptionForCreate =
 				}
 			},
 			{
-				name: 'price',
+				name: `${symbol}价格`,
 				nameLocation: 'end',
 				nameTextStyle: {
 					fontSize: 14
@@ -201,7 +204,7 @@ export const buildChartWithMetricAndPriceOptionForCreate =
 		],
 		series: [
 			{
-				name: 'Metric',
+				name: '指标',
 				type: 'line',
 				showSymbol: false,
 				yAxisIndex: 0,
@@ -231,7 +234,7 @@ export const buildChartWithMetricAndPriceOptionForCreate =
 				},
 			},
 			{
-				name: 'Price',
+				name: `${symbol}价格`,
 				type: 'line',
 				yAxisIndex: 1,
 				showSymbol: false,

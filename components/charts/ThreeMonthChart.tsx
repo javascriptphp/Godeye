@@ -1,6 +1,13 @@
 import React, {useEffect, useRef, useState} from "react";
 import * as echarts from 'echarts';
-import {BaseMetric, BUY, MetricTypeEnum} from "@/types";
+import {
+	BUY,
+	isErrorTypeEnum,
+	ThreeMonthBuyData,
+	ThreeMonthBuyValues,
+	ThreeMonthData,
+	ThreeMonthSellValues
+} from "@/types";
 import {getThreeMonthData} from "@/service";
 import {message} from "antd";
 import {
@@ -9,6 +16,7 @@ import {
 	chartWidth,
 	createChart
 } from "@/utils/global_constant";
+import useStore from "@/utils/store";
 
 
 const ThreeMonthChart = ({symbol, metric}: { symbol: string, metric: string }) => {
@@ -20,47 +28,42 @@ const ThreeMonthChart = ({symbol, metric}: { symbol: string, metric: string }) =
 
 	const chartRef = useRef<echarts.ECharts | null>(null);  // Store chart instance in a ref
 	const [messageApi, contextHolder] = message.useMessage();
+	const {userContext} = useStore();
 
 	// Fetch data and update the state
 	useEffect(() => {
-		console.log("three month chart",symbol, metric)
 		const fetchData = async () => {
 			const result = await getThreeMonthData(symbol, metric);
-			if (Array.isArray(result[metric])) {
-				const _timestamps = result[metric].map((item: BaseMetric) => (
+			if (isErrorTypeEnum(result)) {
+				
+			}else{
+				const nonNullResult = result as ThreeMonthData;
+				const _timestamps = nonNullResult.values.map((item: ThreeMonthBuyValues | ThreeMonthSellValues) => (
 					new Date(item.timestamp).toLocaleDateString()
 				));
 				setTimestamps(_timestamps);
-				const _buyMetricData = result[metric].map((item: BaseMetric) => (item.metric_value));
+				const _buyMetricData = nonNullResult.values.map((item: ThreeMonthBuyValues | ThreeMonthSellValues) => (item.metric_value));
 				setMetricData(_buyMetricData);
-				const _buyPriceData = result[metric].map((item: BaseMetric) => (item.price));
+				// todo 这里要针对threemonthsellvalues 进行更新数据
+				const buyResult = nonNullResult as ThreeMonthBuyData;
+				const _buyPriceData = buyResult.values.map((item: ThreeMonthBuyValues) => (item.price));
 				setPriceData(_buyPriceData);
-			}
-			if (typeof result[`${metric}_threshold`] === 'number') {
-				setThreshold(result[`${metric}_threshold`] as number);
+				setThreshold(nonNullResult.threshold);
 			}
 		};
 
-		// if (!hasFetchedData.current) {
-		// 	hasFetchedData.current = true;
-			fetchData().then(data => console.log(metricData))
-				.catch((error) => {
-					messageApi.open({
-						type: "error",
-						content: "Error in fetching Three-Month Data",
-						duration: 1500
-					})
-			});
-		// }
+		fetchData().then(data => console.log(metricData))
 	}, [symbol, metric]);
 	useEffect(() => {
 		const echartsOption = buildChartWithMetricAndPriceOptionForCreate({
 			title: `T1—部分历史数据`,
+			symbol: symbol,
 			metric: BUY,
 			timestamps: timestamps,
 			threshold: threshold,
 			metricData: metricData,
 			priceData: priceData,
+			watermark: (userContext && userContext.email) || "水印文字",
 		});
 		createChart({chartRef, containerRef, echartsOption})
 

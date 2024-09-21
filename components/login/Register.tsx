@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, {ChangeEvent, useState} from 'react';
 import styled from 'styled-components';
 
 // Styled Components
@@ -99,22 +99,28 @@ const Register = ({onRegister} : {onRegister: VoidFunction}) => {
 	const [password, setPassword] = useState('');
 	const [agreeTerms, setAgreeTerms] = useState(false);
 
-	const handleEmailChange = (e) => {
+	const handleEmailChange = (e : React.ChangeEvent<HTMLInputElement>) => {
 		setEmail(e.target.value);
 	};
-	const handleUsernameChange = (e) => {
+	const handleUsernameChange = (e : React.ChangeEvent<HTMLInputElement>) => {
 		setUsername(e.target.value);
 	};
+	const handleUsernameBlur = (e : React.ChangeEvent<HTMLInputElement>) => {
+		const username = e.target.value;
+	};
+	const handlePasswordBlur = (e : React.ChangeEvent<HTMLInputElement>) => {
+		const username = e.target.value;
+	};
 
-	const handlePasswordChange = (e) => {
+	const handlePasswordChange = (e : React.ChangeEvent<HTMLInputElement>) => {
 		setPassword(e.target.value);
 	};
 
-	const handleAgreeTermsChange = (e) => {
+	const handleAgreeTermsChange = (e : React.ChangeEvent<HTMLInputElement>) => {
 		setAgreeTerms(e.target.checked);
 	};
 
-	const handleSubmit = (e) => {
+	const handleSubmit = (e : React.ChangeEvent<HTMLInputElement>) => {
 		e.preventDefault();
 		// 处理表单提交逻辑
 		console.log('Email:', email);
@@ -128,28 +134,32 @@ const Register = ({onRegister} : {onRegister: VoidFunction}) => {
 				<Description>输入您帐户的详细信息和强密码以保护您的帐户</Description>
 				<Form onSubmit={handleSubmit}>
 					<Label>
-						用户名
+						<span style={{color:'red'}}>* </span>用户名
 						<Input
 							type="text"
 							value={username}
 							onChange={handleUsernameChange}
+							required={true}
+							onBlur={handleUsernameBlur}
 						/>
 					</Label>
 					<Label>
-						邮箱
+						<span style={{color:'red'}}>* </span>邮箱
 						<Input
 							type="email"
 							value={email}
 							onChange={handleEmailChange}
+							required={true}
 						/>
 					</Label>
 					<Label>
-						密码
+						<span style={{color:'red'}}>* </span>密码
 						<Input
 							type="password"
 							value={password}
 							onChange={handlePasswordChange}
-							required
+							required={true}
+							onBlur={handlePasswordBlur}
 						/>
 					</Label>
 					<CheckboxContainer>
@@ -159,7 +169,7 @@ const Register = ({onRegister} : {onRegister: VoidFunction}) => {
 								checked={agreeTerms}
 								onChange={handleAgreeTermsChange}
 							/>
-							我已阅读并同意 Godeye 的 <TermsLink href="#">用户服务条款</TermsLink>
+							我已阅读并同意 Godeye 的 <TermsLink href="./terms.html">用户服务条款</TermsLink>
 						</CheckboxLabel>
 					</CheckboxContainer>
 					<Button type="submit" disabled={!username || !email || !password || !agreeTerms} >

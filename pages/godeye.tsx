@@ -63,14 +63,14 @@ const GodeyeIndexPage = () => {
 				<RichHeader/>
 				<Sidebar symbolToggledHandler={symbolSwitchedHandler}/>
 				<MainContentWrapper>
-					<Flex justify={"center"} align={"center"} vertical={true}>
-						<Space align={"center"} size={100} direction={"vertical"}>
+					{/*<Flex justify={"center"} align={"center"} vertical={true}>*/}
+						<Space align={"center"} size={100} direction={"vertical"} style={{marginLeft: 100}}>
 							<ThreeMonthChart symbol={symbol} metric={metric}/>
 							<HistoricalChart symbol={symbol} metric={metric}/>
 							<RealtimeChart symbol={symbol} metric={metric}/>
 							<MetricIntroduction metric={metric}/>
 						</Space>
-					</Flex>
+					{/*</Flex>*/}
 				</MainContentWrapper>
 				<Footer>
 					{footerText}

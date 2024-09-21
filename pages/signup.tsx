@@ -6,13 +6,19 @@ import Register from "@/components/login/Register";
 import {footerText} from "@/utils/global_constant";
 import RichHeader from "@/components/RichHeader";
 import {Col, Row, Steps} from "antd";
+import Register2 from "@/components/login/Register2";
+import {string} from "prop-types";
 
 const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
     min-height: 100vh;
 `;
-
+const Container = styled.div`
+    width: 300px;
+    margin: 100px auto;
+    font-family: Arial, sans-serif;
+`;
 const Content = styled.div`
     flex: 1;
     margin-top: 100px;
@@ -30,16 +36,24 @@ const FooterContainer = styled.footer`
 `;
 
 const stepStyle: React.CSSProperties = {
-	marginTop: '10vh',
+	marginTop: '150px',
 	height: '50vh',
+	minWidth: '100px'
+}
+export interface UserInfo {
+	username: string,
+	email: string,
+	password: string,
 }
 const RegistrationForm = () => {
 	const [isRegistered, setIsRegistered] = useState(false);
+	const [userInfo, setUserInfo] = useState<UserInfo>({email: "", password: "", username: ""});
 	const [curStep, setCurStep] = useState(0);
 
-	const handleRegister = () => {
+	const handleRegister = (userInfo:UserInfo) => {
 		setCurStep(1);
 		setIsRegistered(true); // 切换到验证页面
+		setUserInfo(userInfo);
 	};
 	return (
 		<Wrapper>
@@ -54,7 +68,7 @@ const RegistrationForm = () => {
 							current={curStep}
 							items={[
 								{
-									title: "输入邮箱",
+									title: "输入注册信息",
 								},
 								{
 									title: "邮箱验证",
@@ -63,7 +77,9 @@ const RegistrationForm = () => {
 						/>
 					</Col>
 					<Col span={8} offset={1}>
-						{isRegistered ? <EmailVerification/> : <Register onRegister={handleRegister}/>}
+						<Container>
+						{isRegistered ? <EmailVerification userInfo={userInfo}/> : <Register2 onRegister={handleRegister}/>}
+						</Container>
 					</Col>
 				</Row>
 			</Content>

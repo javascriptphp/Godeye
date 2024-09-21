@@ -1,81 +1,85 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import styled from 'styled-components';
+import {UserInfo} from "@/pages/signup";
+import {Checkbox, Form, Input, message} from "antd";
+import {SubmitButton} from "@/components/login/SubmitButton";
+import {getVerificationCode, invokeRegister} from "@/service";
+import {useRouter} from "next/router";
 
 const VerificationWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 20px;
-  min-height: 80vh;
+    padding: 20px;
+    min-height: 80vh;
 `;
 
 const VerificationTitle = styled.h2`
-  margin-bottom: 10px;
+    margin-bottom: 10px;
 `;
 
 const VerificationDescription = styled.p`
-  margin-bottom: 20px;
-  color: #666;
-  font-size: 14px;
+    margin-bottom: 20px;
+    color: #666;
+    font-size: 14px;
 `;
 
-const VerificationForm = styled.form`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-
-const VerificationInput = styled.input`
-  width: 300px;
-  padding: 8px;
-  margin-bottom: 10px;
-  font-size: 14px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-`;
 
 const ResendCodeContainer = styled.div`
-  display: flex;
-  align-items: center;
-  margin-bottom: 20px;
-  font-size: 14px;
-  color: #666;
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    font-size: 14px;
+    color: #666;
 `;
 
 const Timer = styled.span`
-  margin-left: 10px;
-  font-size: 14px;
-  color: #999;
+    margin-left: 10px;
+    font-size: 14px;
+    color: #999;
 `;
 
-const SubmitButton = styled.button`
-  background-color: #ffd700;
-  color: #000;
-  padding: 10px 20px;
-  border: none;
-  cursor: pointer;
-  width: 300px;
-  font-size: 14px;
-  border-radius: 4px;
-  transition: background-color 0.3s;
-
-  &:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-  }
-`;
 
 const ResendLink = styled.a`
-  color: #1677FF;
-  text-decoration: none;
-  margin-top: 20px;
-  font-size: 14px;
+    color: #1677FF;
+    text-decoration: none;
+    margin-top: 20px;
+    font-size: 14px;
 `;
+const formItemLayout = {
+	labelCol: {
+		xs: {span: 24},
+		md: {span: 24, offset: 0},
+		sm: {span: 8},
+	},
+	wrapperCol: {
+		xs: {span: 24},
+		md: {span: 24},
+		sm: {span: 16},
+	},
+};
 
-const EmailVerification = () => {
+const tailFormItemLayout = {
+	wrapperCol: {
+		xs: {
+			span: 24,
+			offset: 0,
+		},
+		md: {
+			span: 24,
+			offset: 0,
+		},
+		sm: {
+			span: 16,
+			offset: 8,
+		},
+	},
+};
+
+const EmailVerification = ({userInfo}: { userInfo: UserInfo }) => {
+
+	const [form] = Form.useForm();
 	const [verificationCode, setVerificationCode] = useState('');
 	const [timer, setTimer] = useState(60);
 	const [canResend, setCanResend] = useState(false);
+	const [messageApi, contextHolder] = message.useMessage();
 
 	useEffect(() => {
 		const countdown = setInterval(() => {
@@ -92,21 +96,52 @@ const EmailVerification = () => {
 		return () => clearInterval(countdown);
 	}, []);
 
-	const handleCodeChange = (e) => {
+	useEffect(() => {
+		if (userInfo && userInfo.email) {
+			getVerificationCode(userInfo.email)
+				.then((isSuccess) => {
+					if (isSuccess) {
+						messageApi.open({
+							type: "success",
+							content: "验证码发送成功",
+							duration: 1000
+						}).then(r => r)
+					}
+				})
+		}
+	}, []);
+	const handleCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setVerificationCode(e.target.value);
 	};
 
-	const handleSubmit = (e) => {
-		e.preventDefault();
-		console.log('Verification Code:', verificationCode);
+	const router = useRouter();
+	const handleSubmit = (e: React.ChangeEvent<HTMLInputElement>) => {
+		invokeRegister({...userInfo, verification_code: form.getFieldValue('verification_code')})
+			.then((isSuccess) => {
+				if (isSuccess) {
+					// 注册且登录成功，返回主页
+					router.push("/").then(r => r);
+				}
+			});
 	};
 
 	const handleResendCode = () => {
 		if (canResend) {
-			setTimer(60);
-			setCanResend(false);
 			// 重新发送验证码的逻辑
-			console.log('Resending code...');
+			if (userInfo && userInfo.email) {
+				getVerificationCode(userInfo.email)
+					.then((isSuccess) => {
+						if (isSuccess) {
+							setTimer(60);
+							setCanResend(false);
+							messageApi.open({
+								type: "success",
+								content: "验证码发送成功",
+								duration: 1000
+							}).then(r => r)
+						}
+					})
+			}
 		}
 	};
 
@@ -116,24 +151,41 @@ const EmailVerification = () => {
 			<VerificationDescription>
 				请输入您在邮箱收到的6位验证码，验证码30分钟有效
 			</VerificationDescription>
-			<VerificationForm onSubmit={handleSubmit}>
-				<VerificationInput
-					type="text"
-					value={verificationCode}
-					onChange={handleCodeChange}
-					placeholder="邮箱验证码"
-				/>
-				<ResendCodeContainer>
-					验证码已发送
-					<Timer>{timer > 0 ? `${timer}s` : '可以重新发送'}</Timer>
-				</ResendCodeContainer>
-				<SubmitButton type="submit" disabled={!verificationCode}>
-					提交
-				</SubmitButton>
-			</VerificationForm>
-			<ResendLink href="#" onClick={handleResendCode}>
-				未收到验证码？
-			</ResendLink>
+			<Form
+				{...formItemLayout}
+				form={form}
+				name="register"
+				onFinish={handleSubmit}
+				style={{maxWidth: 600}}
+				layout="vertical"
+				scrollToFirstError
+			>
+				<Form.Item
+					name="verification_code"
+					label="验证码"
+					rules={[
+						{required: true, message: '请输入验证码', whitespace: true}
+					]}
+					hasFeedback
+				>
+					<Input/>
+				</Form.Item>
+				<Form.Item>
+					<ResendCodeContainer>
+						验证码已发送
+						<Timer>
+							{timer > 0 ? `${timer}s` :
+								<ResendLink href="#" onClick={handleResendCode}>
+									重新发送
+								</ResendLink>
+							}
+						</Timer>
+					</ResendCodeContainer>
+				</Form.Item>
+				<Form.Item {...tailFormItemLayout}>
+					<SubmitButton form={form} style={{width: '100%'}}>提交</SubmitButton>
+				</Form.Item>
+			</Form>
 		</VerificationWrapper>
 	);
 };

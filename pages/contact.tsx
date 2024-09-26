@@ -36,23 +36,23 @@ const ContactPage = () => {
 					</Button>
 				</Col>
 				<Col xs={24} sm={1}></Col>
-				<Col xs={24} sm={6} style={{ justifyContent: 'center', display: 'flex', alignItems: 'center' }}>
-					<Button
-						type="default"
-						icon={<SendOutlined />}
-						block
-						style={{
-							height: '60px',
-							backgroundColor: '#fff',
-							borderColor: '#1890ff',
-							color: '#1890ff',
-							fontSize: '16px',
-						}}
-						className="custom-button"
-					>
-						点击加入 Telegram
-					</Button>
-				</Col>
+				{/*<Col xs={24} sm={6} style={{ justifyContent: 'center', display: 'flex', alignItems: 'center' }}>*/}
+				{/*	<Button*/}
+				{/*		type="default"*/}
+				{/*		icon={<SendOutlined />}*/}
+				{/*		block*/}
+				{/*		style={{*/}
+				{/*			height: '60px',*/}
+				{/*			backgroundColor: '#fff',*/}
+				{/*			borderColor: '#1890ff',*/}
+				{/*			color: '#1890ff',*/}
+				{/*			fontSize: '16px',*/}
+				{/*		}}*/}
+				{/*		className="custom-button"*/}
+				{/*	>*/}
+				{/*		点击加入 Telegram*/}
+				{/*	</Button>*/}
+				{/*</Col>*/}
 
 			</Row>
 			<Row justify="center">
@@ -75,23 +75,23 @@ const ContactPage = () => {
 					</Button>
 				</Col>
 				<Col xs={24} sm={1}></Col>
-				<Col xs={24} sm={6} style={{ justifyContent: 'center', display: 'flex', alignItems: 'center' }}>
-					<Button
-						type="default"
-						icon={<FormOutlined />}
-						block
-						style={{
-							height: '60px',
-							backgroundColor: '#fff',
-							borderColor: '#1890ff',
-							color: '#1890ff',
-							fontSize: '16px',
-						}}
-						className="custom-button"
-					>
-						点击提交建议
-					</Button>
-				</Col>
+				{/*<Col xs={24} sm={6} style={{ justifyContent: 'center', display: 'flex', alignItems: 'center' }}>*/}
+				{/*	<Button*/}
+				{/*		type="default"*/}
+				{/*		icon={<FormOutlined />}*/}
+				{/*		block*/}
+				{/*		style={{*/}
+				{/*			height: '60px',*/}
+				{/*			backgroundColor: '#fff',*/}
+				{/*			borderColor: '#1890ff',*/}
+				{/*			color: '#1890ff',*/}
+				{/*			fontSize: '16px',*/}
+				{/*		}}*/}
+				{/*		className="custom-button"*/}
+				{/*	>*/}
+				{/*		点击提交建议*/}
+				{/*	</Button>*/}
+				{/*</Col>*/}
 
 			</Row>
 			</Space>

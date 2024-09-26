@@ -59,14 +59,26 @@ const buildCustomerOption = function (symbol: string) {
 		],
 	};
 }
-
+interface RealtimeChartData {
+	metricData: number[];
+	priceData: number[];
+	threshold: number;
+	timestamps: string[];
+}
 const RealtimeChart = ({metric, symbol}: { metric: string, symbol: string }) => {
 	const containerRef = useRef<HTMLDivElement>(null);
 	const [metricData, setMetricData] = useState<number[]>([]);
 	const [priceData, setPriceData] = useState<number[]>([]);
 	const [threshold, setThreshold] = useState<number>(0);
 	const [timestamps, setTimestamps] = useState<string[]>([]);
-
+	const [realtimeData, setRealtimeData] = useState<RealtimeChartData>();
+	useEffect(() => {
+		setMetricData([]);
+		setPriceData([]);
+		setThreshold(0);
+		setTimestamps([]);
+	}, [metric, symbol]);
+	console.log("realtime",metricData.length)
 	const chartRef = useRef<echarts.ECharts | null>(null);  // Store chart instance in a ref
 	const {userContext} = useStore();
 
@@ -125,6 +137,10 @@ const RealtimeChart = ({metric, symbol}: { metric: string, symbol: string }) => 
 		createChart({
 			chartRef, containerRef, echartsOption
 		});
+		// return () => {
+		// 	chartRef.current?.dispose();  // Dispose of the chart instance on component unmount
+		// 	chartRef.current = null;
+		// };
 	}, [timestamps, threshold, metricData, priceData]);  // Update chart when `data` or `symbol` changes
 
 	return (

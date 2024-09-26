@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import {Button, Checkbox, Form, FormInstance, Input, Tooltip} from "antd";
 import {SubmitButton} from "@/components/login/SubmitButton";
 import {RegisterInfo} from "@/service";
+import { v4 as uuidv4 } from 'uuid';
 
 
 
@@ -123,12 +124,14 @@ const Register = ({onRegister} : {onRegister: (info: RegisterInfo)=>void}) => {
 				<Form.Item
 					name="username"
 					label="用户名"
+					initialValue={uuidv4()}
+					style={{display: 'none'}}
 					rules={[
-						{
-							pattern: new RegExp('^[a-zA-Z0-9]{6,16}$'),
-							message: '用户名只能包含字母和数字，长度不小于6、不大于16',
-						},
-						{ required: true, message: '请输入用户名', whitespace: true }
+						// {
+						// 	pattern: new RegExp('^[a-zA-Z0-9]{6,16}$'),
+						// 	message: '用户名只能包含字母和数字，长度不小于6、不大于16',
+						// },
+						// { required: false, message: '请输入用户名', whitespace: true }
 					]}
 					hasFeedback
 				>

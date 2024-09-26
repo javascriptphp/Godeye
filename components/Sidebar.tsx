@@ -12,7 +12,7 @@ const siderStyle: React.CSSProperties = {
 	position: 'fixed',
 	top: 0,  // 从顶部开始布局
 	bottom: 0,
-	marginTop: '80px',
+	marginTop: '100px',
 };
 const scrollStyle: React.CSSProperties = {
 	scrollbarWidth: 'thin',
@@ -157,24 +157,22 @@ const Sidebar = ({symbolToggledHandler} : {symbolToggledHandler: (type: SymbolAn
 			style={siderStyle}
 		>
 			{/* 顶部按钮组 */}
-			<div
-				style={{
-					padding: 10,
-					position: 'sticky',  // 保持按钮组在顶部
-					top: 0,
-					backgroundColor: '#fff',  // 背景颜色，避免被覆盖
-					zIndex: 10,
-				}}
-			>
 				<Radio.Group
 					value={selectedGroup}
 					onChange={(e) => metricTypeToggled(e)}
 					buttonStyle="solid"
+					style={{
+						padding: 10,
+						position: 'sticky',  // 保持按钮组在顶部
+						top: 0,
+						backgroundColor: '#fff',  // 背景颜色，避免被覆盖
+						zIndex: 10,
+						display: "none",
+					}}
 				>
 					<Radio.Button value={MetricTypeEnum.pay}>核心指标</Radio.Button>
 					<Radio.Button value={MetricTypeEnum.free}>免费指标</Radio.Button>
 				</Radio.Group>
-			</div>
 
 			{/* 可滚动的菜单区域 */}
 			<div style={scrollStyle}>

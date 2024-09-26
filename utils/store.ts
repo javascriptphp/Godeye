@@ -17,7 +17,6 @@ const useStore = create<ZustandStore>((set) => ({
 	},
 	logoutHandler: () => {
 		set({userContext: null})
-		// todo 登出时删除个人信息
 		localStorage.removeItem('userContext');
 	},
 	loadSession: () => {

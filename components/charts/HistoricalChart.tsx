@@ -21,6 +21,7 @@ import useStore from "@/utils/store";
 
 
 const HistoricalChart = ({symbol, metric}: { symbol: string, metric: string }) => {
+	console.log("historical",symbol,metric);
 	const containerRef = useRef<HTMLDivElement>(null);
 	const [metricData, setMetricData] = useState<number[]>([]);
 	const [priceData, setPriceData] = useState<number[]>([]);
@@ -54,11 +55,11 @@ const HistoricalChart = ({symbol, metric}: { symbol: string, metric: string }) =
 				setThreshold(nonNullResult.threshold);
 			}
 		};
-
-		if (!hasFetchedData.current) {
-			hasFetchedData.current = true;
+		//
+		// if (!hasFetchedData.current) {
+		// 	hasFetchedData.current = true;
 			fetchData().then(r => r)
-		}
+		// }
 	}, [symbol, metric]);
 	useEffect(() => {
 		const echartsOption = buildChartWithMetricAndPriceOptionForCreate({

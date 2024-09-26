@@ -55,7 +55,8 @@ const Login: React.FC = () => {
 		const loginInfo = form.getFieldsValue(['email','password']) as LoginInfo;
 		invokeLogin(loginInfo, loginHandler).then((isSuccess) => {
 			if (isSuccess) {
-				router.push('/').then(r => r);
+				message.success("登录成功~").then(r => r);
+				router.push("/").then(r => r);
 			}else{
 				console.log("登录失败")
 			}

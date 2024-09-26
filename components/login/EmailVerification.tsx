@@ -100,13 +100,13 @@ const EmailVerification = ({userInfo}: { userInfo: UserInfo }) => {
 
 	useEffect(() => {
 		if (userInfo && userInfo.email) {
-			getVerificationCode(userInfo.email)
+			getVerificationCode(userInfo.email, messageApi)
 				.then((isSuccess) => {
 					if (isSuccess) {
 						messageApi.open({
 							type: "success",
 							content: "验证码发送成功",
-							duration: 1000
+							duration: 2
 						}).then(r => r)
 					}
 				})
@@ -118,13 +118,13 @@ const EmailVerification = ({userInfo}: { userInfo: UserInfo }) => {
 
 	const router = useRouter();
 	const handleSubmit = (e: React.ChangeEvent<HTMLInputElement>) => {
-		invokeRegister({...userInfo, verification_code: form.getFieldValue('verification_code')})
+		invokeRegister({...userInfo, verification_code: form.getFieldValue('verification_code')}, messageApi)
 			.then((isSuccess) => {
 				if (isSuccess) {
 					// 注册且登录成功，返回主页
 					invokeLogin(userInfo, loginHandler).then((isSuccess) => {
 						if (isSuccess) {
-							router.push("/").then(r => r);
+							message.info("注册成功，已为您自动登录~").then(r => router.push("/"))
 						}
 					})
 				}
@@ -135,7 +135,7 @@ const EmailVerification = ({userInfo}: { userInfo: UserInfo }) => {
 		if (canResend) {
 			// 重新发送验证码的逻辑
 			if (userInfo && userInfo.email) {
-				getVerificationCode(userInfo.email)
+				getVerificationCode(userInfo.email, messageApi)
 					.then((isSuccess) => {
 						if (isSuccess) {
 							setTimer(60);
@@ -143,7 +143,7 @@ const EmailVerification = ({userInfo}: { userInfo: UserInfo }) => {
 							messageApi.open({
 								type: "success",
 								content: "验证码发送成功",
-								duration: 1000
+								duration: 2
 							}).then(r => r)
 						}
 					})
@@ -153,6 +153,7 @@ const EmailVerification = ({userInfo}: { userInfo: UserInfo }) => {
 
 	return (
 		<VerificationWrapper>
+			{contextHolder}
 			<VerificationTitle>邮箱验证</VerificationTitle>
 			<VerificationDescription>
 				请输入您在邮箱收到的6位验证码，验证码30分钟有效

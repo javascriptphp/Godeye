@@ -36,8 +36,9 @@ const LoginedAvatar: React.FC = () => {
 				break;
 			case MenuItemKeys.LOGOUT:
 				if (userContext && userContext.logined && userContext.email) {
-					invokeLogout(userContext.email, logoutHandler).then(r => r);
-					window.location.reload();
+					invokeLogout(userContext.email, logoutHandler).then(r => {
+						window.location.reload();
+					});
 				}
 				break;
 		}

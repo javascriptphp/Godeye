@@ -73,10 +73,11 @@ const RichHeader = () => {
 						<div style={{width: 350, alignItems: 'center'}}>
 							<span style={{
 								fontSize: 12,
-								background: 'linear-gradient(to right, red, blue)',
-								color: 'transparent',
-								WebkitBackgroundClip: 'text'
-							}}>普通人能接触到的<span style={{fontSize: 16}}>最精准</span>预警指标，多家对冲基金已购买本产品</span>
+								color: "red"
+								// background: 'linear-gradient(to right, red, blue)',
+								// color: 'transparent',
+								// WebkitBackgroundClip: 'text'
+							}}>普通人能接触到的最精准预警指标，多家对冲基金已购买本产品</span>
 						</div>
 					</Space>
 				</Link>

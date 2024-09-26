@@ -106,7 +106,7 @@ export const getRealtimeDataUrl = async function (metric: string, symbol: string
 			messageApi && messageApi.open({
 				type: "error",
 				content: responseData.message,
-				duration: 1500
+				duration: 3
 			}).then(r => r)
 		}
 	}
@@ -125,7 +125,7 @@ export const getVerificationCode = async function (email: string, messageApi: Me
 			messageApi && messageApi.open({
 				type: "error",
 				content: responseData.message,
-				duration: 1500
+				duration: 3
 			}).then(r => r)
 		}
 	}
@@ -147,10 +147,12 @@ export const invokeRegister = async function (registerInfo: RegisterInfo, messag
 		if (responseData.code === 200) {
 			data = responseData.data as RegisterData;
 		} else if (responseData.message_level === 'user') {
+			console.log(responseData.message)
+			console.log(messageApi)
 			messageApi && messageApi.open({
 				type: "error",
 				content: responseData.message,
-				duration: 1500
+				duration: 3
 			}).then(r => r)
 		}
 	}
@@ -179,7 +181,7 @@ export const invokeLogin = async function (loginInfo: LoginInfo, loginHandler: L
 			messageApi && messageApi.open({
 				type: "error",
 				content: responseData.message,
-				duration: 1500
+				duration: 3
 			}).then(r => r)
 		}
 	}
@@ -198,7 +200,7 @@ export const invokeLogout = async function (email: string, logoutHandler: VoidFu
 			messageApi && messageApi.open({
 				type: "error",
 				content: responseData.message,
-				duration: 1500
+				duration: 3
 			}).then(r => r)
 		}
 	}

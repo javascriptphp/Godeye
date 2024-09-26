@@ -19,7 +19,7 @@ const PageContainer = styled.div`
     flex-direction: column;
     height: 100vh;
     min-width: 1000px;
-    padding: 0 20px;
+    //padding: 0 20px;
 `;
 
 const TabsWrapper = styled.div`

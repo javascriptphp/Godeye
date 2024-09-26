@@ -20,6 +20,7 @@ import useStore from "@/utils/store";
 
 
 const ThreeMonthChart = ({symbol, metric}: { symbol: string, metric: string }) => {
+	console.log("three",symbol,metric);
 	const containerRef = useRef<HTMLDivElement>(null);
 	const [metricData, setMetricData] = useState<number[]>([]);
 	const [priceData, setPriceData] = useState<number[]>([]);
@@ -52,7 +53,7 @@ const ThreeMonthChart = ({symbol, metric}: { symbol: string, metric: string }) =
 			}
 		};
 
-		fetchData().then(data => console.log(metricData))
+		fetchData().then(data => data)
 	}, [symbol, metric]);
 	useEffect(() => {
 		const echartsOption = buildChartWithMetricAndPriceOptionForCreate({

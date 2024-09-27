@@ -126,10 +126,11 @@ export type SymbolAndMetric = {
 	metric: string;
 }
 export interface UserContext {
-	email: string|undefined;
-	username: string|undefined;
-	logined: boolean;
-	role: string|undefined;
+	email: string|'';
+	username: string|'';
+	logined: boolean|false;
+	role: string|'';
+	expireTime: Date;
 }
 export enum ErrorTypeEnum {
 	FALSE,

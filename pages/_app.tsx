@@ -16,6 +16,10 @@ export default function App({ Component, pageProps }: AppProps) {
   useEffect(() =>{
     useStore.getState().loadSession();
   })
+  const {userContext, updateExpireTime} = useStore();
+  setInterval(() => {
+    updateExpireTime(userContext)
+  }, 60*1000);
   return (
     <>
       <ThemeProvider theme={theme}>

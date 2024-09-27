@@ -19,7 +19,7 @@ import {message} from "antd";
 import axios, {AxiosResponse} from "axios";
 import {NextApiRequest, NextApiResponse} from "next";
 import {SERVER_HOST} from "@/utils/axios";
-import {LoginHandler} from "@/utils/store";
+import {UserContextHandler} from "@/utils/store";
 import type {MessageInstance} from "antd/es/message/interface";
 
 export const apiHandler = async function (req: NextApiRequest, res: NextApiResponse, url: string): Promise<void> {
@@ -164,18 +164,20 @@ export interface LoginInfo {
 	email: string
 }
 
-export const invokeLogin = async function (loginInfo: LoginInfo, loginHandler: LoginHandler, messageApi?: MessageInstance): Promise<LoginData | null> {
+export const invokeLogin = async function (loginInfo: LoginInfo, loginHandler: UserContextHandler, messageApi?: MessageInstance): Promise<LoginData | null> {
 	let data = null;
 	const response = await request("/api/invokeLogin", {...loginInfo});
 	const responseData = response.data as LoginResponse;
 	if (response.status === 200) {
 		if (responseData.code === 200) {
 			data = responseData.data as LoginData;
+			const now = new Date();
 			loginHandler({
 				logined: true,
 				email: loginInfo.email,
-				username: data.user,
-				role: data.role,
+				username: data.user||'',
+				role: data.role||'',
+				expireTime: new Date(now.setHours(now.getHours()+3))
 			})
 		} else if (responseData.message_level === 'user') {
 			messageApi && messageApi.open({

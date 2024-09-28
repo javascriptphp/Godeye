@@ -47,10 +47,10 @@ const Sidebar = ({symbolToggledHandler} : {symbolToggledHandler: (type: SymbolAn
 					key: 'buy',
 					metric: '买入指标'
 				},
-				{
-					key: 'sell',
-					metric: '卖出指标'
-				}
+				// {
+				// 	key: 'sell',
+				// 	metric: '卖出指标'
+				// }
 				]
 		},
 		{
@@ -60,10 +60,10 @@ const Sidebar = ({symbolToggledHandler} : {symbolToggledHandler: (type: SymbolAn
 					key: 'buy',
 					metric: '买入指标'
 				},
-				{
-					key: 'sell',
-					metric: '卖出指标'
-				}
+				// {
+				// 	key: 'sell',
+				// 	metric: '卖出指标'
+				// }
 				]
 		},
 		{
@@ -73,10 +73,10 @@ const Sidebar = ({symbolToggledHandler} : {symbolToggledHandler: (type: SymbolAn
 					key: 'buy',
 					metric: '买入指标'
 				},
-				{
-					key: 'sell',
-					metric: '卖出指标'
-				}
+				// {
+				// 	key: 'sell',
+				// 	metric: '卖出指标'
+				// }
 				]
 		},
 	];

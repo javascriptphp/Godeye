@@ -22,12 +22,8 @@ const useStore = create<ZustandStore>((set) => ({
 	},
 	loadSession: () => {
 		const userContextStr: string|null = localStorage.getItem('userContext');
-		console.log("userContextStr",userContextStr)
 		if (userContextStr) {
 			const expireTime = new Date((JSON.parse(userContextStr) as UserContext).expireTime);
-			console.log("expireTime", expireTime.toISOString());
-			console.log("new Date()", new Date().toISOString())
-			console.log("expireTime", new Date(expireTime) > new Date());
 			if (new Date(expireTime) > new Date()) {
 				console.log("加载用户信息")
 

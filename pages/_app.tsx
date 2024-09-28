@@ -13,13 +13,16 @@ const theme: DefaultTheme = {
 
 export default function App({ Component, pageProps }: AppProps) {
 
+  const {updateExpireTime} = useStore();
   useEffect(() =>{
     useStore.getState().loadSession();
-  })
-  const {userContext, updateExpireTime} = useStore();
-  setInterval(() => {
-    updateExpireTime(userContext)
-  }, 60*1000);
+    const userContext = useStore.getState().userContext;
+    console.log("在app中的userContext", userContext);
+    setInterval(() => {
+      updateExpireTime(userContext)
+      console.log("登录过期时间+1分钟")
+    }, 60*1000);
+  }, [])
   return (
     <>
       <ThemeProvider theme={theme}>

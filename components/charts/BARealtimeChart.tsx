@@ -1,7 +1,6 @@
 import React, {useEffect, useRef, useState} from "react";
 import * as echarts from 'echarts';
-import {BARealtimeData, BaseMetric, RealtimeData} from "@/types";
-import {getRealtimeDataUrl, getThreeMonthData} from "@/service";
+import {BARealtimeData, RealtimeBuyData} from "@/types";
 import {message} from "antd";
 import useWebSocket from "react-use-websocket";
 
@@ -20,11 +19,11 @@ const RealtimeChart = ({metric, symbol}: { metric: string, symbol: string }) => 
 	const chartRef = useRef<echarts.ECharts | null>(null);  // Store chart instance in a ref
 	const hasFetchedData = useRef(false);  // Track if data has been fetched
 	// const [message, setMessage] = useState<RealtimeData>();
-	const [realtimeData, setRealtimeData] = useState<RealtimeData>();
+	const [realtimeData, setRealtimeData] = useState<RealtimeBuyData>();
 
 	const [websocketUrl, setWebsocketUrl] = useState<string>('wss://stream.binance.com:9443/ws/btcusdt@kline_1s@+08:00');
 	  // socketUrl 存在时才启动 WebSocket
-	const [displayData, setDisplayData] = useState<RealtimeData[]>([]);
+	const [displayData, setDisplayData] = useState<RealtimeBuyData[]>([]);
 	const { sendMessage, lastMessage, readyState } = useWebSocket(websocketUrl, {
 		onOpen: () => {
 			console.log('WebSocket connected!')

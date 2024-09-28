@@ -9,6 +9,11 @@ export const chartWidth = '1100px';
 export const chartHeight = '650px';
 export const introductionWidth = 2*parseInt(chartWidth)/3;
 export const footerText = `\u00A9 2024 Godeye Ltd. All rights reserved.`;
+export const upColor = '#00da3c';
+export const downColor = '#ec0000';
+export const upBorderColor = '#8A0000';
+export const downBorderColor = '#008F28';
+export const areaColor = '#d2f2df';
 
 type optionBuilderParam = { 
 	title: string,

@@ -50,10 +50,11 @@ const FooterContainer = styled.footer`
 const Login: React.FC = () => {
 	const [form] = Form.useForm();
 	const router = useRouter();
+	const [messageApi, contextHolder] = message.useMessage();
 	const {loginHandler} = useStore();
 	const onFinish = (values: any) => {
 		const loginInfo = form.getFieldsValue(['email','password']) as LoginInfo;
-		invokeLogin(loginInfo, loginHandler).then((isSuccess) => {
+		invokeLogin(loginInfo, loginHandler, messageApi).then((isSuccess) => {
 			if (isSuccess) {
 				message.success("登录成功~").then(r => r);
 				router.push("/").then(r => r);
@@ -68,6 +69,7 @@ const Login: React.FC = () => {
 			<RichHeader />
 			<Wrapper>
 				<Content>
+					{contextHolder}
 					<LoginBox>
 						<Title level={3} style={{ textAlign: 'center' }}>Godeye 帐户登录</Title>
 						<Text type="secondary" style={{ display: 'block', textAlign: 'center', marginBottom: 20 }}>

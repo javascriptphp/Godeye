@@ -177,9 +177,11 @@ export const invokeLogin = async function (loginInfo: LoginInfo, loginHandler: U
 				email: loginInfo.email,
 				username: data.user||'',
 				role: data.role||'',
-				expireTime: new Date(now.setHours(now.getHours()+3))
+				expireTime: new Date(now.setHours(now.getHours()+24))
 			})
 		} else if (responseData.message_level === 'user') {
+			console.log(responseData.message)
+			console.log(messageApi)
 			messageApi && messageApi.open({
 				type: "error",
 				content: responseData.message,

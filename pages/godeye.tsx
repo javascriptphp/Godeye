@@ -1,14 +1,17 @@
 import React, {useState} from 'react';
 import styled from 'styled-components';
 import RichHeader from '../components/RichHeader';
-import RealtimeChart from "@/components/charts/RealtimeChart";
-import ThreeMonthChart from "@/components/charts/ThreeMonthChart";
+import RealtimeBuyChart from "@/components/charts/RealtimeBuyChart";
+import ThreeMonthBuyChart from "@/components/charts/ThreeMonthBuyChart";
 import Sidebar from "@/components/Sidebar";
 import {MetricIntroduction} from "@/components/MetricIntroduction";
-import {Flex, Space} from "antd";
-import HistoricalChart from "@/components/charts/HistoricalChart";
+import {Space} from "antd";
+import HistoricalBuyChart from "@/components/charts/HistoricalBuyChart";
 import {footerText} from "@/utils/global_constant";
-import {SymbolAndMetric} from "@/types";
+import {BUY, SymbolAndMetric} from "@/types";
+import RealtimeSellChart from "@/components/charts/RealtimeSellChart";
+import HistoricalSellChart from "@/components/charts/HistoricalSellChart";
+import ThreeMonthSellChart from "@/components/charts/ThreeMonthSellChart";
 
 const MainContentWrapper = styled.div`
     margin-top: 150px;
@@ -65,9 +68,10 @@ const GodeyeIndexPage = () => {
 				<MainContentWrapper>
 					{/*<Flex justify={"center"} align={"center"} vertical={true}>*/}
 						<Space align={"center"} size={100} direction={"vertical"} style={{marginLeft: 100}}>
-							<ThreeMonthChart symbol={symbol} metric={metric}/>
-							<HistoricalChart symbol={symbol} metric={metric}/>
-							<RealtimeChart symbol={symbol} metric={metric}/>
+							{metric === BUY ? <ThreeMonthBuyChart symbol={symbol} metric={metric}/> : <ThreeMonthSellChart symbol={symbol} metric={metric}/>}
+							{metric === BUY ? <HistoricalBuyChart symbol={symbol} metric={metric}/> : <HistoricalSellChart symbol={symbol} metric={metric}/>}
+							{metric === BUY ? <RealtimeBuyChart symbol={symbol} metric={metric}/> : <RealtimeSellChart symbol={symbol} metric={metric}/>}
+							{/*<StockChart/>*/}
 							<MetricIntroduction metric={metric}/>
 						</Space>
 					{/*</Flex>*/}

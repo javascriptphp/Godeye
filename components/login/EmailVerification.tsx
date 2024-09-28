@@ -122,7 +122,7 @@ const EmailVerification = ({userInfo}: { userInfo: UserInfo }) => {
 			.then((isSuccess) => {
 				if (isSuccess) {
 					// 注册且登录成功，返回主页
-					invokeLogin(userInfo, loginHandler).then((isSuccess) => {
+					invokeLogin(userInfo, loginHandler, messageApi).then((isSuccess) => {
 						if (isSuccess) {
 							message.info("注册成功，已为您自动登录~").then(r => router.push("/"))
 						}

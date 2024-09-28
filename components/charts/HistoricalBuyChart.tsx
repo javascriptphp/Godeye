@@ -1,14 +1,15 @@
 import React, {useEffect, useRef, useState} from "react";
 import * as echarts from 'echarts';
 import {
+	BaseMetric,
 	BUY,
-	isErrorTypeEnum,
-	ThreeMonthBuyData,
-	ThreeMonthBuyValues,
-	ThreeMonthData,
-	ThreeMonthSellValues
+	HistoricalBuyData,
+	HistoricalBuyValues,
+	HistoricalData,
+	HistoricalSellData,
+	HistoricalSellValues, isErrorTypeEnum
 } from "@/types";
-import {getThreeMonthData} from "@/service";
+import {getHistoricalData} from "@/service";
 import {message} from "antd";
 import {
 	buildChartWithMetricAndPriceOptionForCreate,
@@ -17,47 +18,57 @@ import {
 	createChart
 } from "@/utils/global_constant";
 import useStore from "@/utils/store";
+import {Simulate} from "react-dom/test-utils";
+import load = Simulate.load;
 
 
-const ThreeMonthChart = ({symbol, metric}: { symbol: string, metric: string }) => {
-	console.log("three",symbol,metric);
+const HistoricalBuyChart = ({symbol, metric}: { symbol: string, metric: string }) => {
+	console.log("historical",symbol,metric);
 	const containerRef = useRef<HTMLDivElement>(null);
 	const [metricData, setMetricData] = useState<number[]>([]);
 	const [priceData, setPriceData] = useState<number[]>([]);
 	const [threshold, setThreshold] = useState<number>(0);
 	const [timestamps, setTimestamps] = useState<string[]>([]);
+	const [messageApi, contextHolder] = message.useMessage();
 
 	const chartRef = useRef<echarts.ECharts | null>(null);  // Store chart instance in a ref
-	const [messageApi, contextHolder] = message.useMessage();
+	const hasFetchedData = useRef(false);  // Track if data has been fetched
+	
+	// const {loadSession} = useStore();
+	// loadSession();
 	const {userContext} = useStore();
+	console.log("在historicalchart中拿到的usercontext",userContext)
 
 	// Fetch data and update the state
 	useEffect(() => {
 		const fetchData = async () => {
-			const result = await getThreeMonthData(symbol, metric);
+			const result = await getHistoricalData(symbol, metric);
 			if (isErrorTypeEnum(result)) {
-				
+
 			}else{
-				const nonNullResult = result as ThreeMonthData;
-				const _timestamps = nonNullResult.values.map((item: ThreeMonthBuyValues | ThreeMonthSellValues) => (
+				const nonNullResult = result as HistoricalData;
+				const _timestamps = nonNullResult.values.map((item: HistoricalBuyValues | HistoricalSellValues) => (
 					new Date(item.timestamp).toLocaleDateString()
 				));
 				setTimestamps(_timestamps);
-				const _buyMetricData = nonNullResult.values.map((item: ThreeMonthBuyValues | ThreeMonthSellValues) => (item.metric_value));
+				const _buyMetricData = nonNullResult.values.map((item: HistoricalBuyValues | HistoricalSellValues) => (item.metric_value));
 				setMetricData(_buyMetricData);
-				// todo 这里要针对threemonthsellvalues 进行更新数据
-				const buyResult = nonNullResult as ThreeMonthBuyData;
-				const _buyPriceData = buyResult.values.map((item: ThreeMonthBuyValues) => (item.price));
+				// todo 处理sell data
+				const buyResult = nonNullResult as HistoricalBuyData;
+				const _buyPriceData = buyResult.values.map((item: HistoricalBuyValues) => (item.price));
 				setPriceData(_buyPriceData);
 				setThreshold(nonNullResult.threshold);
 			}
 		};
-
-		fetchData().then(data => data)
+		//
+		// if (!hasFetchedData.current) {
+		// 	hasFetchedData.current = true;
+			fetchData().then(r => r)
+		// }
 	}, [symbol, metric]);
 	useEffect(() => {
 		const echartsOption = buildChartWithMetricAndPriceOptionForCreate({
-			title: `T1—部分历史数据`,
+			title: `T2—全部数据`,
 			symbol: symbol,
 			metric: BUY,
 			timestamps: timestamps,
@@ -79,4 +90,4 @@ const ThreeMonthChart = ({symbol, metric}: { symbol: string, metric: string }) =
 	);
 };
 
-export default ThreeMonthChart;
+export default HistoricalBuyChart;

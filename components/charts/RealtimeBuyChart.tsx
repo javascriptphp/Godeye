@@ -1,7 +1,7 @@
 import React, {useEffect, useRef, useState} from "react";
 import * as echarts from 'echarts';
 import {EChartsOption} from 'echarts';
-import {BUY, RealtimeData, RealtimeResponse} from "@/types";
+import {BUY, RealtimeBuyData, RealtimeResponse} from "@/types";
 import {getRealtimeDataUrl} from "@/service";
 import {message} from "antd";
 import useWebSocket from "react-use-websocket";
@@ -65,7 +65,7 @@ interface RealtimeChartData {
 	threshold: number;
 	timestamps: string[];
 }
-const RealtimeChart = ({metric, symbol}: { metric: string, symbol: string }) => {
+const RealtimeBuyChart = ({metric, symbol}: { metric: string, symbol: string }) => {
 	const containerRef = useRef<HTMLDivElement>(null);
 	const [metricData, setMetricData] = useState<number[]>([]);
 	const [priceData, setPriceData] = useState<number[]>([]);
@@ -105,7 +105,7 @@ const RealtimeChart = ({metric, symbol}: { metric: string, symbol: string }) => 
 		if (!lastMessage) return;
 		const response: RealtimeResponse = JSON.parse(lastMessage.data);
 		if (response.code !== 200) return;
-		const realtimeDataArray: RealtimeData[] = response.data;
+		const realtimeDataArray: RealtimeBuyData[] = response.data as RealtimeBuyData[];
 		if (realtimeDataArray.length <= 0) return;
 
 		const _timestamps: Array<string> = realtimeDataArray.map(data => new Date(data.timestamp).toLocaleTimeString())
@@ -150,4 +150,4 @@ const RealtimeChart = ({metric, symbol}: { metric: string, symbol: string }) => 
 	);
 };
 
-export default RealtimeChart;
+export default RealtimeBuyChart;

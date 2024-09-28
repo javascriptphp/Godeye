@@ -94,12 +94,23 @@ export type RealtimeResponse = {
 	message: string;
 	message_level: string;
 	code: number;
-	data: RealtimeData[];
+	data: RealtimeBuyData[] | RealtimeSellData[];
 }
-export type RealtimeData = {
+export type RealtimeBuyData = {
 	timestamp: Date;
 	symbol: string;
 	price: number;
+	metric: string;
+	metric_value: number;
+	threshold: number;
+};
+export type RealtimeSellData = {
+	timestamp: Date;
+	symbol: string;
+	open: number;
+	high: number;
+	low: number;
+	close: number;
 	metric: string;
 	metric_value: number;
 	threshold: number;

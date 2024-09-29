@@ -1,8 +1,8 @@
 import * as echarts from "echarts";
 import {EChartsOption} from "echarts";
 import React from "react";
-import {BUY} from "@/types";
-import {symbol} from "prop-types";
+import {BUY, CoordType} from "@/types";
+import {findTimestampRanges} from "@/utils/utils";
 
 export const sidebarWidth = '200px';
 export const chartWidth = '1100px';
@@ -39,15 +39,8 @@ export const createChart = function ({chartRef, containerRef, echartsOption} : {
 		chartRef.current.setOption(echartsOption);
 	}
 
-	// Handle chart resizing
-	const handleResize = () => {
-		chartRef.current?.resize();
-	};
-
-	window.addEventListener('resize', handleResize);
-
 	return () => {
-		window.removeEventListener('resize', handleResize);
+		// window.removeEventListener('resize', handleResize);
 		chartRef.current?.dispose();  // Dispose of the chart instance on component unmount
 		chartRef.current = null;
 	};
@@ -95,6 +88,20 @@ const buildWatermarks = function (watermark: string) {
 };
 export const buildOptionForBuyChart =
 	function ({title, symbol, metric, timestamps, threshold, metricData, priceData, watermark}: optionBuilderParam): EChartsOption {
+	const calculateAreaRanges = function() : CoordType[]{
+		const ranges = findTimestampRanges(metricData, timestamps, threshold);
+		return ranges.map((range:string[]) => {
+			return [
+				{
+					xAxis: range[0]
+				},
+				{
+					xAxis: range[1]
+				}
+			]
+		})
+	};
+	console.log(calculateAreaRanges())
 	return {
 		title: {
 			text: title,
@@ -228,7 +235,7 @@ export const buildOptionForBuyChart =
 							yAxis: threshold, // 这里设置阈值线的 y 轴位置
 							label: {
 								position: 'start',
-								formatter: '指标阈值', // 显示的文本
+								formatter: '指标阈值{c}', // 显示的文本
 							},
 							lineStyle: {
 								width: 2,
@@ -238,6 +245,14 @@ export const buildOptionForBuyChart =
 						},
 					],
 				},
+				markArea: {
+					silent: true,
+					itemStyle: {
+						color: areaColor,
+						opacity: 0.8
+					},
+					data: calculateAreaRanges()
+				}
 			},
 			{
 				name: `${symbol}价格`,

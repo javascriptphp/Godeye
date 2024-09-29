@@ -153,3 +153,11 @@ export enum ErrorTypeEnum {
 	SYSTEM_ERROR,
 	
 }
+export type CoordType = [
+	{
+		xAxis: string;
+	},
+	{
+		xAxis: string;
+	}
+]

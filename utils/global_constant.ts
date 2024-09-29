@@ -261,13 +261,11 @@ export const buildOptionForSellChart =
 	return {
 		title: {
 			text: title,
+			textStyle: {
+				fontSize: '26px',
+			},
 			left: 'center',
-		},
-		tooltip: {
-			trigger: 'axis',
-			axisPointer: {
-				type: 'cross'
-			}
+			top: 0,
 		},
 		legend: {
 			data: ['指标', '日K'],
@@ -278,7 +276,42 @@ export const buildOptionForSellChart =
 		},
 		grid: {
 			top: '80', // 将图表的绘制区域向下移动，避免与legend重叠
-			bottom: '100'
+			bottom: '80'
+		},
+		tooltip: {
+			trigger: 'axis',
+			axisPointer: {
+				type: 'cross',
+				animation: false,
+				label: {
+					backgroundColor: '#505765'
+				}
+			},
+		},
+		graphic: buildWatermarks(watermark),
+		dataZoom: [
+			{
+				show: true,
+				realtime: true,
+				type: 'slider',
+				start: 95,
+				end: 100
+			},
+			{
+				type: 'inside',
+				realtime: true,
+				start: 95,
+				end: 100
+			},
+		],
+		toolbox: {
+			feature: {
+				dataZoom: {
+					yAxisIndex: 'none'
+				},
+				restore: {},
+				saveAsImage: {}
+			}
 		},
 		xAxis: {
 			type: 'category',
@@ -290,7 +323,6 @@ export const buildOptionForSellChart =
 			max: 'dataMax'
 		},
 		yAxis: [
-
 			{
 				name: '指标',
 				scale: true,
@@ -320,26 +352,14 @@ export const buildOptionForSellChart =
 				}
 			},
 		],
-		graphic: buildWatermarks(watermark),
-		dataZoom: [
-			{
-				show: true,
-				type: 'slider',
-				top: '90%',
-				start: 95,
-				end: 100
-			},
-			{
-				type: 'inside',
-				start: 95,
-				end: 100
-			},
-		],
 		series: [
 			{
 				name: '指标',
 				type: 'line',
 				data: metricData,
+				emphasis: {
+					focus: 'series'
+				},
 				smooth: true,
 				lineStyle: {
 					opacity: 0.7
@@ -350,6 +370,10 @@ export const buildOptionForSellChart =
 				type: 'candlestick',
 				data: priceData,
 				yAxisIndex: 1,
+				showSymbol: false,
+				emphasis: {
+					focus: 'series'
+				},
 				itemStyle: {
 					color: upColor,
 					color0: downColor,

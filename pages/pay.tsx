@@ -169,7 +169,7 @@ const Pricing = () => {
 					// style={{top: 350}}
 					open={showModal}
 					centered={true}
-					width={700}
+					width={850}
 					title={<p>订阅</p>}
 					onCancel={handleCancel}
 					footer={[
@@ -195,7 +195,7 @@ const Pricing = () => {
 							将<span style={{color: "red"}}> 199 USDT </span>转入以下地址，然后发送<span style={{color: "red"}}>付款截图</span>、<span
 							style={{color: "red"}}>付款地址</span>、<span style={{color: "red"}}>注册邮箱</span>到 godeye2099@outlook.com <CopyTwoTone onClick={() => handleCopy(TronAddress)}/>，我们将在1小时内开通您的会员权限。
 						</p>
-						<Row>
+						<Row gutter={{ xs: 1, sm: 1, md: 2}} justify={"space-between"}>
 							<Col span={12}>
 								<Space direction={"vertical"} size={0}>
 									<Myp style={{fontWeight: "bolder"}}>Optimism/Avalanche C-Chain</Myp>
@@ -204,7 +204,7 @@ const Pricing = () => {
 								</Space>
 							</Col>
 
-							<Col span={12} >
+							<Col span={10} >
 								<Space direction={"vertical"} size={0}>
 									<Myp style={{fontWeight: "bolder"}}>Tron</Myp>
 									<Myp>（只接受USDT，手续费较高，不推荐）</Myp>

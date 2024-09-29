@@ -11,7 +11,7 @@ import {
 import {getThreeMonthData} from "@/service";
 import {message} from "antd";
 import {
-	buildChartWithMetricAndPriceOptionForCreate,
+	buildOptionForBuyChart,
 	chartHeight,
 	chartWidth,
 	createChart
@@ -56,7 +56,7 @@ const ThreeMonthBuyChart = ({symbol, metric}: { symbol: string, metric: string }
 		fetchData().then(data => data)
 	}, [symbol, metric]);
 	useEffect(() => {
-		const echartsOption = buildChartWithMetricAndPriceOptionForCreate({
+		const echartsOption = buildOptionForBuyChart({
 			title: `T1—部分历史数据`,
 			symbol: symbol,
 			metric: BUY,

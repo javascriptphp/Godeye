@@ -1,25 +1,17 @@
 import React, {useEffect, useRef, useState} from "react";
 import * as echarts from 'echarts';
 import {
-	BaseMetric,
 	BUY,
 	HistoricalBuyData,
 	HistoricalBuyValues,
 	HistoricalData,
-	HistoricalSellData,
-	HistoricalSellValues, isErrorTypeEnum
+	HistoricalSellValues,
+	isErrorTypeEnum
 } from "@/types";
 import {getHistoricalData} from "@/service";
 import {message} from "antd";
-import {
-	buildChartWithMetricAndPriceOptionForCreate,
-	chartHeight,
-	chartWidth,
-	createChart
-} from "@/utils/global_constant";
+import {buildOptionForBuyChart, chartHeight, chartWidth, createChart} from "@/utils/global_constant";
 import useStore from "@/utils/store";
-import {Simulate} from "react-dom/test-utils";
-import load = Simulate.load;
 
 
 const HistoricalBuyChart = ({symbol, metric}: { symbol: string, metric: string }) => {
@@ -34,8 +26,6 @@ const HistoricalBuyChart = ({symbol, metric}: { symbol: string, metric: string }
 	const chartRef = useRef<echarts.ECharts | null>(null);  // Store chart instance in a ref
 	const hasFetchedData = useRef(false);  // Track if data has been fetched
 	
-	// const {loadSession} = useStore();
-	// loadSession();
 	const {userContext} = useStore();
 	console.log("在historicalchart中拿到的usercontext",userContext)
 
@@ -60,14 +50,10 @@ const HistoricalBuyChart = ({symbol, metric}: { symbol: string, metric: string }
 				setThreshold(nonNullResult.threshold);
 			}
 		};
-		//
-		// if (!hasFetchedData.current) {
-		// 	hasFetchedData.current = true;
 			fetchData().then(r => r)
-		// }
 	}, [symbol, metric]);
 	useEffect(() => {
-		const echartsOption = buildChartWithMetricAndPriceOptionForCreate({
+		const echartsOption = buildOptionForBuyChart({
 			title: `T2—全部数据`,
 			symbol: symbol,
 			metric: BUY,

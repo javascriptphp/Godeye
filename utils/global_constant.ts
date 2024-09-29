@@ -6,13 +6,13 @@ import {symbol} from "prop-types";
 
 export const sidebarWidth = '200px';
 export const chartWidth = '1100px';
-export const chartHeight = '650px';
+export const chartHeight = '700px';
 export const introductionWidth = 2*parseInt(chartWidth)/3;
 export const footerText = `\u00A9 2024 Godeye Ltd. All rights reserved.`;
-export const upColor = '#00da3c';
 export const downColor = '#ec0000';
-export const upBorderColor = '#8A0000';
-export const downBorderColor = '#008F28';
+export const downBorderColor = '#8A0000';
+export const upColor = '#00da3c';
+export const upBorderColor = '#008F28';
 export const areaColor = '#d2f2df';
 
 type optionBuilderParam = { 
@@ -22,8 +22,8 @@ type optionBuilderParam = {
 	timestamps: string[],
 	threshold: number,
 	metricData: number[],
-	priceData: number[],
-	watermark?: string|null,
+	priceData: any,
+	watermark: string,
 }
 export const createChart = function ({chartRef, containerRef, echartsOption} : {
 	chartRef:  React.MutableRefObject<echarts.ECharts | null>,
@@ -52,7 +52,48 @@ export const createChart = function ({chartRef, containerRef, echartsOption} : {
 		chartRef.current = null;
 	};
 }
-export const buildChartWithMetricAndPriceOptionForCreate =
+const buildWatermarks = function (watermark: string) {
+	const graphics = [];
+	const text = watermark; // 你想要的水印文本
+	const gap = 150; // 间隔
+
+	// 计算行和列
+	const cols = Math.ceil(parseInt(chartWidth) / gap);
+	const rows = Math.ceil(parseInt(chartHeight) / gap);
+
+	// 循环生成多个水印文字
+	for (let i = 0; i < rows; i++) {
+		for (let j = 0; j < cols; j++) {
+			graphics.push({
+				type: 'text',
+				left: j * gap+30,
+				top: i * gap+30,
+				style: {
+					text: text,
+					fontSize: 14,
+					fill: 'rgba(0, 0, 0, 0.1)', // 设置文字颜色和透明度
+				},
+				rotation: Math.PI / 4, // 逆时针旋转 45 度
+			});
+		}
+	}
+
+	// 添加公司名称水印
+	graphics.push({
+		type: 'text',
+		left: parseInt(chartWidth)*0.37,
+		top: parseInt(chartHeight)*0.42,
+		style: {
+			text: 'G o d e y e',
+			fontSize: 56,
+			fill: 'rgba(0, 0, 0, 0.1)', // 设置文字颜色和透明度
+		},
+		rotation: 0, // 逆时针旋转 45 度
+	});
+
+	return graphics;
+};
+export const buildOptionForBuyChart =
 	function ({title, symbol, metric, timestamps, threshold, metricData, priceData, watermark}: optionBuilderParam): EChartsOption {
 	return {
 		title: {
@@ -95,47 +136,7 @@ export const buildChartWithMetricAndPriceOptionForCreate =
 				return result;
 			},
 		},
-		graphic: (function () {
-			const graphics = [];
-			const text = watermark; // 你想要的水印文本
-			const gap = 150; // 间隔
-
-			// 计算行和列
-			const cols = Math.ceil(parseInt(chartWidth) / gap);
-			const rows = Math.ceil(parseInt(chartHeight) / gap);
-
-			// 循环生成多个水印文字
-			for (let i = 0; i < rows; i++) {
-				for (let j = 0; j < cols; j++) {
-					graphics.push({
-						type: 'text',
-						left: j * gap,
-						top: i * gap,
-						style: {
-							text: text,
-							fontSize: 14,
-							fill: 'rgba(0, 0, 0, 0.1)', // 设置文字颜色和透明度
-						},
-						rotation: Math.PI / 4, // 逆时针旋转 45 度
-					});
-				}
-			}
-			
-			// 添加公司名称水印
-			graphics.push({
-				type: 'text',
-				left: parseInt(chartWidth)*0.32,
-				top: parseInt(chartHeight)*0.38,
-				style: {
-					text: 'G o d e y e',
-					fontSize: 56,
-					fill: 'rgba(0, 0, 0, 0.1)', // 设置文字颜色和透明度
-				},
-				rotation: 0, // 逆时针旋转 45 度
-			});
-
-			return graphics;
-		})(),
+		graphic: buildWatermarks(watermark),
 		dataZoom: [
 			{
 				show: true,
@@ -254,3 +255,108 @@ export const buildChartWithMetricAndPriceOptionForCreate =
 		],
 	};
 }
+
+export const buildOptionForSellChart =
+	function ({title, symbol, metric, timestamps, threshold, metricData, priceData, watermark}: optionBuilderParam): EChartsOption {
+	return {
+		title: {
+			text: title,
+			left: 'center',
+		},
+		tooltip: {
+			trigger: 'axis',
+			axisPointer: {
+				type: 'cross'
+			}
+		},
+		legend: {
+			data: ['指标', '日K'],
+			itemStyle: {
+				borderColor: "#008F28"
+			},
+			top: 40
+		},
+		grid: {
+			top: '80', // 将图表的绘制区域向下移动，避免与legend重叠
+			bottom: '100'
+		},
+		xAxis: {
+			type: 'category',
+			data: timestamps,
+			boundaryGap: false,
+			axisLine: {onZero: false},
+			splitLine: {show: false},
+			min: 'dataMin',
+			max: 'dataMax'
+		},
+		yAxis: [
+
+			{
+				name: '指标',
+				scale: true,
+				splitArea: {
+					show: true
+				}
+			},
+			{
+				name: `${symbol}价格`,
+				nameLocation: 'end',
+				nameTextStyle: {
+					fontSize: 14
+				},
+				// alignTicks: true,
+				type: 'value',
+				min: (value: any) => {
+					return value.min * 0.999;  // Y 轴最小值为数据最小值的 90%
+				},
+				max: (value: any) => {
+					return value.max * 1.001;  // Y 轴最小值为数据最小值的 90%
+				},
+				axisLabel: {
+					formatter: (value: any) => {
+						// 保留3位小数
+						return value.toFixed(2);
+					}
+				}
+			},
+		],
+		graphic: buildWatermarks(watermark),
+		dataZoom: [
+			{
+				show: true,
+				type: 'slider',
+				top: '90%',
+				start: 95,
+				end: 100
+			},
+			{
+				type: 'inside',
+				start: 95,
+				end: 100
+			},
+		],
+		series: [
+			{
+				name: '指标',
+				type: 'line',
+				data: metricData,
+				smooth: true,
+				lineStyle: {
+					opacity: 0.7
+				}
+			},
+			{
+				name: '日K',
+				type: 'candlestick',
+				data: priceData,
+				yAxisIndex: 1,
+				itemStyle: {
+					color: upColor,
+					color0: downColor,
+					borderColor: upBorderColor,
+					borderColor0: downBorderColor
+				}
+			},
+		]
+	} as EChartsOption;
+	}

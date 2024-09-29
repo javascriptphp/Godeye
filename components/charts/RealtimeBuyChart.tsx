@@ -3,14 +3,8 @@ import * as echarts from 'echarts';
 import {EChartsOption} from 'echarts';
 import {BUY, RealtimeBuyData, RealtimeResponse} from "@/types";
 import {getRealtimeDataUrl} from "@/service";
-import {message} from "antd";
 import useWebSocket from "react-use-websocket";
-import {
-	buildChartWithMetricAndPriceOptionForCreate,
-	chartHeight,
-	chartWidth,
-	createChart
-} from "@/utils/global_constant";
+import {buildOptionForBuyChart, chartHeight, chartWidth, createChart} from "@/utils/global_constant";
 import useStore from "@/utils/store";
 
 const buildCustomerOption = function (symbol: string) {
@@ -120,7 +114,7 @@ const RealtimeBuyChart = ({metric, symbol}: { metric: string, symbol: string }) 
 
 	// Initialize and update the chart when data or symbol changes
 	useEffect(() => {
-		const _option = buildChartWithMetricAndPriceOptionForCreate({
+		const _option = buildOptionForBuyChart({
 			title: `T3—实时数据`,
 			symbol: symbol,
 			metric: BUY,
@@ -137,10 +131,6 @@ const RealtimeBuyChart = ({metric, symbol}: { metric: string, symbol: string }) 
 		createChart({
 			chartRef, containerRef, echartsOption
 		});
-		// return () => {
-		// 	chartRef.current?.dispose();  // Dispose of the chart instance on component unmount
-		// 	chartRef.current = null;
-		// };
 	}, [timestamps, threshold, metricData, priceData]);  // Update chart when `data` or `symbol` changes
 
 	return (

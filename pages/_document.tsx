@@ -5,10 +5,11 @@ import Document, {Head, Html, Main, NextScript} from 'next/document';
 
 const MyDocument = () => (
   <Html lang="en">
-    <Head />
+    <title>Godeye</title>
+    <Head/>
     <body>
-    <Main />
-    <NextScript />
+    <Main/>
+    <NextScript/>
     </body>
   </Html>
 );

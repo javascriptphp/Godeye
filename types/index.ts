@@ -26,7 +26,7 @@ export type WebsocketUrlResponse = {
 	code: number;
 	message: string;
 	message_level: string;
-	data: { 
+	data: {
 		websocket_url: string;
 	};
 };
@@ -49,20 +49,21 @@ export type ThreeMonthData = {
 };
 export type ThreeMonthBuyData = {
 	symbol: string;
-	threshold: number;
 	values: ThreeMonthBuyValues[];
 };
 export type ThreeMonthSellData = {
 	symbol: string;
-	threshold: number;
 	values: ThreeMonthSellValues[];
 };
-export function isErrorTypeEnum(data:ThreeMonthBuyData | ThreeMonthSellData | ErrorTypeEnum) : boolean {
+
+export function isErrorTypeEnum(data: ThreeMonthBuyData | ThreeMonthSellData | ErrorTypeEnum): boolean {
 	return typeof data === "number";
 }
+
 export function isThreeMonthBuyData(data: ThreeMonthBuyData | ThreeMonthSellData): data is ThreeMonthBuyData {
 	return (data as ThreeMonthBuyData).values !== undefined;
 }
+
 export function isThreeMonthBuyValues(data: ThreeMonthBuyValues | ThreeMonthSellValues): data is ThreeMonthBuyValues {
 	const _data = data as ThreeMonthBuyValues;
 	return _data.timestamp !== undefined && _data.price !== undefined && _data.metric_value !== undefined;
@@ -70,7 +71,6 @@ export function isThreeMonthBuyValues(data: ThreeMonthBuyValues | ThreeMonthSell
 
 export type HistoricalData = {
 	symbol: string;
-	threshold: number;
 	values: HistoricalBuyValues[] | HistoricalSellValues[];
 }
 export type HistoricalBuyData = ThreeMonthBuyData;
@@ -81,6 +81,7 @@ export type ThreeMonthBuyValues = {
 	timestamp: Date;
 	price: number;
 	metric_value: number;
+	threshold: number;
 };
 export type ThreeMonthSellValues = {
 	timestamp: Date;
@@ -88,6 +89,7 @@ export type ThreeMonthSellValues = {
 	high: number;
 	low: number;
 	close: number;
+	threshold: number;
 	metric_value: number;
 };
 export type RealtimeResponse = {
@@ -129,20 +131,24 @@ export type BARealtimeData = {
 		o: string,
 	}
 }
+
 export enum MetricTypeEnum {
 	free, pay
 }
+
 export type SymbolAndMetric = {
 	symbol: string;
 	metric: string;
 }
+
 export interface UserContext {
-	email: string|'';
-	username: string|'';
-	logined: boolean|false;
-	role: string|'';
+	email: string | '';
+	username: string | '';
+	logined: boolean | false;
+	role: string | '';
 	expireTime: Date;
 }
+
 export enum ErrorTypeEnum {
 	FALSE,
 	NULL,
@@ -151,13 +157,13 @@ export enum ErrorTypeEnum {
 	INVALID_VERIFICATION_CODE,
 	INVALID_CREDENTIALS,
 	SYSTEM_ERROR,
-	
+
 }
+
+export type XaxisType = {
+	xAxis: string;
+};
 export type CoordType = [
-	{
-		xAxis: string;
-	},
-	{
-		xAxis: string;
-	}
+	XaxisType,
+	XaxisType
 ]

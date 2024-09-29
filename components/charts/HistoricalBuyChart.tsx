@@ -47,7 +47,7 @@ const HistoricalBuyChart = ({symbol, metric}: { symbol: string, metric: string }
 				const buyResult = nonNullResult as HistoricalBuyData;
 				const _buyPriceData = buyResult.values.map((item: HistoricalBuyValues) => (item.price));
 				setPriceData(_buyPriceData);
-				setThreshold(nonNullResult.threshold);
+				setThreshold(nonNullResult.values[0].threshold);
 			}
 		};
 			fetchData().then(r => r)

@@ -1,8 +1,9 @@
 import * as echarts from "echarts";
 import {EChartsOption} from "echarts";
 import React from "react";
-import {BUY, CoordType} from "@/types";
-import {findTimestampRanges} from "@/utils/utils";
+import {BUY, CoordType, XaxisType} from "@/types";
+import {findTimestamp, findTimestampRanges} from "@/utils/utils";
+import range from "@rc-component/async-validator/es/rule/range";
 
 export const sidebarWidth = '200px';
 export const chartWidth = '1100px';
@@ -88,8 +89,8 @@ const buildWatermarks = function (watermark: string) {
 };
 export const buildOptionForBuyChart =
 	function ({title, symbol, metric, timestamps, threshold, metricData, priceData, watermark}: optionBuilderParam): EChartsOption {
+	const ranges = findTimestampRanges(metricData, timestamps, threshold);
 	const calculateAreaRanges = function() : CoordType[]{
-		const ranges = findTimestampRanges(metricData, timestamps, threshold);
 		return ranges.map((range:string[]) => {
 			return [
 				{
@@ -101,7 +102,38 @@ export const buildOptionForBuyChart =
 			]
 		})
 	};
-	console.log(calculateAreaRanges())
+	const areaRanges = calculateAreaRanges();
+	const lineTimestamp = findTimestamp(ranges);
+	const calculateLineTimestamp = function() : any {
+		const _lines = lineTimestamp.map((s:string)=> {
+			return {
+				xAxis: s,
+				label: {
+					show: false
+				},
+				lineStyle: {
+					width: 2,
+					type: 'solid',
+					color: areaColor, // 阈值线的颜色
+					opacity: 0.8,
+				},
+			}
+		}) as any;
+		_lines.push({
+			yAxis: threshold, // 这里设置阈值线的 y 轴位置
+			label: {
+				position: 'start',
+				formatter: '指标阈值{c}', // 显示的文本
+			},
+			lineStyle: {
+				width: 2,
+				color: metric === BUY ? '#44ee11' : '#ec3939', // 阈值线的颜色
+				type: 'dashed', // 阈值线的样式，'dashed' 表示虚线
+			},
+		},);
+		return _lines;
+	};
+	const lineRanges = calculateLineTimestamp();
 	return {
 		title: {
 			text: title,
@@ -230,20 +262,8 @@ export const buildOptionForBuyChart =
 				},
 				markLine: {
 					symbol: 'none',
-					data: [
-						{
-							yAxis: threshold, // 这里设置阈值线的 y 轴位置
-							label: {
-								position: 'start',
-								formatter: '指标阈值{c}', // 显示的文本
-							},
-							lineStyle: {
-								width: 2,
-								color: metric === BUY ? '#44ee11' : '#ec3939', // 阈值线的颜色
-								type: 'dashed', // 阈值线的样式，'dashed' 表示虚线
-							},
-						},
-					],
+					data: lineRanges,
+					animation: false,
 				},
 				markArea: {
 					silent: true,
@@ -251,7 +271,7 @@ export const buildOptionForBuyChart =
 						color: areaColor,
 						opacity: 0.8
 					},
-					data: calculateAreaRanges()
+					data: areaRanges
 				}
 			},
 			{

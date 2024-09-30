@@ -26,7 +26,7 @@ const HistoricalChart = ({symbol, metric}: { symbol: string, metric: string }) =
 	const [lowVal, setLowVal] = useState<number[]>([]);
 	const [priceValues, setPriceValues] = useState<number[][]>([][4]);
 	const [closeVal, setCloseVal] = useState<number[]>([]);
-	const [threshold, setThreshold] = useState<number>(0);
+	const [threshold, setThreshold] = useState<number[]>([]);
 	const [timestamps, setTimestamps] = useState<string[]>([]);
 	const [messageApi, contextHolder] = message.useMessage();
 
@@ -60,10 +60,11 @@ const HistoricalChart = ({symbol, metric}: { symbol: string, metric: string }) =
 				setLowVal(_lowVal);
 				const _closeVal = sellResult.values.map((item: ThreeMonthSellValues) => (item.close));
 				setCloseVal(_closeVal);
+				const _threshold = sellResult.values.map((item: ThreeMonthSellValues) => item.threshold);
+				setThreshold(_threshold);
 
 				const _priceValues = sellResult.values.map((item: ThreeMonthSellValues) => [item.open, item.close, item.low, item.high]);
 				setPriceValues(_priceValues);
-				setThreshold(nonNullResult.threshold);
 			}
 		};
 		//

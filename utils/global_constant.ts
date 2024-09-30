@@ -16,12 +16,22 @@ export const upColor = '#00da3c';
 export const upBorderColor = '#008F28';
 export const areaColor = '#d2f2df';
 
-type optionBuilderParam = { 
+type BuyOptionBuilderParam = { 
 	title: string,
 	symbol: string,
 	metric: string,
 	timestamps: string[],
 	threshold: number,
+	metricData: number[],
+	priceData: any,
+	watermark: string,
+}
+type SellOptionBuilderParam = { 
+	title: string,
+	symbol: string,
+	metric: string,
+	timestamps: string[],
+	threshold: number[],
 	metricData: number[],
 	priceData: any,
 	watermark: string,
@@ -88,7 +98,7 @@ const buildWatermarks = function (watermark: string) {
 	return graphics;
 };
 export const buildOptionForBuyChart =
-	function ({title, symbol, metric, timestamps, threshold, metricData, priceData, watermark}: optionBuilderParam): EChartsOption {
+	function ({title, symbol, metric, timestamps, threshold, metricData, priceData, watermark}: BuyOptionBuilderParam): EChartsOption {
 	const ranges = findTimestampRanges(metricData, timestamps, threshold);
 	const calculateAreaRanges = function() : CoordType[]{
 		return ranges.map((range:string[]) => {
@@ -292,7 +302,7 @@ export const buildOptionForBuyChart =
 }
 
 export const buildOptionForSellChart =
-	function ({title, symbol, metric, timestamps, threshold, metricData, priceData, watermark}: optionBuilderParam): EChartsOption {
+	function ({title, symbol, metric, timestamps, threshold, metricData, priceData, watermark}: SellOptionBuilderParam): EChartsOption {
 	return {
 		title: {
 			text: title,
@@ -303,7 +313,7 @@ export const buildOptionForSellChart =
 			top: 0,
 		},
 		legend: {
-			data: ['指标', '日K'],
+			data: ['指标', '日K', '阈值'],
 			itemStyle: {
 				borderColor: "#008F28"
 			},
@@ -371,17 +381,15 @@ export const buildOptionForSellChart =
 				nameTextStyle: {
 					fontSize: 14
 				},
-				// alignTicks: true,
 				type: 'value',
 				min: (value: any) => {
 					return value.min * 0.999;  // Y 轴最小值为数据最小值的 90%
 				},
 				max: (value: any) => {
-					return value.max * 1.001;  // Y 轴最小值为数据最小值的 90%
+					return value.max * 1.001;  // Y 轴最大值为数据最大值的 100.1%
 				},
 				axisLabel: {
 					formatter: (value: any) => {
-						// 保留3位小数
 						return value.toFixed(2);
 					}
 				}
@@ -416,6 +424,22 @@ export const buildOptionForSellChart =
 					borderColor0: downBorderColor
 				}
 			},
-		]
+			{
+				name: '阈值',
+				type: 'line',
+				step: 'end', // 使用阶梯图
+				showSymbol: false,
+				yAxisIndex: 0, // 关联到指标的 Y 轴
+				data: threshold,
+				lineStyle: {
+					type: 'dashed',
+					color: '#FF0000',
+					width: 1
+				},
+				tooltip: {
+					show: false
+				}
+			}
+		],
 	} as EChartsOption;
 	}

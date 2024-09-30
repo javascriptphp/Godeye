@@ -17,14 +17,14 @@ const RealtimeChart = ({metric, symbol}: { metric: string, symbol: string }) => 
 	const [metricData, setMetricData] = useState<number[]>([]);
 	const [priceData, setPriceData] = useState<number[]>([]);
 	const [priceValues, setPriceValues] = useState<number[][]>([][4]);
-	const [threshold, setThreshold] = useState<number>(0);
+	const [threshold, setThreshold] = useState<number[]>([]);
 	const [timestamps, setTimestamps] = useState<string[]>([]);
 	const [realtimeData, setRealtimeData] = useState<RealtimeChartData>();
 	useEffect(() => {
 		setMetricData([]);
 		setPriceData([])
 		setPriceValues([][4]);
-		setThreshold(0);
+		setThreshold([]);
 		setTimestamps([]);
 	}, [metric, symbol]);
 	console.log("realtime",metricData.length)
@@ -61,10 +61,10 @@ const RealtimeChart = ({metric, symbol}: { metric: string, symbol: string }) => 
 		const _timestamps: Array<string> = realtimeDataArray.map(data => new Date(data.timestamp).toLocaleTimeString())
 		const _metricValues: Array<number> = realtimeDataArray.map(data => data.metric_value)
 		const _priceValues: Array<Array<number>> = realtimeDataArray.map(data => [data.open, data.close, data.low, data.high])
-		// const _prices: Array<number> = realtimeDataArray.map(data => data.price);
+		const _thresholds: Array<number> = realtimeDataArray.map(data => data.threshold);
 		setTimestamps((prevTimeStamps) => [...prevTimeStamps, ..._timestamps]);
 		setMetricData((prevMetricData) => [...prevMetricData, ..._metricValues]);
-		setThreshold(realtimeDataArray[0].threshold);
+		setThreshold((prevThreshold) => [...prevThreshold, ..._thresholds]);
 		setPriceValues((prevPriceValues) => prevPriceValues ? [...prevPriceValues, ..._priceValues] : _priceValues);
 	}, [lastMessage]);
 

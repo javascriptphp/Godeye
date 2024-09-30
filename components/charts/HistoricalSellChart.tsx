@@ -20,7 +20,7 @@ const HistoricalSellChart = ({symbol, metric}: { symbol: string, metric: string 
 	const [metricData, setMetricData] = useState<number[]>([]);
 	const [priceData, setPriceData] = useState<number[]>([]);
 	const [priceValues, setPriceValues] = useState<number[][]>([][4]);
-	const [threshold, setThreshold] = useState<number>(0);
+	const [threshold, setThreshold] = useState<number[]>([]);
 	const [timestamps, setTimestamps] = useState<string[]>([]);
 	const [messageApi, contextHolder] = message.useMessage();
 
@@ -36,26 +36,22 @@ const HistoricalSellChart = ({symbol, metric}: { symbol: string, metric: string 
 			if (isErrorTypeEnum(result)) {
 
 			}else{
-				const nonNullResult = result as HistoricalData;
-				const _timestamps = nonNullResult.values.map((item: HistoricalBuyValues | HistoricalSellValues) => (
+				const nonNullResult = result as HistoricalSellData;
+				const _timestamps = nonNullResult.values.map((item: HistoricalSellValues) => (
 					new Date(item.timestamp).toLocaleDateString()
 				));
 				setTimestamps(_timestamps);
-				const _buyMetricData = nonNullResult.values.map((item: HistoricalBuyValues | HistoricalSellValues) => (item.metric_value));
+				const _buyMetricData = nonNullResult.values.map((item: HistoricalSellValues) => item.metric_value);
 				setMetricData(_buyMetricData);
-				// todo 处理sell data
-				const sellResult = nonNullResult as HistoricalSellData;
 				
-				const _priceValues: Array<Array<number>> = sellResult.values.map(data => [data.open, data.close, data.low, data.high])
+				const _priceValues: Array<Array<number>> = nonNullResult.values.map(data => [data.open, data.close, data.low, data.high]);
 				setPriceValues(_priceValues);
-				setThreshold(sellResult.threshold);
+				
+				const _threshold = nonNullResult.values.map(data => data.threshold);
+				setThreshold(_threshold);
 			}
 		};
-		//
-		// if (!hasFetchedData.current) {
-		// 	hasFetchedData.current = true;
-			fetchData().then(r => r)
-		// }
+		fetchData().then(r => r);
 	}, [symbol, metric]);
 	useEffect(() => {
 	const echartsOption = buildOptionForSellChart({

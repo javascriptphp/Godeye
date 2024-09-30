@@ -74,9 +74,23 @@ export type HistoricalData = {
 	values: HistoricalBuyValues[] | HistoricalSellValues[];
 }
 export type HistoricalBuyData = ThreeMonthBuyData;
-export type HistoricalSellData = ThreeMonthSellData;
+export type HistoricalSellData = {
+	symbol: string;
+	values: HistoricalSellValues[];
+};
 export type HistoricalBuyValues = ThreeMonthBuyValues;
-export type HistoricalSellValues = ThreeMonthSellValues;
+// 更新后的 HistoricalSellValues，包含 threshold 数组
+export type HistoricalSellValues = {
+	timestamp: Date;
+	symbol: string;
+	open: number;
+	high: number;
+	low: number;
+	close: number;
+	metric: string;
+	metric_value: number;
+	threshold: number; 
+};
 export type ThreeMonthBuyValues = {
 	timestamp: Date;
 	price: number;
@@ -167,3 +181,7 @@ export type CoordType = [
 	XaxisType,
 	XaxisType
 ]
+
+export function isHistoricalSellValues(data: HistoricalBuyValues | HistoricalSellValues): data is HistoricalSellValues {
+	return Array.isArray((data as HistoricalSellValues).threshold);
+}

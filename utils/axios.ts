@@ -12,11 +12,8 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(
 	(config) => {
 		// 修改 host 或 baseURL
-		// 比如根据环境动态设置 baseURL
-		const customHost = process.env.NEXT_PUBLIC_API_HOST || 'http://47.236.100.38:8888';
-		console.log("config",config)
 		if (config.baseURL) {
-			config.baseURL = customHost;
+			config.baseURL = SERVER_HOST;
 		}
 
 		return config;

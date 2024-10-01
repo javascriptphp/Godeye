@@ -332,7 +332,7 @@ export const buildOptionForSellChart =
 			let rangeStart: number | null = null;
 
 			for (let i = 0; i < metricData.length; i++) {
-				if (metricData[i] < threshold[i]) {
+				if (metricData[i] >= threshold[i]) {
 					if (rangeStart === null) {
 						rangeStart = i;
 					}

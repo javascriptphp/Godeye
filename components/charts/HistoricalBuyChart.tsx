@@ -62,6 +62,7 @@ const HistoricalBuyChart = ({symbol, metric}: { symbol: string, metric: string }
 			metricData: metricData,
 			priceData: priceData,
 			watermark: (userContext && userContext.email) || "水印文字",
+			includeMark: true,
 		});
 		createChart({chartRef, containerRef, echartsOption})
 

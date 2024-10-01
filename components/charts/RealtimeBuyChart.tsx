@@ -109,6 +109,7 @@ const RealtimeBuyChart = ({metric, symbol}: { metric: string, symbol: string }) 
 		setMetricData((prevMetricData) => [...prevMetricData, ..._metricValues]);
 		setThreshold(realtimeDataArray[0].threshold);
 		setPriceData((prevPriceData) => [...prevPriceData, ..._prices]);
+		console.log("实时数据的阈值", threshold)
 	}, [lastMessage]);
 
 
@@ -123,6 +124,7 @@ const RealtimeBuyChart = ({metric, symbol}: { metric: string, symbol: string }) 
 			metricData: metricData,
 			priceData: priceData,
 			watermark: (userContext && userContext.email) || "水印文字",
+			includeMark: false
 		});
 		const echartsOption = {
 			..._option,

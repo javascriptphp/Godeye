@@ -62,8 +62,9 @@ const HistoricalSellChart = ({symbol, metric}: { symbol: string, metric: string 
 		threshold: threshold,
 		metricData: metricData,
 		priceData: priceValues,
-		watermark: (userContext && userContext.email) || "水印文字",
-	});
+			watermark: (userContext && userContext.email) || "水印文字",
+			includeMark: true,
+		});
 		createChart({chartRef, containerRef, echartsOption})
 
 		// 用对象包装依赖对象，可以保证在所有元素都变化之后才执行副作用

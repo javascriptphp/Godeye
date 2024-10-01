@@ -5,12 +5,59 @@ import {getRealtimeDataUrl} from "@/service";
 import useWebSocket from "react-use-websocket";
 import {buildOptionForSellChart, chartHeight, chartWidth, createChart} from "@/utils/global_constant";
 import useStore from "@/utils/store";
+import {EChartsOption} from "echarts";
 
 interface RealtimeChartData {
 	metricData: number[];
 	priceData: number[];
 	threshold: number;
 	timestamps: string[];
+}
+const buildCustomerOption = function (symbol: string) {
+	return {
+		dataZoom: [
+			{
+				show: true,
+				realtime: true,
+				start: 90,
+				end: 100
+			},
+			{
+				type: 'inside',
+				realtime: true,
+				start: 95,
+				end: 100
+			}
+		],
+		yAxis: [
+			{
+				name: '指标',
+				nameLocation: 'end',
+				nameTextStyle: {
+					fontSize: 14
+				},
+				type: 'value',
+				min: (value: any) => value.min * 0.98,
+				max: (value: any) => value.max * 1.01,
+				axisLabel: {
+					formatter: (value: any) => value.toFixed(3)
+				}
+			},
+			{
+				name: `${symbol}价格`,
+				nameLocation: 'end',
+				nameTextStyle: {
+					fontSize: 14
+				},
+				type: 'value',
+				min: (value: any) => value.min * 0.999,
+				max: (value: any) => value.max * 1.001,
+				axisLabel: {
+					formatter: (value: any) => value.toFixed(3)
+				}
+			}
+		],
+	};
 }
 const RealtimeChart = ({metric, symbol}: { metric: string, symbol: string }) => {
 	const containerRef = useRef<HTMLDivElement>(null);
@@ -71,7 +118,7 @@ const RealtimeChart = ({metric, symbol}: { metric: string, symbol: string }) => 
 
 	// Initialize and update the chart when data or symbol changes
 	useEffect(() => {
-		let echartsOption = buildOptionForSellChart({
+		const _option = buildOptionForSellChart({
 			title: `T3-实时数据`,
 			symbol: symbol,
 			metric: SELL,
@@ -80,24 +127,12 @@ const RealtimeChart = ({metric, symbol}: { metric: string, symbol: string }) => 
 			metricData: metricData,
 			priceData: priceValues,
 			watermark: (userContext && userContext.email) || "水印文字",
+			includeMark: false,
 		})
-		echartsOption = {
-			...echartsOption,
-			dataZoom: [
-				{
-					show: true,
-					type: 'slider',
-					top: '90%',
-					start: 85,
-					end: 100
-				},
-				{
-					type: 'inside',
-					start: 85,
-					end: 100
-				},
-			],
-		}
+		const echartsOption = {
+			..._option,
+			...buildCustomerOption(symbol)
+		} as EChartsOption;
 		createChart({
 			chartRef, containerRef, echartsOption
 		});

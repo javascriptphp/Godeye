@@ -86,7 +86,7 @@ const Pricing = () => {
 		{
 			code: 'ultimate',
 			title: '上帝视角版',
-			price: '199 美元/季',
+			price: '(15+184) 美元/季',
 			description: '为小白投资者提供最精准的加密市场趋势预测数据。让普通人也能通过大数据开启上帝视角，明牌操作。所有图表均可访问。',
 			features: [
 				{text: 'T1 指标', available: true},
@@ -138,6 +138,8 @@ const Pricing = () => {
 								bordered={false}
 							>
 								<Price>{plan.price}</Price>
+								{plan.code === 'ultimate' ? <span style={{fontSize:12,color: '#888'}}>说明：先支付15 USDT，获得三个月使用权限，赚钱后再补齐184 USDT</span> : 
+									<span style={{fontSize:12,color: '#888'}}>说明：注册后可免费查看T1数据</span>}
 								<Divider/>
 								<Description>{plan.description}</Description>
 								<List
@@ -184,15 +186,19 @@ const Pricing = () => {
 						<Divider style={{margin: "5px 0"}}></Divider>
 						<Flex justify={"space-between"} gap={"small"}>
 							<Myp>计划</Myp>
-							<Myp>专业版-季付</Myp>
+							<Myp>上帝视角版-季付</Myp>
 						</Flex>
 						<Flex justify={"space-between"} gap={"small"}>
 							<Myp>价格</Myp>
-							<Myp><span style={{color:"red"}}>199 美元</span></Myp>
+							<Myp><span style={{color:"red"}}>(15+184) 美元</span></Myp>
+						</Flex>
+						<Flex justify={"right"} gap={"small"}>
+							<Myp>说明：先支付15 USDT，获得三个月使用权限，赚钱后再补齐184 USDT</Myp>
+							{/*<Myp><span style={{color:"red"}}>(15+184) 美元</span></Myp>*/}
 						</Flex>
 						<Divider style={{margin: "5px 0"}}></Divider>
 						<p>
-							将<span style={{color: "red"}}> 199 USDT </span>转入以下地址，然后发送<span style={{color: "red"}}>付款截图</span>、<span
+							将<span style={{color: "red"}}> 15 USDT </span>转入以下地址，然后发送<span style={{color: "red"}}>付款截图</span>、<span
 							style={{color: "red"}}>付款地址</span>、<span style={{color: "red"}}>注册邮箱</span>到 godeye2099@outlook.com <CopyTwoTone onClick={() => handleCopy(TronAddress)}/>，我们将在1小时内开通您的会员权限。
 						</p>
 						<Row gutter={{ xs: 1, sm: 1, md: 2}} justify={"space-between"}>

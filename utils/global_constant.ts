@@ -14,8 +14,8 @@ export const downColor = '#ec0000';
 export const downBorderColor = '#8A0000';
 export const upColor = '#00da3c';
 export const upBorderColor = '#008F28';
-export const buyAreaColor = '#d2f2df';
-export const sellAreaColor = '#f2d2df';
+export const buyAreaColor = '#d2f9df';
+export const sellAreaColor = '#f9d2df';
 
 type BuyOptionBuilderParam = {
 	title: string,
@@ -145,10 +145,10 @@ export const buildOptionForBuyChart =
 						show: false
 					},
 					lineStyle: {
-						width: 2,
+						width: 5,
 						type: 'solid',
 						color: buyAreaColor, // 阈值线的颜色
-						opacity: 0.8,
+						opacity: 0.9,
 					},
 				}
 			}) as any;
@@ -302,7 +302,7 @@ export const buildOptionForBuyChart =
 						silent: true,
 						itemStyle: {
 							color: buyAreaColor,
-							opacity: 0.8
+							opacity: 0.9
 						},
 						data: areaRanges
 					} : {}
@@ -388,10 +388,10 @@ export const buildOptionForSellChart =
 						show: false
 					},
 					lineStyle: {
-						width: 2,
+						width: 5,
 						type: 'solid',
 						color: sellAreaColor, // 阈值线的颜色
-						opacity: 0.6,
+						opacity: 0.9,
 					},
 					// emphasis: {
 					// 	label: {
@@ -511,7 +511,7 @@ export const buildOptionForSellChart =
 						data: markAreas,
 						itemStyle: {
 							color: sellAreaColor,
-							opacity: 0.6
+							opacity: 0.9
 						}
 					} : {},
 					markLine: includeMark ? {

@@ -158,19 +158,6 @@ const Sidebar = ({symbolToggledHandler} : {symbolToggledHandler: (type: SymbolAn
 				]
 		},
 		{
-			symbol: 'AR',
-			metrics: [
-				{
-					key: 'buy',
-					metric: '买入指标'
-				},
-				// {
-				// 	key: 'sell',
-				// 	metric: '卖出指标'
-				// }
-				]
-		},
-		{
 			symbol: 'ARKM',
 			metrics: [
 				{
@@ -184,7 +171,33 @@ const Sidebar = ({symbolToggledHandler} : {symbolToggledHandler: (type: SymbolAn
 				]
 		},
 		{
-			symbol: 'WLD',
+			symbol: 'ORDI',
+			metrics: [
+				{
+					key: 'buy',
+					metric: '买入指标'
+				},
+				// {
+				// 	key: 'sell',
+				// 	metric: '卖出指标'
+				// }
+				]
+		},
+		{
+			symbol: 'PENDLE',
+			metrics: [
+				{
+					key: 'buy',
+					metric: '买入指标'
+				},
+				// {
+				// 	key: 'sell',
+				// 	metric: '卖出指标'
+				// }
+				]
+		},
+		{
+			symbol: 'STX',
 			metrics: [
 				{
 					key: 'buy',

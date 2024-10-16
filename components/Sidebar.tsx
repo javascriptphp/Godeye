@@ -79,8 +79,124 @@ const Sidebar = ({symbolToggledHandler} : {symbolToggledHandler: (type: SymbolAn
 				// }
 				]
 		},
+		{
+			symbol: 'PEPE',
+			metrics: [
+				{
+					key: 'buy',
+					metric: '买入指标'
+				},
+				// {
+				// 	key: 'sell',
+				// 	metric: '卖出指标'
+				// }
+				]
+		},
+		{
+			symbol: 'WIF',
+			metrics: [
+				{
+					key: 'buy',
+					metric: '买入指标'
+				},
+				// {
+				// 	key: 'sell',
+				// 	metric: '卖出指标'
+				// }
+				]
+		},
+		{
+			symbol: 'FLOKI',
+			metrics: [
+				{
+					key: 'buy',
+					metric: '买入指标'
+				},
+				// {
+				// 	key: 'sell',
+				// 	metric: '卖出指标'
+				// }
+				]
+		},
+		{
+			symbol: 'SUI',
+			metrics: [
+				{
+					key: 'buy',
+					metric: '买入指标'
+				},
+				// {
+				// 	key: 'sell',
+				// 	metric: '卖出指标'
+				// }
+				]
+		},
+		{
+			symbol: 'SEI',
+			metrics: [
+				{
+					key: 'buy',
+					metric: '买入指标'
+				},
+				// {
+				// 	key: 'sell',
+				// 	metric: '卖出指标'
+				// }
+				]
+		},
+		{
+			symbol: 'FTM',
+			metrics: [
+				{
+					key: 'buy',
+					metric: '买入指标'
+				},
+				// {
+				// 	key: 'sell',
+				// 	metric: '卖出指标'
+				// }
+				]
+		},
+		{
+			symbol: 'AR',
+			metrics: [
+				{
+					key: 'buy',
+					metric: '买入指标'
+				},
+				// {
+				// 	key: 'sell',
+				// 	metric: '卖出指标'
+				// }
+				]
+		},
+		{
+			symbol: 'ARKM',
+			metrics: [
+				{
+					key: 'buy',
+					metric: '买入指标'
+				},
+				// {
+				// 	key: 'sell',
+				// 	metric: '卖出指标'
+				// }
+				]
+		},
+		{
+			symbol: 'WLD',
+			metrics: [
+				{
+					key: 'buy',
+					metric: '买入指标'
+				},
+				// {
+				// 	key: 'sell',
+				// 	metric: '卖出指标'
+				// }
+				]
+		},
 	];
-
 	const payMetrics = [
 		{
 			symbol: 'BTC',

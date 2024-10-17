@@ -10,15 +10,15 @@ const enum MenuItemKeys {
 }
 
 const items: MenuProps['items'] = [
-	{
-		label: (
-			<Button type="link">个人信息</Button>
-		),
-		key: MenuItemKeys.INFO,
-	},
-	{
-		type: 'divider',
-	},
+	// {
+	// 	label: (
+	// 		<Button type="link">个人信息</Button>
+	// 	),
+	// 	key: MenuItemKeys.INFO,
+	// },
+	// {
+	// 	type: 'divider',
+	// },
 	{
 		label: (
 			<Button type="link">退出登录</Button>

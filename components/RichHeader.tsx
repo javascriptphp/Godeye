@@ -5,6 +5,9 @@ import Link from "next/link";
 import React from "react";
 import LoginedAvatar from "@/components/login/LoginedAvatar";
 import useStore from "@/utils/store";
+import { Dropdown, Menu } from 'antd';
+import { useTranslation } from 'react-i18next';
+import { GlobalOutlined } from '@ant-design/icons';
 
 const HeaderContainer = styled.header`
     display: flex;
@@ -51,6 +54,23 @@ const alterStyle: React.CSSProperties = {
 const RichHeader = () => {
 	const router = useRouter();
 	const {userContext} = useStore();
+	const { t, i18n } = useTranslation();
+
+	const handleLanguageChange = (lang: string) => {
+		i18n.changeLanguage(lang);
+	};
+
+	const languageMenu = (
+		<Menu>
+			<Menu.Item key="zh" onClick={() => handleLanguageChange('zh')}>
+				中文
+			</Menu.Item>
+			<Menu.Item key="en" onClick={() => handleLanguageChange('en')}>
+				English
+			</Menu.Item>
+		</Menu>
+	);
+
 	const handleSignup = async () => {
 		await router.push('/signup')
 	}
@@ -86,13 +106,16 @@ const RichHeader = () => {
 					<a href="/contact">联系我们</a>
 				</NavLinks>
 				<Flex gap={"middle"} justify="center" align="center">
+					<Dropdown overlay={languageMenu} placement="bottomRight">
+						<GlobalOutlined style={{ fontSize: '18px', cursor: 'pointer' }} />
+					</Dropdown>
 					{
 						(userContext && userContext.logined) ? 
 							<LoginedAvatar/>
 							:
 							<>
-								<Button onClick={handleSignin}>登 录</Button>
-								<Button type="primary" onClick={handleSignup}>注 册</Button>
+								<Button onClick={handleSignin}>{t('login')}</Button>
+								<Button type="primary" onClick={handleSignup}>{t('register')}</Button>
 							</>
 					}
 				</Flex>

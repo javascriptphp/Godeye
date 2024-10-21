@@ -3,6 +3,7 @@ import { ThemeProvider, type DefaultTheme } from "styled-components";
 import GlobalStyle from "@/components/globalstyles";
 import {useEffect} from "react";
 import useStore from "@/utils/store";
+import '../utils/i18n';
 
 const theme: DefaultTheme = {
   colors: {

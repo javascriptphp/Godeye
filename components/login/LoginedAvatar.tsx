@@ -4,32 +4,34 @@ import React from "react";
 import {useRouter} from "next/router";
 import {invokeLogout} from "@/service";
 import useStore from "@/utils/store";
+import {useTranslation} from "react-i18next";
 
 const enum MenuItemKeys {
 	INFO = 'info', LOGOUT = 'logout',
 }
 
-const items: MenuProps['items'] = [
-	// {
-	// 	label: (
-	// 		<Button type="link">个人信息</Button>
-	// 	),
-	// 	key: MenuItemKeys.INFO,
-	// },
-	// {
-	// 	type: 'divider',
-	// },
-	{
-		label: (
-			<Button type="link">退出登录</Button>
-		),
-		key: MenuItemKeys.LOGOUT,
-	},
-];
 
 const LoginedAvatar: React.FC = () => {
 	const router = useRouter();
 	const {userContext, logoutHandler} = useStore();
+	const { t } = useTranslation();
+	const items: MenuProps['items'] = [
+		// {
+		// 	label: (
+		// 		<Button type="link">{t('profile')}</Button>
+		// 	),
+		// 	key: MenuItemKeys.INFO,
+		// },
+		// {
+		// 	type: 'divider',
+		// },
+		{
+			label: (
+				<Button type="link">{t('logout')}</Button>
+			),
+			key: MenuItemKeys.LOGOUT,
+		},
+	];
 	const onClick: MenuProps['onClick'] = ({key}) => {
 		switch (key) {
 			case MenuItemKeys.INFO:

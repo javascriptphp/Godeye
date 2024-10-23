@@ -17,6 +17,7 @@ import {
 	createChart
 } from "@/utils/global_constant";
 import useStore from "@/utils/store";
+import {useTranslation} from "react-i18next";
 
 
 const ThreeMonthBuyChart = ({symbol, metric}: { symbol: string, metric: string }) => {
@@ -30,6 +31,7 @@ const ThreeMonthBuyChart = ({symbol, metric}: { symbol: string, metric: string }
 	const chartRef = useRef<echarts.ECharts | null>(null);  // Store chart instance in a ref
 	const [messageApi, contextHolder] = message.useMessage();
 	const {userContext} = useStore();
+	const { t } = useTranslation();
 
 	// Fetch data and update the state
 	useEffect(() => {
@@ -57,14 +59,14 @@ const ThreeMonthBuyChart = ({symbol, metric}: { symbol: string, metric: string }
 	}, [symbol, metric]);
 	useEffect(() => {
 		const echartsOption = buildOptionForBuyChart({
-			title: `T1—部分历史数据`,
+			title: t('t1Title'),
 			symbol: symbol,
 			metric: BUY,
 			timestamps: timestamps,
 			threshold: threshold,
 			metricData: metricData,
 			priceData: priceData,
-			watermark: (userContext && userContext.email) || "水印文字",
+			watermark: (userContext && userContext.email) || t('watermarkText'),
 			includeMark: true,
 		});
 		createChart({chartRef, containerRef, echartsOption})

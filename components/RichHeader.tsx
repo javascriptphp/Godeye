@@ -63,7 +63,7 @@ const RichHeader = () => {
 	const languageMenu = (
 		<Menu>
 			<Menu.Item key="zh" onClick={() => handleLanguageChange('zh')}>
-				中文
+				简体中文
 			</Menu.Item>
 			<Menu.Item key="en" onClick={() => handleLanguageChange('en')}>
 				English
@@ -81,7 +81,7 @@ const RichHeader = () => {
 		<Wrapper>
 			<Alert
 				style={alterStyle}
-				message="网站免责声明：本网站内提供的产品及信息仅供位于非中国大陆地区的客户访问。"
+				message={t('topAnnouncement')}
 				type="warning"
 				closable
 				// onClose={}
@@ -97,13 +97,13 @@ const RichHeader = () => {
 								// background: 'linear-gradient(to right, red, blue)',
 								// color: 'transparent',
 								// WebkitBackgroundClip: 'text'
-							}}>普通人能接触到的最精准预警指标，多家对冲基金已购买本产品</span>
+							}}>{t('shortDescription')}</span>
 						</div>
 					</Space>
 				</Link>
 				<NavLinks>
-					<a href="/pay">价格</a>
-					<a href="/contact">联系我们</a>
+					<a href="/pay">{t("pricing")}</a>
+					<a href="/contact">{t("contactUs")}</a>
 				</NavLinks>
 				<Flex gap={"middle"} justify="center" align="center">
 					<Dropdown overlay={languageMenu} placement="bottomRight">

@@ -12,6 +12,7 @@ import {getHistoricalData} from "@/service";
 import {message} from "antd";
 import {buildOptionForSellChart, chartHeight, chartWidth, createChart} from "@/utils/global_constant";
 import useStore from "@/utils/store";
+import {useTranslation} from "react-i18next";
 
 
 const HistoricalSellChart = ({symbol, metric}: { symbol: string, metric: string }) => {
@@ -28,6 +29,7 @@ const HistoricalSellChart = ({symbol, metric}: { symbol: string, metric: string 
 	const hasFetchedData = useRef(false);  // Track if data has been fetched
 	
 	const {userContext} = useStore();
+	const { t } = useTranslation();
 
 	// Fetch data and update the state
 	useEffect(() => {
@@ -55,14 +57,14 @@ const HistoricalSellChart = ({symbol, metric}: { symbol: string, metric: string 
 	}, [symbol, metric]);
 	useEffect(() => {
 	const echartsOption = buildOptionForSellChart({
-		title: `T2-历史数据`,
+		title: t('t2Title'),
 		symbol: symbol,
 		metric: SELL,
 		timestamps: timestamps,
 		threshold: threshold,
 		metricData: metricData,
 		priceData: priceValues,
-			watermark: (userContext && userContext.email) || "水印文字",
+			watermark: (userContext && userContext.email) || t('watermarkText'),
 			includeMark: true,
 		});
 		createChart({chartRef, containerRef, echartsOption})

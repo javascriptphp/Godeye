@@ -6,53 +6,9 @@ import {getRealtimeDataUrl} from "@/service";
 import useWebSocket from "react-use-websocket";
 import {buildOptionForBuyChart, chartHeight, chartWidth, createChart} from "@/utils/global_constant";
 import useStore from "@/utils/store";
+import {useTranslation} from "react-i18next";
 
-const buildCustomerOption = function (symbol: string) {
-	return {
-		dataZoom: [
-			{
-				show: true,
-				realtime: true,
-				start: 0,
-				end: 100
-			},
-			{
-				type: 'inside',
-				realtime: true,
-				start: 0,
-				end: 100
-			}
-		],
-		yAxis: [
-			{
-				name: '指标',
-				nameLocation: 'end',
-				nameTextStyle: {
-					fontSize: 14
-				},
-				type: 'value',
-				min: (value: any) => value.min * 0.999,
-				max: (value: any) => value.max * 1.001,
-				axisLabel: {
-					formatter: (value: any) => value.toFixed(3)
-				}
-			},
-			{
-				name: `${symbol}价格`,
-				nameLocation: 'end',
-				nameTextStyle: {
-					fontSize: 14
-				},
-				type: 'value',
-				min: (value: any) => value.min * 0.999,
-				max: (value: any) => value.max * 1.0001,
-				axisLabel: {
-					formatter: (value: any) => value.toFixed(3)
-				}
-			}
-		],
-	};
-}
+
 interface RealtimeChartData {
 	metricData: number[];
 	priceData: number[];
@@ -65,7 +21,53 @@ const RealtimeBuyChart = ({metric, symbol}: { metric: string, symbol: string }) 
 	const [priceData, setPriceData] = useState<number[]>([]);
 	const [threshold, setThreshold] = useState<number>(0);
 	const [timestamps, setTimestamps] = useState<string[]>([]);
-	const [realtimeData, setRealtimeData] = useState<RealtimeChartData>();
+	const { t } = useTranslation();
+	const buildCustomerOption = function (symbol: string) {
+		return {
+			dataZoom: [
+				{
+					show: true,
+					realtime: true,
+					start: 0,
+					end: 100
+				},
+				{
+					type: 'inside',
+					realtime: true,
+					start: 0,
+					end: 100
+				}
+			],
+			yAxis: [
+				{
+					name: t('chart_metric'),
+					nameLocation: 'end',
+					nameTextStyle: {
+						fontSize: 14
+					},
+					type: 'value',
+					min: (value: any) => value.min * 0.999,
+					max: (value: any) => value.max * 1.001,
+					axisLabel: {
+						formatter: (value: any) => value.toFixed(3)
+					}
+				},
+				{
+					name: `${symbol}价格`,
+					nameLocation: 'end',
+					nameTextStyle: {
+						fontSize: 14
+					},
+					type: 'value',
+					min: (value: any) => value.min * 0.999,
+					max: (value: any) => value.max * 1.0001,
+					axisLabel: {
+						formatter: (value: any) => value.toFixed(3)
+					}
+				}
+			],
+		};
+	}
 	useEffect(() => {
 		setMetricData([]);
 		setPriceData([]);
@@ -116,14 +118,14 @@ const RealtimeBuyChart = ({metric, symbol}: { metric: string, symbol: string }) 
 	// Initialize and update the chart when data or symbol changes
 	useEffect(() => {
 		const _option = buildOptionForBuyChart({
-			title: `T3—实时数据`,
+			title: t('t3Title'),
 			symbol: symbol,
 			metric: BUY,
 			timestamps: timestamps,
 			threshold: threshold,
 			metricData: metricData,
 			priceData: priceData,
-			watermark: (userContext && userContext.email) || "水印文字",
+			watermark: (userContext && userContext.email) || t('watermarkText'),
 			includeMark: false
 		});
 		const echartsOption = {

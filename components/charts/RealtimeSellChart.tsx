@@ -6,6 +6,7 @@ import useWebSocket from "react-use-websocket";
 import {buildOptionForSellChart, chartHeight, chartWidth, createChart} from "@/utils/global_constant";
 import useStore from "@/utils/store";
 import {EChartsOption} from "echarts";
+import {useTranslation} from "react-i18next";
 
 interface RealtimeChartData {
 	metricData: number[];
@@ -66,7 +67,6 @@ const RealtimeChart = ({metric, symbol}: { metric: string, symbol: string }) => 
 	const [priceValues, setPriceValues] = useState<number[][]>([][4]);
 	const [threshold, setThreshold] = useState<number[]>([]);
 	const [timestamps, setTimestamps] = useState<string[]>([]);
-	const [realtimeData, setRealtimeData] = useState<RealtimeChartData>();
 	useEffect(() => {
 		setMetricData([]);
 		setPriceData([])
@@ -77,6 +77,7 @@ const RealtimeChart = ({metric, symbol}: { metric: string, symbol: string }) => 
 	console.log("realtime",metricData.length)
 	const chartRef = useRef<echarts.ECharts | null>(null);  // Store chart instance in a ref
 	const {userContext} = useStore();
+	const { t } = useTranslation();
 
 	const [websocketUrl, setWebsocketUrl] = useState<string>('');
 	// 请求websocket url
@@ -119,14 +120,14 @@ const RealtimeChart = ({metric, symbol}: { metric: string, symbol: string }) => 
 	// Initialize and update the chart when data or symbol changes
 	useEffect(() => {
 		const _option = buildOptionForSellChart({
-			title: `T3-实时数据`,
+			title: t('t3Title'),
 			symbol: symbol,
 			metric: SELL,
 			timestamps: timestamps,
 			threshold: threshold,
 			metricData: metricData,
 			priceData: priceValues,
-			watermark: (userContext && userContext.email) || "水印文字",
+			watermark: (userContext && userContext.email) || t('watermarkText'),
 			includeMark: false,
 		})
 		const echartsOption = {

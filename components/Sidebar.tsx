@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {Layout, Menu, Radio, RadioChangeEvent} from 'antd';
 import {sidebarWidth} from "@/utils/global_constant";
 import {MetricTypeEnum, SymbolAndMetric} from "@/types";
+import {useTranslation} from "react-i18next";
 
 const { Sider } = Layout;
 const { SubMenu } = Menu;
@@ -22,6 +23,7 @@ const scrollStyle: React.CSSProperties = {
 }
 
 const Sidebar = ({symbolToggledHandler} : {symbolToggledHandler: (type: SymbolAndMetric) => void}) => {
+	const { t } = useTranslation();
 	// 定义按钮组状态来控制显示的菜单
 	const [selectedGroup, setSelectedGroup] = useState<MetricTypeEnum>(MetricTypeEnum.free);
 
@@ -32,11 +34,11 @@ const Sidebar = ({symbolToggledHandler} : {symbolToggledHandler: (type: SymbolAn
 			metrics: [
 				{
 					key: 'buy',
-					metric: '买入指标'
+					metric: t('buyMetric')
 				},
 				{
 					key: 'sell',
-					metric: '卖出指标'
+					metric: t('sellMetric')
 				}
 				]
 		},
@@ -45,11 +47,11 @@ const Sidebar = ({symbolToggledHandler} : {symbolToggledHandler: (type: SymbolAn
 			metrics: [
 				{
 					key: 'buy',
-					metric: '买入指标'
+					metric: t('buyMetric')
 				},
 				// {
 				// 	key: 'sell',
-				// 	metric: '卖出指标'
+				// 	metric: t('sellMetric')
 				// }
 				]
 		},
@@ -58,11 +60,11 @@ const Sidebar = ({symbolToggledHandler} : {symbolToggledHandler: (type: SymbolAn
 			metrics: [
 				{
 					key: 'buy',
-					metric: '买入指标'
+					metric: t('buyMetric')
 				},
 				// {
 				// 	key: 'sell',
-				// 	metric: '卖出指标'
+				// 	metric: t('sellMetric')
 				// }
 				]
 		},
@@ -71,11 +73,11 @@ const Sidebar = ({symbolToggledHandler} : {symbolToggledHandler: (type: SymbolAn
 			metrics: [
 				{
 					key: 'buy',
-					metric: '买入指标'
+					metric: t('buyMetric')
 				},
 				// {
 				// 	key: 'sell',
-				// 	metric: '卖出指标'
+				// 	metric: t('sellMetric')
 				// }
 				]
 		},
@@ -84,11 +86,11 @@ const Sidebar = ({symbolToggledHandler} : {symbolToggledHandler: (type: SymbolAn
 			metrics: [
 				{
 					key: 'buy',
-					metric: '买入指标'
+					metric: t('buyMetric')
 				},
 				// {
 				// 	key: 'sell',
-				// 	metric: '卖出指标'
+				// 	metric: t('sellMetric')
 				// }
 				]
 		},
@@ -97,11 +99,11 @@ const Sidebar = ({symbolToggledHandler} : {symbolToggledHandler: (type: SymbolAn
 			metrics: [
 				{
 					key: 'buy',
-					metric: '买入指标'
+					metric: t('buyMetric')
 				},
 				// {
 				// 	key: 'sell',
-				// 	metric: '卖出指标'
+				// 	metric: t('sellMetric')
 				// }
 				]
 		},
@@ -110,11 +112,11 @@ const Sidebar = ({symbolToggledHandler} : {symbolToggledHandler: (type: SymbolAn
 			metrics: [
 				{
 					key: 'buy',
-					metric: '买入指标'
+					metric: t('buyMetric')
 				},
 				// {
 				// 	key: 'sell',
-				// 	metric: '卖出指标'
+				// 	metric: t('sellMetric')
 				// }
 				]
 		},
@@ -123,11 +125,11 @@ const Sidebar = ({symbolToggledHandler} : {symbolToggledHandler: (type: SymbolAn
 			metrics: [
 				{
 					key: 'buy',
-					metric: '买入指标'
+					metric: t('buyMetric')
 				},
 				// {
 				// 	key: 'sell',
-				// 	metric: '卖出指标'
+				// 	metric: t('sellMetric')
 				// }
 				]
 		},
@@ -136,11 +138,11 @@ const Sidebar = ({symbolToggledHandler} : {symbolToggledHandler: (type: SymbolAn
 			metrics: [
 				{
 					key: 'buy',
-					metric: '买入指标'
+					metric: t('buyMetric')
 				},
 				// {
 				// 	key: 'sell',
-				// 	metric: '卖出指标'
+				// 	metric: t('sellMetric')
 				// }
 				]
 		},
@@ -149,11 +151,11 @@ const Sidebar = ({symbolToggledHandler} : {symbolToggledHandler: (type: SymbolAn
 			metrics: [
 				{
 					key: 'buy',
-					metric: '买入指标'
+					metric: t('buyMetric')
 				},
 				// {
 				// 	key: 'sell',
-				// 	metric: '卖出指标'
+				// 	metric: t('sellMetric')
 				// }
 				]
 		},
@@ -162,11 +164,11 @@ const Sidebar = ({symbolToggledHandler} : {symbolToggledHandler: (type: SymbolAn
 			metrics: [
 				{
 					key: 'buy',
-					metric: '买入指标'
+					metric: t('buyMetric')
 				},
 				// {
 				// 	key: 'sell',
-				// 	metric: '卖出指标'
+				// 	metric: t('sellMetric')
 				// }
 				]
 		},
@@ -175,11 +177,11 @@ const Sidebar = ({symbolToggledHandler} : {symbolToggledHandler: (type: SymbolAn
 			metrics: [
 				{
 					key: 'buy',
-					metric: '买入指标'
+					metric: t('buyMetric')
 				},
 				// {
 				// 	key: 'sell',
-				// 	metric: '卖出指标'
+				// 	metric: t('sellMetric')
 				// }
 				]
 		},
@@ -188,11 +190,11 @@ const Sidebar = ({symbolToggledHandler} : {symbolToggledHandler: (type: SymbolAn
 			metrics: [
 				{
 					key: 'buy',
-					metric: '买入指标'
+					metric: t('buyMetric')
 				},
 				// {
 				// 	key: 'sell',
-				// 	metric: '卖出指标'
+				// 	metric: t('sellMetric')
 				// }
 				]
 		},
@@ -201,11 +203,11 @@ const Sidebar = ({symbolToggledHandler} : {symbolToggledHandler: (type: SymbolAn
 			metrics: [
 				{
 					key: 'buy',
-					metric: '买入指标'
+					metric: t('buyMetric')
 				},
 				// {
 				// 	key: 'sell',
-				// 	metric: '卖出指标'
+				// 	metric: t('sellMetric')
 				// }
 				]
 		},
@@ -216,11 +218,11 @@ const Sidebar = ({symbolToggledHandler} : {symbolToggledHandler: (type: SymbolAn
 			metrics: [
 				{
 					key: 'buy',
-					metric: '买入指标'
+					metric: t('buyMetric')
 				},
 				{
 					key: 'sell',
-					metric: '卖出指标'
+					metric: t('sellMetric')
 				}
 			]
 		},
@@ -229,11 +231,11 @@ const Sidebar = ({symbolToggledHandler} : {symbolToggledHandler: (type: SymbolAn
 			metrics: [
 				{
 					key: 'buy',
-					metric: '买入指标'
+					metric: t('buyMetric')
 				},
 				{
 					key: 'sell',
-					metric: '卖出指标'
+					metric: t('sellMetric')
 				}
 			]
 		},
@@ -242,11 +244,11 @@ const Sidebar = ({symbolToggledHandler} : {symbolToggledHandler: (type: SymbolAn
 			metrics: [
 				{
 					key: 'buy',
-					metric: '买入指标'
+					metric: t('buyMetric')
 				},
 				{
 					key: 'sell',
-					metric: '卖出指标'
+					metric: t('sellMetric')
 				}
 			]
 		},
@@ -255,11 +257,11 @@ const Sidebar = ({symbolToggledHandler} : {symbolToggledHandler: (type: SymbolAn
 			metrics: [
 				{
 					key: 'buy',
-					metric: '买入指标'
+					metric: t('buyMetric')
 				},
 				{
 					key: 'sell',
-					metric: '卖出指标'
+					metric: t('sellMetric')
 				}
 			]
 		},
@@ -299,8 +301,8 @@ const Sidebar = ({symbolToggledHandler} : {symbolToggledHandler: (type: SymbolAn
 						display: "none",
 					}}
 				>
-					<Radio.Button value={MetricTypeEnum.pay}>核心指标</Radio.Button>
-					<Radio.Button value={MetricTypeEnum.free}>免费指标</Radio.Button>
+					<Radio.Button value={MetricTypeEnum.pay}>{t('crucialMetric')}</Radio.Button>
+					<Radio.Button value={MetricTypeEnum.free}>{t('freeMetric')}</Radio.Button>
 				</Radio.Group>
 
 			{/* 可滚动的菜单区域 */}

@@ -13,6 +13,7 @@ import {getThreeMonthData} from "@/service";
 import {message} from "antd";
 import {buildOptionForSellChart, chartHeight, chartWidth, createChart} from "@/utils/global_constant";
 import useStore from "@/utils/store";
+import {useTranslation} from "react-i18next";
 
 
 const HistoricalChart = ({symbol, metric}: { symbol: string, metric: string }) => {
@@ -29,6 +30,7 @@ const HistoricalChart = ({symbol, metric}: { symbol: string, metric: string }) =
 	const [threshold, setThreshold] = useState<number[]>([]);
 	const [timestamps, setTimestamps] = useState<string[]>([]);
 	const [messageApi, contextHolder] = message.useMessage();
+	const { t } = useTranslation();
 
 	const chartRef = useRef<echarts.ECharts | null>(null);  // Store chart instance in a ref
 	const hasFetchedData = useRef(false);  // Track if data has been fetched
@@ -75,14 +77,14 @@ const HistoricalChart = ({symbol, metric}: { symbol: string, metric: string }) =
 	}, [symbol, metric]);
 	useEffect(() => {
 		const echartsOption = buildOptionForSellChart({
-			title: `T1-部分历史数据`,
+			title: t("t1Title"),
 			symbol: symbol,
 			metric: SELL,
 			timestamps: timestamps,
 			threshold: threshold,
 			metricData: metricData,
 			priceData: priceValues,
-			watermark: (userContext && userContext.email) || "水印文字",
+			watermark: (userContext && userContext.email) || t('watermarkText'),
 			includeMark: true,
 		})
 		createChart({chartRef, containerRef, echartsOption})

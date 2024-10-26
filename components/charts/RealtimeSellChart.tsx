@@ -1,12 +1,13 @@
 import React, {useEffect, useRef, useState} from "react";
 import * as echarts from 'echarts';
+import {EChartsOption} from 'echarts';
 import {RealtimeResponse, RealtimeSellData, SELL} from "@/types";
 import {getRealtimeDataUrl} from "@/service";
 import useWebSocket from "react-use-websocket";
-import {buildOptionForSellChart, chartHeight, chartWidth, createChart} from "@/utils/global_constant";
+import {chartHeight, chartWidth, createChart} from "@/utils/global_constant";
 import useStore from "@/utils/store";
-import {EChartsOption} from "echarts";
 import {useTranslation} from "react-i18next";
+import GlobalFunctions from "@/utils/global_functions";
 
 interface RealtimeChartData {
 	metricData: number[];
@@ -61,6 +62,7 @@ const buildCustomerOption = function (symbol: string) {
 	};
 }
 const RealtimeChart = ({metric, symbol}: { metric: string, symbol: string }) => {
+	const Functions = GlobalFunctions();
 	const containerRef = useRef<HTMLDivElement>(null);
 	const [metricData, setMetricData] = useState<number[]>([]);
 	const [priceData, setPriceData] = useState<number[]>([]);
@@ -119,7 +121,7 @@ const RealtimeChart = ({metric, symbol}: { metric: string, symbol: string }) => 
 
 	// Initialize and update the chart when data or symbol changes
 	useEffect(() => {
-		const _option = buildOptionForSellChart({
+		const _option = Functions.buildOptionForSellChart({
 			title: t('t3Title'),
 			symbol: symbol,
 			metric: SELL,

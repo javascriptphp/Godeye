@@ -6,6 +6,7 @@ import RichHeader from "@/components/RichHeader";
 import {invokeLogin, LoginInfo} from "@/service";
 import {useRouter} from "next/router";
 import useStore from "@/utils/store";
+import {useTranslation} from "react-i18next";
 
 const { Title, Text, Link } = Typography;
 const { Footer, Content } = Layout;
@@ -52,11 +53,12 @@ const Login: React.FC = () => {
 	const router = useRouter();
 	const [messageApi, contextHolder] = message.useMessage();
 	const {loginHandler} = useStore();
+	const { t } = useTranslation();
 	const onFinish = (values: any) => {
 		const loginInfo = form.getFieldsValue(['email','password']) as LoginInfo;
 		invokeLogin(loginInfo, loginHandler, messageApi).then((isSuccess) => {
 			if (isSuccess) {
-				message.success("登录成功~").then(r => r);
+				message.success(t('signInSuccessfully')).then(r => r);
 				router.push("/").then(r => r);
 			}else{
 				console.log("登录失败")
@@ -71,17 +73,16 @@ const Login: React.FC = () => {
 				<Content>
 					{contextHolder}
 					<LoginBox>
-						<Title level={3} style={{ textAlign: 'center' }}>Godeye 帐户登录</Title>
+						<Title level={3} style={{ textAlign: 'center' }}>{t('signInTitle')}</Title>
 						<Text type="secondary" style={{ display: 'block', textAlign: 'center', marginBottom: 20 }}>
-							欢迎回来！请使用您的邮箱登录
+							{t('signInWelcome')}
 						</Text>
 
 						<Alert
 							style={alterStyle}
 							description={
 								<div>
-									<p><span style={{ fontSize: '18px' }}>⚠️</span> 本网站已设置防外传水印，付费购买后仅限自己使用，<span style={{color: 'red'}}> 禁止外传，否则永久封禁</span>，原因是指标使用人数越多，指标准确度越低。希望理解和支持。</p>
-									<p><span style={{ fontSize: '18px' }}>⚠️</span> 同时为了保证指标的精准度，当指标付费用户达到一定人数，我们将停止对外出售指标，仅服务老用户。</p>
+									<p><span style={{ fontSize: '18px' }}>⚠️</span> <span style={{color: 'red'}}> {t("signInWarning")}</span></p>
 								</div>
 							}
 							type="info"
@@ -90,24 +91,24 @@ const Login: React.FC = () => {
 						<Form onFinish={onFinish} layout="vertical" form={form}>
 							<Form.Item
 								name="email"
-								rules={[{ required: true, message: '请输入您的邮箱!' }]}
+								rules={[{ required: true, message: t("emailRequiredWarning") }]}
 							>
 								<Input placeholder="邮箱" size="large" />
 							</Form.Item>
 							<Form.Item
 								name="password"
-								rules={[{ required: true, message: '请输入您的密码!' }]}
+								rules={[{ required: true, message: t("passwordRequiredWarning") }]}
 							>
 								<Input.Password placeholder="密码" size="large" />
 							</Form.Item>
 							<StyledButton type="primary" htmlType="submit">
-								登 录
+								{t('signInButtonText')}
 							</StyledButton>
 						</Form>
 
 						<Space style={{ display: 'flex', justifyContent: 'space-between', marginTop: 20 }}>
-							<Link href="#">忘记密码?</Link>
-							<Link href="/signup">立即注册</Link>
+							<Link href="#">{t('passwordForget')}</Link>
+							<Link href="/signup">{t('signUpNow')}</Link>
 						</Space>
 					</LoginBox>
 				</Content>

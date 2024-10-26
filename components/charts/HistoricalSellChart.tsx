@@ -10,13 +10,15 @@ import {
 } from "@/types";
 import {getHistoricalData} from "@/service";
 import {message} from "antd";
-import {buildOptionForSellChart, chartHeight, chartWidth, createChart} from "@/utils/global_constant";
+import {chartHeight, chartWidth, createChart} from "@/utils/global_constant";
 import useStore from "@/utils/store";
 import {useTranslation} from "react-i18next";
+import GlobalFunctions from "@/utils/global_functions";
 
 
 const HistoricalSellChart = ({symbol, metric}: { symbol: string, metric: string }) => {
 	console.log("historical",symbol,metric);
+	const Functions = GlobalFunctions();
 	const containerRef = useRef<HTMLDivElement>(null);
 	const [metricData, setMetricData] = useState<number[]>([]);
 	const [priceData, setPriceData] = useState<number[]>([]);
@@ -56,7 +58,7 @@ const HistoricalSellChart = ({symbol, metric}: { symbol: string, metric: string 
 		fetchData().then(r => r);
 	}, [symbol, metric]);
 	useEffect(() => {
-	const echartsOption = buildOptionForSellChart({
+	const echartsOption = Functions.buildOptionForSellChart({
 		title: t('t2Title'),
 		symbol: symbol,
 		metric: SELL,

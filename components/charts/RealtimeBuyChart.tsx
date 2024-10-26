@@ -4,9 +4,10 @@ import {EChartsOption} from 'echarts';
 import {BUY, RealtimeBuyData, RealtimeResponse} from "@/types";
 import {getRealtimeDataUrl} from "@/service";
 import useWebSocket from "react-use-websocket";
-import {buildOptionForBuyChart, chartHeight, chartWidth, createChart} from "@/utils/global_constant";
+import {chartHeight, chartWidth, createChart} from "@/utils/global_constant";
 import useStore from "@/utils/store";
 import {useTranslation} from "react-i18next";
+import GlobalFunctions from "@/utils/global_functions";
 
 
 interface RealtimeChartData {
@@ -16,6 +17,7 @@ interface RealtimeChartData {
 	timestamps: string[];
 }
 const RealtimeBuyChart = ({metric, symbol}: { metric: string, symbol: string }) => {
+	const Functions = GlobalFunctions();
 	const containerRef = useRef<HTMLDivElement>(null);
 	const [metricData, setMetricData] = useState<number[]>([]);
 	const [priceData, setPriceData] = useState<number[]>([]);
@@ -117,7 +119,7 @@ const RealtimeBuyChart = ({metric, symbol}: { metric: string, symbol: string }) 
 
 	// Initialize and update the chart when data or symbol changes
 	useEffect(() => {
-		const _option = buildOptionForBuyChart({
+		const _option = Functions.buildOptionForBuyChart({
 			title: t('t3Title'),
 			symbol: symbol,
 			metric: BUY,

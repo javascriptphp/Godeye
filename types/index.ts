@@ -162,7 +162,10 @@ export interface UserContext {
 	role: string | '';
 	expireTime: Date;
 }
-
+export interface SystemContext {
+	language: string;
+}
+export const DEFAULT_LANGUAGE = 'en' as string;
 export enum ErrorTypeEnum {
 	FALSE,
 	NULL,
@@ -181,7 +184,28 @@ export type CoordType = [
 	XaxisType,
 	XaxisType
 ]
-
+export type BuyOptionBuilderParam = {
+	title: string,
+	symbol: string,
+	metric: string,
+	timestamps: string[],
+	threshold: number,
+	metricData: number[],
+	priceData: any,
+	watermark: string,
+	includeMark: boolean,
+}
+export type SellOptionBuilderParam = {
+	title: string,
+	symbol: string,
+	metric: string,
+	timestamps: string[],
+	threshold: number[],
+	metricData: number[],
+	priceData: any,
+	watermark: string,
+	includeMark: boolean,
+}
 export function isHistoricalSellValues(data: HistoricalBuyValues | HistoricalSellValues): data is HistoricalSellValues {
 	return Array.isArray((data as HistoricalSellValues).threshold);
 }

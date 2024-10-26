@@ -29,6 +29,11 @@ const Logo = styled.div`
     font-size: 24px;
     font-weight: bold;
 `;
+const Nav = styled.span`
+		&:hover {
+				cursor: pointer;
+		}
+`
 
 const NavLinks = styled.div`
     display: flex;
@@ -53,11 +58,14 @@ const alterStyle: React.CSSProperties = {
 }
 const RichHeader = () => {
 	const router = useRouter();
-	const {userContext} = useStore();
-	const { t, i18n } = useTranslation();
+	const {userContext,setLanguage} = useStore();
+	const { t } = useTranslation();
 
 	const handleLanguageChange = (lang: string) => {
-		i18n.changeLanguage(lang);
+		// i18n.changeLanguage(lang);
+		setLanguage(lang);
+		// i18n.loadLanguages(lang);
+		
 	};
 
 	const languageMenu = (
@@ -76,6 +84,9 @@ const RichHeader = () => {
 	}
 	const handleSignin = async () => {
 		await router.push('/signin')
+	}
+	const routeUrl = (url: string) => {
+		router.push(url).then(r => r)
 	}
 	return (
 		<Wrapper>
@@ -102,8 +113,10 @@ const RichHeader = () => {
 					</Space>
 				</Link>
 				<NavLinks>
-					<a href="/pay">{t("pricing")}</a>
-					<a href="/contact">{t("contactUs")}</a>
+					<Space direction={"horizontal"} align={"baseline"} size={"middle"}>
+						<Nav onClick={() => routeUrl("/pay")}>{t("pricing")}</Nav>
+						<Nav onClick={() => routeUrl("/contact")}>{t("contactUs")}</Nav>
+					</Space>
 				</NavLinks>
 				<Flex gap={"middle"} justify="center" align="center">
 					<Dropdown overlay={languageMenu} placement="bottomRight">

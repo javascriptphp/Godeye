@@ -3,6 +3,7 @@ import {Row, Col, Button, Typography, Form, Space} from "antd";
 import { TwitterOutlined, YoutubeOutlined, MailOutlined, FormOutlined, SendOutlined } from '@ant-design/icons';
 import PageFrame from "@/components/PageFrame";
 import styled from "styled-components";
+import {useTranslation} from "react-i18next";
 
 const Heading = styled.h1`
 		margin: 60px 0;
@@ -11,9 +12,11 @@ const Heading = styled.h1`
 `;
 
 const ContactPage = () => {
+
+	const { t } = useTranslation();
 	return (
 		<PageFrame>
-			<Heading>联系方式</Heading>
+			<Heading>{t("contactTitle")}</Heading>
 			<Space direction="vertical" size={50} style={{ display: 'flex' }}>
 			<Row justify="center">
 				{/* Twitter */}
@@ -32,10 +35,10 @@ const ContactPage = () => {
 						className="custom-button"
 						onClick={() => { window.open('https://x.com/btcnnn199?t=sTvR8AI1MmiIkx6OepZuRQ&s=09', '_blank')}}
 					>
-						点击关注 Twitter
+						{t("followTwitter")}
 					</Button>
 				</Col>
-				<Col xs={24} sm={1}></Col>
+				{/*<Col xs={24} sm={1}></Col>*/}
 				{/*<Col xs={24} sm={6} style={{ justifyContent: 'center', display: 'flex', alignItems: 'center' }}>*/}
 				{/*	<Button*/}
 				{/*		type="default"*/}
@@ -71,10 +74,10 @@ const ContactPage = () => {
 						}}
 						className="custom-button"
 					>
-						邮箱：godeye2099@outlook.com
+						{t("emailContact")}
 					</Button>
 				</Col>
-				<Col xs={24} sm={1}></Col>
+				{/*<Col xs={24} sm={1}></Col>*/}
 				{/*<Col xs={24} sm={6} style={{ justifyContent: 'center', display: 'flex', alignItems: 'center' }}>*/}
 				{/*	<Button*/}
 				{/*		type="default"*/}

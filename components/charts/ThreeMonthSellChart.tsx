@@ -11,13 +11,15 @@ import {
 } from "@/types";
 import {getThreeMonthData} from "@/service";
 import {message} from "antd";
-import {buildOptionForSellChart, chartHeight, chartWidth, createChart} from "@/utils/global_constant";
+import {chartHeight, chartWidth, createChart} from "@/utils/global_constant";
 import useStore from "@/utils/store";
 import {useTranslation} from "react-i18next";
+import GlobalFunctions from "@/utils/global_functions";
 
 
 const HistoricalChart = ({symbol, metric}: { symbol: string, metric: string }) => {
 	console.log("historical", symbol, metric);
+	const Functions = GlobalFunctions();
 	const upColor = '#00da3c';
 	const downColor = '#ec0000';
 	const containerRef = useRef<HTMLDivElement>(null);
@@ -76,7 +78,7 @@ const HistoricalChart = ({symbol, metric}: { symbol: string, metric: string }) =
 		// }
 	}, [symbol, metric]);
 	useEffect(() => {
-		const echartsOption = buildOptionForSellChart({
+		const echartsOption = Functions.buildOptionForSellChart({
 			title: t("t1Title"),
 			symbol: symbol,
 			metric: SELL,

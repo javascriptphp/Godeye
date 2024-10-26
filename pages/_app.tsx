@@ -3,7 +3,7 @@ import { ThemeProvider, type DefaultTheme } from "styled-components";
 import GlobalStyle from "@/components/globalstyles";
 import {useEffect} from "react";
 import useStore from "@/utils/store";
-import '../utils/i18n';
+import Internationalization from "@/utils/i18n";
 
 const theme: DefaultTheme = {
   colors: {
@@ -28,6 +28,7 @@ export default function App({ Component, pageProps }: AppProps) {
     <>
       <ThemeProvider theme={theme}>
         <GlobalStyle />
+        <Internationalization/>
         <Component {...pageProps} />
       </ThemeProvider>
     </>

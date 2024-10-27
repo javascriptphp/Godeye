@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import {useRouter} from "next/router";
-import {Alert, Button, Flex, Space} from "antd";
+import {Alert, Button, Flex, MenuProps, Space} from "antd";
 import Link from "next/link";
 import React from "react";
 import LoginedAvatar from "@/components/login/LoginedAvatar";
@@ -69,16 +69,21 @@ const RichHeader = () => {
 		
 	};
 
-	const languageMenu = (
-		<Menu>
-			<Menu.Item key="zh" onClick={() => handleLanguageChange('zh')}>
-				简体中文
-			</Menu.Item>
-			<Menu.Item key="en" onClick={() => handleLanguageChange('en')}>
-				English
-			</Menu.Item>
-		</Menu>
-	);
+	const languageMenu: MenuProps = {
+		items: [
+			{
+				key: 'zh',
+				label: '简体中文',
+				onClick: () => handleLanguageChange('zh')
+			},
+			{
+				key: 'en',
+				label: 'English',
+				onClick: () => handleLanguageChange('en')
+			}
+		]
+	};
+
 
 	const handleSignup = async () => {
 		await router.push('/signup')
@@ -91,13 +96,14 @@ const RichHeader = () => {
 	}
 	return (
 		<Wrapper>
-			<Alert
-				style={alterStyle}
-				message={t('topAnnouncement')}
-				type="warning"
-				closable
-				// onClose={}
-			/>
+			{/*删除顶部声明*/}
+			{/*<Alert*/}
+			{/*	style={alterStyle}*/}
+			{/*	message={t('topAnnouncement')}*/}
+			{/*	type="warning"*/}
+			{/*	closable*/}
+			{/*	// onClose={}*/}
+			{/*/>*/}
 			<HeaderContainer>
 				<Link href={"/"}>
 					<Space direction={"horizontal"} align={"baseline"} size={"middle"}>
@@ -120,7 +126,7 @@ const RichHeader = () => {
 					</Space>
 				</NavLinks>
 				<Flex gap={"middle"} justify="center" align="center">
-					<Dropdown overlay={languageMenu} placement="bottomRight">
+					<Dropdown menu={languageMenu} placement="bottomRight">
 						<GlobalOutlined style={{ fontSize: '18px', cursor: 'pointer' }} />
 					</Dropdown>
 					{

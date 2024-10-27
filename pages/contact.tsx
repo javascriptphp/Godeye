@@ -20,7 +20,7 @@ const ContactPage = () => {
 			<Space direction="vertical" size={50} style={{ display: 'flex' }}>
 			<Row justify="center">
 				{/* Twitter */}
-				<Col xs={24} sm={6} style={{ justifyContent: 'center', display: 'flex', alignItems: 'center' }}>
+				<Col xs={24} sm={12} style={{ justifyContent: 'center', display: 'flex', alignItems: 'center' }}>
 					<Button
 						type="default"
 						icon={<TwitterOutlined />}
@@ -60,7 +60,7 @@ const ContactPage = () => {
 			</Row>
 			<Row justify="center">
 				{/* Twitter */}
-				<Col xs={24} sm={6} style={{ justifyContent: 'center', display: 'flex', alignItems: 'center' }}>
+				<Col xs={24} sm={12} style={{ justifyContent: 'center', display: 'flex', alignItems: 'center' }}>
 					<Button
 						type="default"
 						icon={<MailOutlined />}

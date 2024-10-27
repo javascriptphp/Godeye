@@ -163,6 +163,10 @@ export const translations = {
 		"zh": "价格",
 		"en": "Price"
 	},
+	"subscriptionTitle": {
+		"zh": "订阅计划",
+		"en": "Subscription"
+	},
 	"subscriptionPrompt": {
 		"zh": "将 15 USDT 转入以下地址，然后发送付款截图、付款地址、注册邮箱到 godeye2099@outlook.com，我们将在1小时内开通您的会员权限。",
 		"en": "Transfer 15 USDT to the address below, then send a payment screenshot, payment address, and registered email to godeye2099@outlook.com. We will activate your membership within 1 hour."
@@ -173,7 +177,7 @@ export const translations = {
 	},
 	"optimismNote": {
 		"zh": "（只接受USDT，手续费低，推荐）",
-		"en": "(USDT only, low fees, recommended)"
+		"en": "(USDT only, lower fees, recommended)"
 	},
 	"tronAddress": {
 		"zh": "Tron",
@@ -199,8 +203,11 @@ export const translations = {
 	"emailContact": {
 		"zh": "邮箱：godeye2099@outlook.com",
 		"en": "Email: godeye2099@outlook.com"
-	}
-	,
+	},
+	"copySuccessMessage": {
+		"zh": "复制成功",
+		"en": "Copy Successfully"
+	},
 	"buyTitle": {
 		"zh": "买入指标教程",
 		"en": "Buy Indicator Tutorial"
@@ -328,6 +335,42 @@ export const translations = {
 	"text_sell_area": {
 		"zh": "卖出区间",
 		"en": "Selling Range"
+	},
+	"verificationTitle": {
+		"zh": "邮箱验证",
+		"en": "Email Verification"
+	},
+	"verificationDescription": {
+		"zh": "请输入您在邮箱收到的6位验证码，验证码30分钟有效",
+		"en": "Please enter the 6-digit code you received in your email, which is valid for 30 minutes."
+	},
+	"verificationCodeLabel": {
+		"zh": "验证码",
+		"en": "Verification Code"
+	},
+	"verificationCodeRequired": {
+		"zh": "请输入验证码",
+		"en": "Please enter the verification code"
+	},
+	"verificationCodeSent": {
+		"zh": "验证码已发送",
+		"en": "Verification code sent"
+	},
+	"verificationResendLink": {
+		"zh": "重新发送",
+		"en": "Resend"
+	},
+	"verificationSubmitButton": {
+		"zh": "提交",
+		"en": "Submit"
+	},
+	"verificationSuccess": {
+		"zh": "验证码发送成功",
+		"en": "Verification code sent successfully"
+	},
+	"registrationSuccess": {
+		"zh": "注册成功，已为您自动登录~",
+		"en": "Registration successful ~"
 	}
 
 

@@ -1,11 +1,12 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import {UserInfo} from "@/pages/signup";
-import {Checkbox, Form, Input, message} from "antd";
-import {SubmitButton} from "@/components/login/SubmitButton";
-import {getVerificationCode, invokeLogin, invokeRegister} from "@/service";
-import {useRouter} from "next/router";
+import { UserInfo } from "@/pages/signup";
+import { Checkbox, Form, Input, message } from "antd";
+import { SubmitButton } from "@/components/login/SubmitButton";
+import { getVerificationCode, invokeLogin, invokeRegister } from "@/service";
+import { useRouter } from "next/router";
 import useStore from "@/utils/store";
+import { useTranslation } from "react-i18next";
 
 const VerificationWrapper = styled.div`
     padding: 20px;
@@ -22,7 +23,6 @@ const VerificationDescription = styled.p`
     font-size: 14px;
 `;
 
-
 const ResendCodeContainer = styled.div`
     display: flex;
     align-items: center;
@@ -37,23 +37,23 @@ const Timer = styled.span`
     color: #999;
 `;
 
-
 const ResendLink = styled.a`
     color: #1677FF;
     text-decoration: none;
     margin-top: 20px;
     font-size: 14px;
 `;
+
 const formItemLayout = {
 	labelCol: {
-		xs: {span: 24},
-		md: {span: 24, offset: 0},
-		sm: {span: 8},
+		xs: { span: 24 },
+		md: { span: 24, offset: 0 },
+		sm: { span: 8 },
 	},
 	wrapperCol: {
-		xs: {span: 24},
-		md: {span: 24},
-		sm: {span: 16},
+		xs: { span: 24 },
+		md: { span: 24 },
+		sm: { span: 16 },
 	},
 };
 
@@ -74,10 +74,10 @@ const tailFormItemLayout = {
 	},
 };
 
-const EmailVerification = ({userInfo}: { userInfo: UserInfo }) => {
-
+const EmailVerification = ({ userInfo }: { userInfo: UserInfo }) => {
+	const { t } = useTranslation();
 	const [form] = Form.useForm();
-	const {loginHandler} = useStore();
+	const { loginHandler } = useStore();
 	const [verificationCode, setVerificationCode] = useState('');
 	const [timer, setTimer] = useState(60);
 	const [canResend, setCanResend] = useState(false);
@@ -105,35 +105,34 @@ const EmailVerification = ({userInfo}: { userInfo: UserInfo }) => {
 					if (isSuccess) {
 						messageApi.open({
 							type: "success",
-							content: "验证码发送成功",
+							content: t("verificationSuccess"),
 							duration: 2
-						}).then(r => r)
+						}).then(r => r);
 					}
-				})
+				});
 		}
 	}, []);
+
 	const handleCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		setVerificationCode(e.target.value);
 	};
 
 	const router = useRouter();
 	const handleSubmit = (e: React.ChangeEvent<HTMLInputElement>) => {
-		invokeRegister({...userInfo, verification_code: form.getFieldValue('verification_code')}, messageApi)
+		invokeRegister({ ...userInfo, verification_code: form.getFieldValue('verification_code') }, messageApi)
 			.then((isSuccess) => {
 				if (isSuccess) {
-					// 注册且登录成功，返回主页
 					invokeLogin(userInfo, loginHandler, messageApi).then((isSuccess) => {
 						if (isSuccess) {
-							message.info("注册成功，已为您自动登录~").then(r => router.push("/"))
+							message.info(t("registrationSuccess")).then(r => router.push("/"));
 						}
-					})
+					});
 				}
 			});
 	};
 
 	const handleResendCode = () => {
 		if (canResend) {
-			// 重新发送验证码的逻辑
 			if (userInfo && userInfo.email) {
 				getVerificationCode(userInfo.email, messageApi)
 					.then((isSuccess) => {
@@ -142,11 +141,11 @@ const EmailVerification = ({userInfo}: { userInfo: UserInfo }) => {
 							setCanResend(false);
 							messageApi.open({
 								type: "success",
-								content: "验证码发送成功",
+								content: t("verificationSuccess"),
 								duration: 2
-							}).then(r => r)
+							}).then(r => r);
 						}
-					})
+					});
 			}
 		}
 	};
@@ -154,43 +153,41 @@ const EmailVerification = ({userInfo}: { userInfo: UserInfo }) => {
 	return (
 		<VerificationWrapper>
 			{contextHolder}
-			<VerificationTitle>邮箱验证</VerificationTitle>
-			<VerificationDescription>
-				请输入您在邮箱收到的6位验证码，验证码30分钟有效
-			</VerificationDescription>
+			<VerificationTitle>{t("verificationTitle")}</VerificationTitle>
+			<VerificationDescription>{t("verificationDescription")}</VerificationDescription>
 			<Form
 				{...formItemLayout}
 				form={form}
 				name="register"
 				onFinish={handleSubmit}
-				style={{maxWidth: 600}}
+				style={{ maxWidth: 600 }}
 				layout="vertical"
 				scrollToFirstError
 			>
 				<Form.Item
 					name="verification_code"
-					label="验证码"
+					label={t("verificationCodeLabel")}
 					rules={[
-						{required: true, message: '请输入验证码', whitespace: true}
+						{ required: true, message: t("verificationCodeRequired"), whitespace: true }
 					]}
 					hasFeedback
 				>
-					<Input/>
+					<Input />
 				</Form.Item>
 				<Form.Item>
 					<ResendCodeContainer>
-						验证码已发送
+						{t("verificationCodeSent")}
 						<Timer>
 							{timer > 0 ? `${timer}s` :
 								<ResendLink href="#" onClick={handleResendCode}>
-									重新发送
+									{t("verificationResendLink")}
 								</ResendLink>
 							}
 						</Timer>
 					</ResendCodeContainer>
 				</Form.Item>
 				<Form.Item {...tailFormItemLayout}>
-					<SubmitButton form={form} style={{width: '100%'}}>提交</SubmitButton>
+					<SubmitButton form={form} style={{ width: '100%' }}>{t("verificationSubmitButton")}</SubmitButton>
 				</Form.Item>
 			</Form>
 		</VerificationWrapper>

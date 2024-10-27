@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import PageFrame from "@/components/PageFrame";
 import copy from "copy-to-clipboard";
 import {useTranslation} from "react-i18next";
+import {useRouter} from "next/router";
 
 const Wrapper = styled.div`
     display: flex;
@@ -63,6 +64,7 @@ const alterStyle: React.CSSProperties = {
 const Pricing = () => {
 	const [showModal, setShowModal] = useState(false);
 	const { t } = useTranslation();
+	const router = useRouter();
 	const plans = [
 		{
 			code: 'primary',
@@ -90,6 +92,9 @@ const Pricing = () => {
 	const handlePay = () => {
 		setShowModal(true);
 	}
+	const handleSignup = async () => {
+		await router.push('/signup')
+	}
 	const handleOk = () => {
 		setShowModal(false);
 	}
@@ -98,9 +103,10 @@ const Pricing = () => {
 	}
 	const OptimismAddress = '0x16fe461fca0c3cd993f2fa8ef8b7daf27909a72a';
 	const TronAddress = 'TCUrNtyVxS4ELtZSN5TvJQK4yN3EK4Xxue';
+	const Email = 'godeye2099@outlook.com';
 	const handleCopy = (text: string) => {
 		copy(text);
-		message.success(t("copySuccessMessage")).then(r => r)
+		message.success(t("copySuccessMessage")+": "+text).then(r => r)
 	}
 
 	return (
@@ -154,7 +160,7 @@ const Pricing = () => {
 									)}
 								/>
 								{plan.code === 'primary' ?
-									<Button type="default" block>{t("register")}</Button>
+									<Button type="default" onClick={handleSignup} block>{t("register")}</Button>
 									: <Button type="primary" onClick={handlePay} block>{t("upgrade")}</Button>}
 							</CustomCard>
 						</Col>
@@ -172,18 +178,18 @@ const Pricing = () => {
 						<Divider style={{ margin: "5px 0" }}></Divider>
 						<Flex justify={"space-between"} gap={"small"}>
 							<Myp>{t("paymentPlan")}</Myp>
-							<Myp>{t("ultimatePlan")}</Myp>
+							<Myp>{t("ultimateVersion")}</Myp>
 						</Flex>
 						<Flex justify={"space-between"} gap={"small"}>
 							<Myp>{t("priceLabel")}</Myp>
-							<Myp><span style={{ color: "red" }}>{t("price")}</span></Myp>
+							<Myp><span style={{ color: "red" }}>{t("priceUltimate")}</span></Myp>
 						</Flex>
 						<Flex justify={"right"} gap={"small"}>
 							<Myp>{t("noteUltimate")}</Myp>
 						</Flex>
 						<Divider style={{ margin: "5px 0" }}></Divider>
 						<p>
-							{t("subscriptionPrompt")} <CopyTwoTone onClick={() => handleCopy(TronAddress)} />
+							{t("subscriptionPrompt")} <CopyTwoTone onClick={() => handleCopy(Email)} />
 						</p>
 						<Row gutter={{ xs: 1, sm: 1, md: 2 }} justify={"space-between"}>
 							<Col span={12}>

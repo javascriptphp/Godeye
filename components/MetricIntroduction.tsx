@@ -42,12 +42,12 @@ export const MetricIntroduction = ({ metric }: { metric: string }) => {
 	return (
 		<Typography style={{ width: introductionWidth, margin: 0 }}>
 			{
-				tutorials[metric].map((tutorial) => {
+				tutorials[metric].map((tutorial,index) => {
 					return (
-						<>
+						<div key={index}>
 							<Title level={3} style={{ marginTop: 0 }}>{tutorial.title}</Title>
 							{tutorial.paragraphs.map((paragraph, index) => (<Paragraph key={index}>{paragraph}</Paragraph>))}
-						</>
+						</div>
 					)
 				})
 			}

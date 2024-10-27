@@ -10,10 +10,9 @@ import {
 	upBorderColor,
 	upColor
 } from "@/utils/global_constant";
-import {useTranslation} from "react-i18next";
+import type {TFunction} from "i18next";
 
-const GlobalFunctions = () => {
-	const { t } = useTranslation();
+const GlobalFunctions = (t: TFunction) => {
 	const buildOptionForBuyChart =
 		function ({
 			          title,
@@ -60,7 +59,7 @@ const GlobalFunctions = () => {
 					yAxis: threshold, // 这里设置阈值线的 y 轴位置
 					label: {
 						position: 'start',
-						formatter: t('text_indicator_threshold')+'{c}', // 显示的文本
+						formatter: t('text_indicator_threshold')+' {c}', // 显示的文本
 					},
 					lineStyle: {
 						width: 2,
@@ -81,7 +80,18 @@ const GlobalFunctions = () => {
 					top: 25,
 				},
 				legend: {
-					data: [`${t('text_indicator')}`, `${symbol}${t('text_price')}`],
+					data: [
+						`${t('text_indicator')}`,
+						`${symbol}${t('text_price')}`,
+						{
+							name: t('text_buy_area'), // 图例项名称
+							icon: 'rect', // 图例项图标设置为矩形
+							itemStyle: {
+								color: buyAreaColor,
+								opacity: 0.9
+							}
+						}
+					],
 					left: 'center',
 					top: 55,
 				},
@@ -224,6 +234,13 @@ const GlobalFunctions = () => {
 						},
 						data: priceData
 					},
+					{
+						// 创建一个隐藏的 series 以模拟 markArea 的图例
+						name: t('text_buy_area'),
+						type: 'line',
+						data: [],
+						itemStyle: { color: buyAreaColor, opacity: 0.9 }
+					}
 				],
 			};
 		}
@@ -319,11 +336,23 @@ const GlobalFunctions = () => {
 					top: 25,
 				},
 				legend: {
-					data: [t('text_indicator'), t('text_dailyK'), t('text_threshold')],
+					data: [
+						`${t('text_indicator')}`,
+						`${t('text_dailyK')}`,
+						{
+							name: t('text_sell_area'), // 图例项名称
+							icon: 'rect', // 图例项图标设置为矩形
+							itemStyle: {
+								color: sellAreaColor,
+								opacity: 0.9
+							}
+						}
+					],
+					left: 'center',
+					top: 55,
 					itemStyle: {
 						borderColor: "#008F28"
 					},
-					top: 55
 				},
 				grid: {
 					top: '90', // 将图表的绘制区域向下移动，避免与legend重叠
@@ -457,6 +486,13 @@ const GlobalFunctions = () => {
 						tooltip: {
 							show: false
 						}
+					}, 
+					{
+						// 创建一个隐藏的 series 以模拟 markArea 的图例
+						name: t('text_sell_area'),
+						type: 'line',
+						data: [],
+						itemStyle: { color: sellAreaColor, opacity: 0.9 }
 					}
 				],
 			} as EChartsOption;

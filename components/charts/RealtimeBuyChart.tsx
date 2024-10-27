@@ -17,13 +17,13 @@ interface RealtimeChartData {
 	timestamps: string[];
 }
 const RealtimeBuyChart = ({metric, symbol}: { metric: string, symbol: string }) => {
-	const Functions = GlobalFunctions();
 	const containerRef = useRef<HTMLDivElement>(null);
 	const [metricData, setMetricData] = useState<number[]>([]);
 	const [priceData, setPriceData] = useState<number[]>([]);
 	const [threshold, setThreshold] = useState<number>(0);
 	const [timestamps, setTimestamps] = useState<string[]>([]);
 	const { t } = useTranslation();
+	const Functions = GlobalFunctions(t);
 	const buildCustomerOption = function (symbol: string) {
 		return {
 			dataZoom: [
@@ -137,7 +137,7 @@ const RealtimeBuyChart = ({metric, symbol}: { metric: string, symbol: string }) 
 		createChart({
 			chartRef, containerRef, echartsOption
 		});
-	}, [timestamps, threshold, metricData, priceData]);  // Update chart when `data` or `symbol` changes
+	}, [timestamps, threshold, metricData, priceData, t]);  // Update chart when `data` or `symbol` changes
 
 	return (
 		<div>

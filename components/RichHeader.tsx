@@ -6,8 +6,9 @@ import React from "react";
 import LoginedAvatar from "@/components/login/LoginedAvatar";
 import useStore from "@/utils/store";
 import { Dropdown, Menu } from 'antd';
-import { useTranslation } from 'react-i18next';
+import {initReactI18next, useTranslation} from 'react-i18next';
 import { GlobalOutlined } from '@ant-design/icons';
+import i18n from "i18next";
 
 const HeaderContainer = styled.header`
     display: flex;

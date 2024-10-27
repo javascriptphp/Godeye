@@ -62,7 +62,6 @@ const buildCustomerOption = function (symbol: string) {
 	};
 }
 const RealtimeChart = ({metric, symbol}: { metric: string, symbol: string }) => {
-	const Functions = GlobalFunctions();
 	const containerRef = useRef<HTMLDivElement>(null);
 	const [metricData, setMetricData] = useState<number[]>([]);
 	const [priceData, setPriceData] = useState<number[]>([]);
@@ -80,6 +79,7 @@ const RealtimeChart = ({metric, symbol}: { metric: string, symbol: string }) => 
 	const chartRef = useRef<echarts.ECharts | null>(null);  // Store chart instance in a ref
 	const {userContext} = useStore();
 	const { t } = useTranslation();
+	const Functions = GlobalFunctions(t);
 
 	const [websocketUrl, setWebsocketUrl] = useState<string>('');
 	// 请求websocket url
@@ -139,7 +139,7 @@ const RealtimeChart = ({metric, symbol}: { metric: string, symbol: string }) => 
 		createChart({
 			chartRef, containerRef, echartsOption
 		});
-	}, [timestamps, threshold, metricData, priceValues]);  // Update chart when `data` or `symbol` changes
+	}, [timestamps, threshold, metricData, priceValues, t]);  // Update chart when `data` or `symbol` changes
 
 	return (
 		<div>

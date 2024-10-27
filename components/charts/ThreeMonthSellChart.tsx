@@ -19,7 +19,6 @@ import GlobalFunctions from "@/utils/global_functions";
 
 const HistoricalChart = ({symbol, metric}: { symbol: string, metric: string }) => {
 	console.log("historical", symbol, metric);
-	const Functions = GlobalFunctions();
 	const upColor = '#00da3c';
 	const downColor = '#ec0000';
 	const containerRef = useRef<HTMLDivElement>(null);
@@ -33,6 +32,7 @@ const HistoricalChart = ({symbol, metric}: { symbol: string, metric: string }) =
 	const [timestamps, setTimestamps] = useState<string[]>([]);
 	const [messageApi, contextHolder] = message.useMessage();
 	const { t } = useTranslation();
+	const Functions = GlobalFunctions(t);
 
 	const chartRef = useRef<echarts.ECharts | null>(null);  // Store chart instance in a ref
 	const hasFetchedData = useRef(false);  // Track if data has been fetched
@@ -92,7 +92,7 @@ const HistoricalChart = ({symbol, metric}: { symbol: string, metric: string }) =
 		createChart({chartRef, containerRef, echartsOption})
 
 		// 用对象包装依赖对象，可以保证在所有元素都变化之后才执行副作用
-	}, [timestamps, threshold, metricData, closeVal]);  // Update chart when `data` or `symbol` changes
+	}, [timestamps, threshold, metricData, closeVal, t]);  // Update chart when `data` or `symbol` changes
 
 	return (
 		<div>

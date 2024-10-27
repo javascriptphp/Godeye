@@ -321,6 +321,14 @@ export const translations = {
 		"zh": "日K",
 		"en": "Daily K-line"
 	},
+	"text_buy_area": {
+		"zh": "买入区间",
+		"en": "Buying Range"
+	},
+	"text_sell_area": {
+		"zh": "卖出区间",
+		"en": "Selling Range"
+	}
 
 
 } as {

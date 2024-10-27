@@ -18,7 +18,6 @@ import GlobalFunctions from "@/utils/global_functions";
 
 const HistoricalBuyChart = ({symbol, metric}: { symbol: string, metric: string }) => {
 	console.log("historical",symbol,metric);
-	const Functions = GlobalFunctions();
 	const containerRef = useRef<HTMLDivElement>(null);
 	const [metricData, setMetricData] = useState<number[]>([]);
 	const [priceData, setPriceData] = useState<number[]>([]);
@@ -31,6 +30,7 @@ const HistoricalBuyChart = ({symbol, metric}: { symbol: string, metric: string }
 	const {userContext} = useStore();
 
 	const { t } = useTranslation();
+	const Functions = GlobalFunctions(t);
 	console.log("在historicalchart中拿到的usercontext",userContext)
 
 	// Fetch data and update the state
@@ -72,7 +72,7 @@ const HistoricalBuyChart = ({symbol, metric}: { symbol: string, metric: string }
 		createChart({chartRef, containerRef, echartsOption})
 
 		// 用对象包装依赖对象，可以保证在所有元素都变化之后才执行副作用
-	}, [timestamps, threshold, metricData, priceData]);  // Update chart when `data` or `symbol` changes
+	}, [timestamps, threshold, metricData, priceData, t]);  // Update chart when `data` or `symbol` changes
 
 	return (
 		<div>

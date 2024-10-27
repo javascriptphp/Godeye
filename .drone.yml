@@ -21,6 +21,14 @@ steps:
     commands:
       - docker build -t godeye-frontend:latest .
 
+  - name: prune_legacy_image
+    image: docker:rc-dind
+    volumes:
+      - name: docker-sock
+        path: /var/run/docker.sock
+    commands:
+      - docker images -q godeye-frontend:latest | xargs -r docker rmi
+
   - name: deploy
     image: docker:rc-dind
     volumes:
@@ -30,11 +38,6 @@ steps:
       - docker stop godeye-frontend || true
       - docker rm godeye-frontend || true
       - docker run -d --name godeye-frontend  -p 8000:8000 godeye-frontend:latest
-  - name: greeting
-    image: alpine
-    commands:
-      - echo hello
-      - echo world
 
 volumes:
   - name: docker-sock

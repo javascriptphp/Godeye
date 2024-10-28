@@ -21,14 +21,6 @@ steps:
     commands:
       - docker build -t godeye-frontend-test:latest .
 
-  - name: prune_legacy_image
-    image: docker:rc-dind
-    volumes:
-      - name: docker-sock
-        path: /var/run/docker.sock
-    commands:
-      - docker images -q godeye-frontend-test:latest | xargs -r docker rmi
-
   - name: deploy
     image: docker:rc-dind
     volumes:

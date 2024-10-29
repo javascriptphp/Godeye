@@ -1,14 +1,12 @@
 import styled from 'styled-components';
 import {useRouter} from "next/router";
-import {Alert, Button, Flex, MenuProps, Space} from "antd";
+import {Button, Dropdown, Flex, MenuProps, Space} from "antd";
 import Link from "next/link";
 import React from "react";
 import LoginedAvatar from "@/components/login/LoginedAvatar";
 import useStore from "@/utils/store";
-import { Dropdown, Menu } from 'antd';
-import {initReactI18next, useTranslation} from 'react-i18next';
-import { GlobalOutlined } from '@ant-design/icons';
-import i18n from "i18next";
+import {useTranslation} from 'react-i18next';
+import {GlobalOutlined} from '@ant-design/icons';
 
 const HeaderContainer = styled.header`
     display: flex;
@@ -31,9 +29,9 @@ const Logo = styled.div`
     font-weight: bold;
 `;
 const Nav = styled.span`
-		&:hover {
-				cursor: pointer;
-		}
+    &:hover {
+        cursor: pointer;
+    }
 `
 
 const NavLinks = styled.div`
@@ -59,14 +57,13 @@ const alterStyle: React.CSSProperties = {
 }
 const RichHeader = () => {
 	const router = useRouter();
-	const {userContext,setLanguage} = useStore();
-	const { t } = useTranslation();
+	const {userContext, setLanguage} = useStore();
+	const {t} = useTranslation();
 
 	const handleLanguageChange = (lang: string) => {
 		// i18n.changeLanguage(lang);
 		setLanguage(lang);
 		// i18n.loadLanguages(lang);
-		
 	};
 
 	const languageMenu: MenuProps = {
@@ -106,31 +103,29 @@ const RichHeader = () => {
 			{/*/>*/}
 			<HeaderContainer>
 				<Link href={"/"}>
-					<Space direction={"horizontal"} align={"baseline"} size={"middle"}>
+					<Space direction={"horizontal"} align={"center"} size={"middle"}>
 						<Logo>Godeye</Logo>
-						<div style={{width: 350, alignItems: 'center'}}>
-							<span style={{
-								fontSize: 12,
-								color: "red"
-								// background: 'linear-gradient(to right, red, blue)',
-								// color: 'transparent',
-								// WebkitBackgroundClip: 'text'
-							}}>{t('shortDescription')}</span>
-						</div>
+						<span style={{
+							fontSize: 12,
+							color: "red"
+							// background: 'linear-gradient(to right, red, blue)',
+							// color: 'transparent',
+							// WebkitBackgroundClip: 'text'
+						}}>{t('shortDescription')}</span>
 					</Space>
 				</Link>
 				<NavLinks>
-					<Space direction={"horizontal"} align={"baseline"} size={"middle"}>
+					<Space direction={"horizontal"} align={"baseline"} size={"large"}>
 						<Nav onClick={() => routeUrl("/pay")}>{t("pricing")}</Nav>
 						<Nav onClick={() => routeUrl("/contact")}>{t("contactUs")}</Nav>
 					</Space>
 				</NavLinks>
 				<Flex gap={"middle"} justify="center" align="center">
 					<Dropdown menu={languageMenu} placement="bottomRight">
-						<GlobalOutlined style={{ fontSize: '18px', cursor: 'pointer' }} />
+						<GlobalOutlined style={{fontSize: '18px', cursor: 'pointer'}}/>
 					</Dropdown>
 					{
-						(userContext && userContext.logined) ? 
+						(userContext && userContext.logined) ?
 							<LoginedAvatar/>
 							:
 							<>

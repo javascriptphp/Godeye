@@ -187,9 +187,13 @@ const GlobalFunctions = (t: TFunction) => {
 							return value.max * 1.05;  // Y 轴最小值为数据最小值的 90%
 						},
 						axisLabel: {
-							formatter: (value: any) => {
-								// 保留3位小数
-								return value.toFixed(2);
+							formatter: function (value) {
+								// 将数值转换为4到6位有效数字
+								if (value >= 1000) {
+									return value.toPrecision(6); // 较大的数保留6位有效数字
+								} else {
+									return value.toPrecision(4); // 较小的数保留4位有效数字
+								}
 							}
 						}
 					}
@@ -424,8 +428,13 @@ const GlobalFunctions = (t: TFunction) => {
 							return value.max * 1.001;  // Y 轴最大值为数据最大值的 100.1%
 						},
 						axisLabel: {
-							formatter: (value: any) => {
-								return value.toFixed(2);
+							formatter: function (value) {
+								// 将数值转换为4到6位有效数字
+								if (value >= 1000) {
+									return value.toPrecision(6); // 较大的数保留6位有效数字
+								} else {
+									return value.toPrecision(4); // 较小的数保留4位有效数字
+								}
 							}
 						}
 					},

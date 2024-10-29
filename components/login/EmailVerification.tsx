@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, {useEffect, useState} from 'react';
 import styled from 'styled-components';
-import { UserInfo } from "@/pages/signup";
-import { Checkbox, Form, Input, message } from "antd";
-import { SubmitButton } from "@/components/login/SubmitButton";
-import { getVerificationCode, invokeLogin, invokeRegister } from "@/service";
-import { useRouter } from "next/router";
+import {UserInfo} from "@/pages/signup";
+import {Form, Input, message} from "antd";
+import {SubmitButton} from "@/components/login/SubmitButton";
+import {getVerificationCode, invokeLogin, invokeRegister} from "@/service";
+import {useRouter} from "next/router";
 import useStore from "@/utils/store";
-import { useTranslation } from "react-i18next";
+import {useTranslation} from "react-i18next";
 
 const VerificationWrapper = styled.div`
     padding: 20px;

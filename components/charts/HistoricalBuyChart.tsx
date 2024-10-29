@@ -10,14 +10,15 @@ import {
 } from "@/types";
 import {getHistoricalData} from "@/service";
 import {message} from "antd";
-import { chartHeight, chartWidth, createChart} from "@/utils/global_constant";
+import {chartHeight, chartWidth, createChart} from "@/utils/global_constant";
 import useStore from "@/utils/store";
 import {useTranslation} from "react-i18next";
 import GlobalFunctions from "@/utils/global_functions";
+import {EChartsOption} from "echarts";
 
 
 const HistoricalBuyChart = ({symbol, metric}: { symbol: string, metric: string }) => {
-	console.log("historical",symbol,metric);
+	console.log("historical", symbol, metric);
 	const containerRef = useRef<HTMLDivElement>(null);
 	const [metricData, setMetricData] = useState<number[]>([]);
 	const [priceData, setPriceData] = useState<number[]>([]);
@@ -26,12 +27,35 @@ const HistoricalBuyChart = ({symbol, metric}: { symbol: string, metric: string }
 	const [messageApi, contextHolder] = message.useMessage();
 
 	const chartRef = useRef<echarts.ECharts | null>(null);  // Store chart instance in a ref
-	
+
 	const {userContext} = useStore();
 
-	const { t } = useTranslation();
+	const {t} = useTranslation();
 	const Functions = GlobalFunctions(t);
-	console.log("在historicalchart中拿到的usercontext",userContext)
+	console.log("在historicalchart中拿到的usercontext", userContext)
+	const buildCustomerOption = function () {
+		if (userContext && userContext.logined) {
+			return {
+				dataZoom: [
+					{
+						show: true,
+						realtime: true,
+						type: 'slider',
+						start: 0,
+						end: 100
+					},
+					{
+						type: 'inside',
+						realtime: true,
+						start: 0,
+						end: 100
+					},
+				],
+			};
+		} else {
+			return {}
+		}
+	}
 
 	// Fetch data and update the state
 	useEffect(() => {
@@ -39,7 +63,7 @@ const HistoricalBuyChart = ({symbol, metric}: { symbol: string, metric: string }
 			const result = await getHistoricalData(symbol, metric);
 			if (isErrorTypeEnum(result)) {
 
-			}else{
+			} else {
 				const nonNullResult = result as HistoricalData;
 				const _timestamps = nonNullResult.values.map((item: HistoricalBuyValues | HistoricalSellValues) => (
 					new Date(item.timestamp).toLocaleDateString()
@@ -54,11 +78,11 @@ const HistoricalBuyChart = ({symbol, metric}: { symbol: string, metric: string }
 				setThreshold(nonNullResult.values[0].threshold);
 			}
 		};
-			fetchData().then(r => r)
+		fetchData().then(r => r)
 	}, [symbol, metric]);
 	useEffect(() => {
-		
-		const echartsOption = Functions.buildOptionForBuyChart({
+
+		const _option = Functions.buildOptionForBuyChart({
 			title: t('t2Title'),
 			symbol: symbol,
 			metric: BUY,
@@ -69,6 +93,10 @@ const HistoricalBuyChart = ({symbol, metric}: { symbol: string, metric: string }
 			watermark: (userContext && userContext.email) || t("watermarkText"),
 			includeMark: true,
 		});
+		const echartsOption = {
+			..._option,
+			...buildCustomerOption()
+		} as EChartsOption;
 		createChart({chartRef, containerRef, echartsOption})
 
 		// 用对象包装依赖对象，可以保证在所有元素都变化之后才执行副作用

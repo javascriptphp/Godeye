@@ -18,7 +18,7 @@ import GlobalFunctions from "@/utils/global_functions";
 
 
 const HistoricalChart = ({symbol, metric}: { symbol: string, metric: string }) => {
-	console.log("historical", symbol, metric);
+	// console.log("historical", symbol, metric);
 	const upColor = '#00da3c';
 	const downColor = '#ec0000';
 	const containerRef = useRef<HTMLDivElement>(null);

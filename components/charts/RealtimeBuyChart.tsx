@@ -76,7 +76,6 @@ const RealtimeBuyChart = ({metric, symbol}: { metric: string, symbol: string }) 
 		setThreshold(0);
 		setTimestamps([]);
 	}, [metric, symbol]);
-	console.log("realtime",metricData.length)
 	const chartRef = useRef<echarts.ECharts | null>(null);  // Store chart instance in a ref
 	const {userContext} = useStore();
 
@@ -92,8 +91,8 @@ const RealtimeBuyChart = ({metric, symbol}: { metric: string, symbol: string }) 
 	const {lastMessage} = useWebSocket(websocketUrl, {
 		reconnectInterval: 5000,
 		reconnectAttempts: 5,
-		onOpen: () => console.log('WebSocket connected!'),
-		onClose: () => console.log('WebSocket disconnected!'),
+		// onOpen: () => console.log('WebSocket connected!'),
+		// onClose: () => console.log('WebSocket disconnected!'),
 		shouldReconnect: (e) => {
 			return !!websocketUrl;
 		},  // 自动重连
@@ -113,7 +112,6 @@ const RealtimeBuyChart = ({metric, symbol}: { metric: string, symbol: string }) 
 		setMetricData((prevMetricData) => [...prevMetricData, ..._metricValues]);
 		setThreshold(realtimeDataArray[0].threshold);
 		setPriceData((prevPriceData) => [...prevPriceData, ..._prices]);
-		console.log("实时数据的阈值", threshold)
 	}, [lastMessage]);
 
 

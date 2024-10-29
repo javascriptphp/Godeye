@@ -11,7 +11,7 @@ import GlobalFunctions from "@/utils/global_functions";
 
 
 const HistoricalSellChart = ({symbol, metric}: { symbol: string, metric: string }) => {
-	console.log("historical", symbol, metric);
+	// console.log("historical", symbol, metric);
 	const containerRef = useRef<HTMLDivElement>(null);
 	const [metricData, setMetricData] = useState<number[]>([]);
 	const [priceData, setPriceData] = useState<number[]>([]);

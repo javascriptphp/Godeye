@@ -2,6 +2,7 @@ import {create} from "zustand";
 import {DEFAULT_LANGUAGE, SystemContext, UserContext} from "@/types";
 
 export type UserContextHandler = (userContext: UserContext|null) => void;
+export type ExpireTimeHandler = (expireAt: Date) => void;
 export interface ZustandStore {
 	userContext: UserContext|null;
 	systemContext: SystemContext|null;
@@ -9,7 +10,7 @@ export interface ZustandStore {
 	loginHandler: UserContextHandler;
 	logoutHandler: VoidFunction;
 	loadSession: VoidFunction;
-	updateExpireTime: UserContextHandler;
+	updateExpireTime: ExpireTimeHandler;
 }
 
 const useStore = create<ZustandStore>((set,getState) => ({
@@ -27,6 +28,8 @@ const useStore = create<ZustandStore>((set,getState) => ({
 	},
 	logoutHandler: () => {
 		set({userContext: null})
+		set({systemContext: null})
+		localStorage.removeItem('systemContext');
 		localStorage.removeItem('userContext');
 	},
 	loadSession: () => {
@@ -45,10 +48,10 @@ const useStore = create<ZustandStore>((set,getState) => ({
 			}
 		}
 	},
-	updateExpireTime: (userContext: UserContext|null) => {
-		const date = new Date();
-		if (userContext && userContext.expireTime > date) {
-			const updatedContext = {...userContext, expireTime: new Date(date.setHours(date.getMinutes()+1))};
+	updateExpireTime: (expireAt: Date) => {
+		const userContext = getState().userContext;
+		if (userContext) {
+			const updatedContext = {...userContext, expireTime: expireAt};
 			set({userContext: updatedContext});
 			localStorage.setItem('userContext', JSON.stringify(updatedContext));
 		}

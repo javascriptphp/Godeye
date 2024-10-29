@@ -18,7 +18,7 @@ import {EChartsOption} from "echarts";
 
 
 const HistoricalBuyChart = ({symbol, metric}: { symbol: string, metric: string }) => {
-	console.log("historical", symbol, metric);
+	// console.log("historical", symbol, metric);
 	const containerRef = useRef<HTMLDivElement>(null);
 	const [metricData, setMetricData] = useState<number[]>([]);
 	const [priceData, setPriceData] = useState<number[]>([]);
@@ -32,7 +32,7 @@ const HistoricalBuyChart = ({symbol, metric}: { symbol: string, metric: string }
 
 	const {t} = useTranslation();
 	const Functions = GlobalFunctions(t);
-	console.log("在historicalchart中拿到的usercontext", userContext)
+	// console.log("在historicalchart中拿到的usercontext", userContext)
 	const buildCustomerOption = function () {
 		if (userContext && userContext.logined) {
 			return {

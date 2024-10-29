@@ -21,7 +21,7 @@ import GlobalFunctions from "@/utils/global_functions";
 
 
 const ThreeMonthBuyChart = ({symbol, metric}: { symbol: string, metric: string }) => {
-	console.log("three",symbol,metric);
+	// console.log("three",symbol,metric);
 	const containerRef = useRef<HTMLDivElement>(null);
 	const [metricData, setMetricData] = useState<number[]>([]);
 	const [priceData, setPriceData] = useState<number[]>([]);

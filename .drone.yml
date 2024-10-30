@@ -19,7 +19,7 @@ steps:
       - name: docker-sock
         path: /var/run/docker.sock
     commands:
-      - docker build -t godeye-frontend-test:latest .
+      - docker build -t godeye-frontend:latest .
 
   - name: deploy
     image: docker:rc-dind
@@ -27,9 +27,9 @@ steps:
       - name: docker-sock
         path: /var/run/docker.sock
     commands:
-      - docker stop godeye-frontend-test || true
-      - docker rm godeye-frontend-test || true
-      - docker run -d --name godeye-frontend-test  -p 8001:8001 godeye-frontend-test:latest
+      - docker stop godeye-frontend || true
+      - docker rm godeye-frontend || true
+      - docker run -d --name godeye-frontend  -p 8000:8000 godeye-frontend:latest
 
 volumes:
   - name: docker-sock

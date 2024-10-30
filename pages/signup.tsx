@@ -1,30 +1,27 @@
 import React, {useState} from 'react';
 import styled from 'styled-components';
-import SimpleHeader from "@/components/SimpleHeader";
 import EmailVerification from "@/components/login/EmailVerification";
-import Register from "@/components/login/Register";
 import {footerText} from "@/utils/global_constant";
 import RichHeader from "@/components/RichHeader";
 import {Col, Row, Steps} from "antd";
 import Register2 from "@/components/login/Register2";
-import {string} from "prop-types";
+import {useTranslation} from "react-i18next";
 
 const Wrapper = styled.div`
     display: flex;
     flex-direction: column;
     min-height: 100vh;
 `;
+
 const Container = styled.div`
     width: 300px;
     margin: 100px auto;
     font-family: Arial, sans-serif;
 `;
+
 const Content = styled.div`
     flex: 1;
     margin-top: 100px;
-    //display: flex;
-    //justify-content: center;
-    //align-items: center;
 `;
 
 const FooterContainer = styled.footer`
@@ -39,25 +36,28 @@ const stepStyle: React.CSSProperties = {
 	marginTop: '150px',
 	height: '50vh',
 	minWidth: '100px'
-}
+};
+
 export interface UserInfo {
 	username: string,
 	email: string,
 	password: string,
 }
+
 const RegistrationForm = () => {
 	const [isRegistered, setIsRegistered] = useState(false);
-	const [userInfo, setUserInfo] = useState<UserInfo>({email: "", password: "", username: ""});
+	const [userInfo, setUserInfo] = useState<UserInfo>({ email: "", password: "", username: "" });
 	const [curStep, setCurStep] = useState(0);
+	const { t } = useTranslation();
 
-	const handleRegister = (userInfo:UserInfo) => {
+	const handleRegister = (userInfo: UserInfo) => {
 		setCurStep(1);
 		setIsRegistered(true); // 切换到验证页面
 		setUserInfo(userInfo);
 	};
 	return (
 		<Wrapper>
-			<RichHeader/>
+			<RichHeader />
 			<Content>
 				<Row>
 					<Col span={4} offset={3}>
@@ -68,17 +68,17 @@ const RegistrationForm = () => {
 							current={curStep}
 							items={[
 								{
-									title: "输入注册信息",
+									title: t("registrationStepTitle"),
 								},
 								{
-									title: "邮箱验证",
+									title: t("emailVerificationStepTitle"),
 								},
 							]}
 						/>
 					</Col>
 					<Col span={8} offset={1}>
 						<Container>
-						{isRegistered ? <EmailVerification userInfo={userInfo}/> : <Register2 onRegister={handleRegister}/>}
+							{isRegistered ? <EmailVerification userInfo={userInfo} /> : <Register2 onRegister={handleRegister} />}
 						</Container>
 					</Col>
 				</Row>

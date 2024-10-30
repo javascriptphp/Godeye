@@ -11,17 +11,17 @@ import {
 import {getThreeMonthData} from "@/service";
 import {message} from "antd";
 import {
-	buildOptionForBuyChart,
 	chartHeight,
 	chartWidth,
 	createChart
 } from "@/utils/global_constant";
 import useStore from "@/utils/store";
 import {useTranslation} from "react-i18next";
+import GlobalFunctions from "@/utils/global_functions";
 
 
 const ThreeMonthBuyChart = ({symbol, metric}: { symbol: string, metric: string }) => {
-	console.log("three",symbol,metric);
+	// console.log("three",symbol,metric);
 	const containerRef = useRef<HTMLDivElement>(null);
 	const [metricData, setMetricData] = useState<number[]>([]);
 	const [priceData, setPriceData] = useState<number[]>([]);
@@ -32,7 +32,7 @@ const ThreeMonthBuyChart = ({symbol, metric}: { symbol: string, metric: string }
 	const [messageApi, contextHolder] = message.useMessage();
 	const {userContext} = useStore();
 	const { t } = useTranslation();
-
+	const Functions = GlobalFunctions(t);
 	// Fetch data and update the state
 	useEffect(() => {
 		const fetchData = async () => {
@@ -47,7 +47,6 @@ const ThreeMonthBuyChart = ({symbol, metric}: { symbol: string, metric: string }
 				setTimestamps(_timestamps);
 				const _buyMetricData = nonNullResult.values.map((item: ThreeMonthBuyValues | ThreeMonthSellValues) => (item.metric_value));
 				setMetricData(_buyMetricData);
-				// todo 这里要针对threemonthsellvalues 进行更新数据
 				const buyResult = nonNullResult as ThreeMonthBuyData;
 				const _buyPriceData = buyResult.values.map((item: ThreeMonthBuyValues) => (item.price));
 				setPriceData(_buyPriceData);
@@ -58,7 +57,7 @@ const ThreeMonthBuyChart = ({symbol, metric}: { symbol: string, metric: string }
 		fetchData().then(data => data)
 	}, [symbol, metric]);
 	useEffect(() => {
-		const echartsOption = buildOptionForBuyChart({
+		const echartsOption = Functions.buildOptionForBuyChart({
 			title: t('t1Title'),
 			symbol: symbol,
 			metric: BUY,
@@ -72,7 +71,7 @@ const ThreeMonthBuyChart = ({symbol, metric}: { symbol: string, metric: string }
 		createChart({chartRef, containerRef, echartsOption})
 
 		// 用对象包装依赖对象，可以保证在所有元素都变化之后才执行副作用
-	}, [timestamps, threshold, metricData, priceData]);  // Update chart when `data` or `symbol` changes
+	}, [timestamps, threshold, metricData, priceData, t]);  // Update chart when `data` or `symbol` changes
 
 	return (
 		<div>

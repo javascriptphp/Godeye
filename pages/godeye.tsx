@@ -12,6 +12,7 @@ import {BUY, SymbolAndMetric} from "@/types";
 import RealtimeSellChart from "@/components/charts/RealtimeSellChart";
 import HistoricalSellChart from "@/components/charts/HistoricalSellChart";
 import ThreeMonthSellChart from "@/components/charts/ThreeMonthSellChart";
+import useStore from "@/utils/store";
 
 const MainContentWrapper = styled.div`
     margin-top: 150px;
@@ -54,6 +55,7 @@ const GodeyeIndexPage = () => {
 
 	const [symbol, setSymbol] = useState('BTC');
 	const [metric, setMetric] = useState('buy');
+	const {userContext} = useStore();
 	const symbolSwitchedHandler = ({symbol, metric}: SymbolAndMetric) => {
 		setSymbol(symbol);
 		setMetric(metric);
@@ -68,7 +70,7 @@ const GodeyeIndexPage = () => {
 				<MainContentWrapper>
 					{/*<Flex justify={"center"} align={"center"} vertical={true}>*/}
 						<Space align={"center"} size={100} direction={"vertical"} style={{marginLeft: 100}}>
-							{metric === BUY ? <ThreeMonthBuyChart symbol={symbol} metric={metric}/> : <ThreeMonthSellChart symbol={symbol} metric={metric}/>}
+							{userContext && userContext.logined ? '' : (metric === BUY ? <ThreeMonthBuyChart symbol={symbol} metric={metric}/> : <ThreeMonthSellChart symbol={symbol} metric={metric}/>) }
 							{metric === BUY ? <HistoricalBuyChart symbol={symbol} metric={metric}/> : <HistoricalSellChart symbol={symbol} metric={metric}/>}
 							{metric === BUY ? <RealtimeBuyChart symbol={symbol} metric={metric}/> : <RealtimeSellChart symbol={symbol} metric={metric}/>}
 							{/*<StockChart/>*/}

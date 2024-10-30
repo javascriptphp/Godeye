@@ -30,8 +30,8 @@ COPY --from=builder /app/node_modules ./node_modules
 ENV NODE_ENV production
 
 # 暴露端口
-EXPOSE 8000
+EXPOSE 8001
 
-ENV PORT=8000
+ENV PORT=8001
 # 启动 Next.js 应用
 CMD ["npm", "run", "start"]

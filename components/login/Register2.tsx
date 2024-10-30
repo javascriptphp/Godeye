@@ -1,11 +1,10 @@
-import React, {CSSProperties, useEffect, useState} from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import {Button, Checkbox, Form, FormInstance, Input, Tooltip} from "antd";
+import {Checkbox, Form, Input} from "antd";
 import {SubmitButton} from "@/components/login/SubmitButton";
 import {RegisterInfo} from "@/service";
-import { v4 as uuidv4 } from 'uuid';
-
-
+import {v4 as uuidv4} from 'uuid';
+import {useTranslation} from "react-i18next";
 
 const Title = styled.h2`
     margin-bottom: 10px;
@@ -17,12 +16,10 @@ const Description = styled.p`
     font-size: 14px;
 `;
 
-
 const TermsLink = styled.a`
     color: #1677FF;
     text-decoration: none;
 `;
-
 
 const LoginLink = styled.p`
     margin-top: 20px;
@@ -33,8 +30,6 @@ const LoginLink = styled.p`
         text-decoration: none;
     }
 `;
-
-
 
 const formItemLayout = {
 	labelCol: {
@@ -66,17 +61,17 @@ const tailFormItemLayout = {
 	},
 };
 
-
-const Register = ({onRegister} : {onRegister: (info: RegisterInfo)=>void}) => {
+const Register = ({ onRegister } : { onRegister: (info: RegisterInfo) => void }) => {
 	const [form] = Form.useForm();
-	const handleSubmit = (e : React.ChangeEvent<HTMLInputElement>) => {
-		onRegister(form.getFieldsValue(['username','password','email']));
+	const { t } = useTranslation();
+	const handleSubmit = () => {
+		onRegister(form.getFieldsValue(['username', 'password', 'email']));
 	};
 	return (
 		<>
-			<Title>输入帐户详细信息</Title>
-			<Description>输入您帐户的详细信息和强密码以保护您的帐户</Description>
-			
+			<Title>{t("accountDetailsTitle")}</Title>
+			<Description>{t("accountDetailsDescription")}</Description>
+
 			<Form
 				{...formItemLayout}
 				form={form}
@@ -88,15 +83,15 @@ const Register = ({onRegister} : {onRegister: (info: RegisterInfo)=>void}) => {
 			>
 				<Form.Item
 					name="email"
-					label="邮箱"
+					label={t("emailLabel")}
 					rules={[
 						{
 							type: 'email',
-							message: '请输入合法的邮箱',
+							message: t("invalidEmailMessage"),
 						},
 						{
 							required: true,
-							message: '请输入邮箱',
+							message: t("requiredEmailMessage"),
 						},
 					]}
 					hasFeedback
@@ -105,34 +100,29 @@ const Register = ({onRegister} : {onRegister: (info: RegisterInfo)=>void}) => {
 				</Form.Item>
 
 				<Form.Item
-						name="password"
-						label="密码"
-						rules={[
-							{
-								pattern: new RegExp('^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[!@#$%^&*_+,.?]).{8,16}$'),
-								message: '密码必须至少包含1个字母、1个数字、一个特殊字符（!@#$%^&*_+,.?），长度不小于8',
-							},
-							{
-								required: true,
-								message: '请输入密码',
-							},
-						]}
-						hasFeedback
-						>
+					name="password"
+					label={t("passwordLabel")}
+					rules={[
+						{
+							pattern: new RegExp('^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[!@#$%^&*_+,.?]).{8,16}$'),
+							message: t("passwordRequirementsMessage"),
+						},
+						{
+							required: true,
+							message: t("requiredPasswordMessage"),
+						},
+					]}
+					hasFeedback
+				>
 					<Input.Password />
 				</Form.Item>
+
 				<Form.Item
 					name="username"
-					label="用户名"
+					label={t("usernameLabel")}
 					initialValue={uuidv4()}
-					style={{display: 'none'}}
-					rules={[
-						// {
-						// 	pattern: new RegExp('^[a-zA-Z0-9]{6,16}$'),
-						// 	message: '用户名只能包含字母和数字，长度不小于6、不大于16',
-						// },
-						// { required: false, message: '请输入用户名', whitespace: true }
-					]}
+					style={{ display: 'none' }}
+					rules={[]}
 					hasFeedback
 				>
 					<Input />
@@ -144,21 +134,21 @@ const Register = ({onRegister} : {onRegister: (info: RegisterInfo)=>void}) => {
 					rules={[
 						{
 							validator: (_, value) =>
-								value ? Promise.resolve() : Promise.reject(new Error('必须阅读并同意服务条款')),
+								value ? Promise.resolve() : Promise.reject(new Error(t("termsErrorMessage"))),
 						},
 					]}
 					{...tailFormItemLayout}
 				>
 					<Checkbox>
-						我已阅读并同意 Godeye 的 <TermsLink href="./terms.html">用户服务条款</TermsLink>
+						{t("termsCheckbox")} <TermsLink href="./terms.html">{t("termsLinkText")}</TermsLink>
 					</Checkbox>
 				</Form.Item>
 				<Form.Item {...tailFormItemLayout}>
-					<SubmitButton form={form} style={{width: '100%'}}>下一步</SubmitButton>
+					<SubmitButton form={form} style={{ width: '100%' }}>{t("nextButton")}</SubmitButton>
 				</Form.Item>
 			</Form>
 			<LoginLink>
-				已经注册了？ <a href="/signin">登录</a>
+				{t("alreadyRegisteredText")} <a href="/signin">{t("loginLinkText")}</a>
 			</LoginLink>
 		</>
 	);

@@ -4,9 +4,10 @@ import {EChartsOption} from 'echarts';
 import {BUY, RealtimeBuyData, RealtimeResponse} from "@/types";
 import {getRealtimeDataUrl} from "@/service";
 import useWebSocket from "react-use-websocket";
-import {buildOptionForBuyChart, chartHeight, chartWidth, createChart} from "@/utils/global_constant";
+import {chartHeight, chartWidth, createChart} from "@/utils/global_constant";
 import useStore from "@/utils/store";
 import {useTranslation} from "react-i18next";
+import GlobalFunctions from "@/utils/global_functions";
 
 
 interface RealtimeChartData {
@@ -22,6 +23,7 @@ const RealtimeBuyChart = ({metric, symbol}: { metric: string, symbol: string }) 
 	const [threshold, setThreshold] = useState<number>(0);
 	const [timestamps, setTimestamps] = useState<string[]>([]);
 	const { t } = useTranslation();
+	const Functions = GlobalFunctions(t);
 	const buildCustomerOption = function (symbol: string) {
 		return {
 			dataZoom: [
@@ -74,7 +76,6 @@ const RealtimeBuyChart = ({metric, symbol}: { metric: string, symbol: string }) 
 		setThreshold(0);
 		setTimestamps([]);
 	}, [metric, symbol]);
-	console.log("realtime",metricData.length)
 	const chartRef = useRef<echarts.ECharts | null>(null);  // Store chart instance in a ref
 	const {userContext} = useStore();
 
@@ -90,8 +91,8 @@ const RealtimeBuyChart = ({metric, symbol}: { metric: string, symbol: string }) 
 	const {lastMessage} = useWebSocket(websocketUrl, {
 		reconnectInterval: 5000,
 		reconnectAttempts: 5,
-		onOpen: () => console.log('WebSocket connected!'),
-		onClose: () => console.log('WebSocket disconnected!'),
+		// onOpen: () => console.log('WebSocket connected!'),
+		// onClose: () => console.log('WebSocket disconnected!'),
 		shouldReconnect: (e) => {
 			return !!websocketUrl;
 		},  // 自动重连
@@ -111,13 +112,12 @@ const RealtimeBuyChart = ({metric, symbol}: { metric: string, symbol: string }) 
 		setMetricData((prevMetricData) => [...prevMetricData, ..._metricValues]);
 		setThreshold(realtimeDataArray[0].threshold);
 		setPriceData((prevPriceData) => [...prevPriceData, ..._prices]);
-		console.log("实时数据的阈值", threshold)
 	}, [lastMessage]);
 
 
 	// Initialize and update the chart when data or symbol changes
 	useEffect(() => {
-		const _option = buildOptionForBuyChart({
+		const _option = Functions.buildOptionForBuyChart({
 			title: t('t3Title'),
 			symbol: symbol,
 			metric: BUY,
@@ -135,7 +135,7 @@ const RealtimeBuyChart = ({metric, symbol}: { metric: string, symbol: string }) 
 		createChart({
 			chartRef, containerRef, echartsOption
 		});
-	}, [timestamps, threshold, metricData, priceData]);  // Update chart when `data` or `symbol` changes
+	}, [timestamps, threshold, metricData, priceData, t]);  // Update chart when `data` or `symbol` changes
 
 	return (
 		<div>

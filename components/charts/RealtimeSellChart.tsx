@@ -1,12 +1,13 @@
 import React, {useEffect, useRef, useState} from "react";
 import * as echarts from 'echarts';
+import {EChartsOption} from 'echarts';
 import {RealtimeResponse, RealtimeSellData, SELL} from "@/types";
 import {getRealtimeDataUrl} from "@/service";
 import useWebSocket from "react-use-websocket";
-import {buildOptionForSellChart, chartHeight, chartWidth, createChart} from "@/utils/global_constant";
+import {chartHeight, chartWidth, createChart} from "@/utils/global_constant";
 import useStore from "@/utils/store";
-import {EChartsOption} from "echarts";
 import {useTranslation} from "react-i18next";
+import GlobalFunctions from "@/utils/global_functions";
 
 interface RealtimeChartData {
 	metricData: number[];
@@ -74,10 +75,10 @@ const RealtimeChart = ({metric, symbol}: { metric: string, symbol: string }) => 
 		setThreshold([]);
 		setTimestamps([]);
 	}, [metric, symbol]);
-	console.log("realtime",metricData.length)
 	const chartRef = useRef<echarts.ECharts | null>(null);  // Store chart instance in a ref
 	const {userContext} = useStore();
 	const { t } = useTranslation();
+	const Functions = GlobalFunctions(t);
 
 	const [websocketUrl, setWebsocketUrl] = useState<string>('');
 	// 请求websocket url
@@ -91,8 +92,8 @@ const RealtimeChart = ({metric, symbol}: { metric: string, symbol: string }) => 
 	const {lastMessage} = useWebSocket(websocketUrl, {
 		reconnectInterval: 5000,
 		reconnectAttempts: 5,
-		onOpen: () => console.log('WebSocket connected!'),
-		onClose: () => console.log('WebSocket disconnected!'),
+		// onOpen: () => console.log('WebSocket connected!'),
+		// onClose: () => console.log('WebSocket disconnected!'),
 		shouldReconnect: (e) => {
 			return !!websocketUrl;
 		},  // 自动重连
@@ -119,7 +120,7 @@ const RealtimeChart = ({metric, symbol}: { metric: string, symbol: string }) => 
 
 	// Initialize and update the chart when data or symbol changes
 	useEffect(() => {
-		const _option = buildOptionForSellChart({
+		const _option = Functions.buildOptionForSellChart({
 			title: t('t3Title'),
 			symbol: symbol,
 			metric: SELL,
@@ -137,7 +138,7 @@ const RealtimeChart = ({metric, symbol}: { metric: string, symbol: string }) => 
 		createChart({
 			chartRef, containerRef, echartsOption
 		});
-	}, [timestamps, threshold, metricData, priceValues]);  // Update chart when `data` or `symbol` changes
+	}, [timestamps, threshold, metricData, priceValues, t]);  // Update chart when `data` or `symbol` changes
 
 	return (
 		<div>

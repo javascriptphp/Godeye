@@ -82,7 +82,7 @@ const GlobalFunctions = (t: TFunction) => {
 				legend: {
 					data: [
 						`${t('text_indicator')}`,
-						`${symbol}${t('text_price')}`,
+						`${symbol} ${t('text_price')}`,
 						{
 							name: t('text_buy_area'), // 图例项名称
 							icon: 'rect', // 图例项图标设置为矩形
@@ -173,7 +173,7 @@ const GlobalFunctions = (t: TFunction) => {
 						}
 					},
 					{
-						name: `${symbol}${t('text_price')}`,
+						name: `${symbol} ${t('text_price')}`,
 						nameLocation: 'end',
 						nameTextStyle: {
 							fontSize: 14
@@ -226,7 +226,7 @@ const GlobalFunctions = (t: TFunction) => {
 						} : {}
 					},
 					{
-						name: `${symbol}${t('text_price')}`,
+						name: `${symbol} ${t('text_price')}`,
 						type: 'line',
 						yAxisIndex: 1,
 						showSymbol: false,
@@ -415,7 +415,7 @@ const GlobalFunctions = (t: TFunction) => {
 						}
 					},
 					{
-						name: `${symbol}${t('text_price')}`,
+						name: `${symbol} ${t('text_price')}`,
 						nameLocation: 'end',
 						nameTextStyle: {
 							fontSize: 14

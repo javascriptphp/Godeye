@@ -25,7 +25,7 @@ export default function App({ Component, pageProps }: AppProps) {
       setCheckTimer(null);
     }
     // 只删除 expire_at cookie
-    document.cookie = `expire_at=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`;
+    // document.cookie = `expire_at=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`;
   };
   useEffect(() => {
     loadSession();
@@ -35,10 +35,11 @@ export default function App({ Component, pageProps }: AppProps) {
       const expireCookie = cookies.find(cookie => cookie.trim().startsWith('expire_at='));
       console.log(expireCookie)
       if (expireCookie) {
-        const expireAt = new Date(parseInt(expireCookie.split('=')[1]));
+        const expireAtNumber = parseInt(expireCookie.split('=')[1]);
+        const expireAt = new Date(expireAtNumber);
         const now = new Date();
         
-        if (now > expireAt) {
+        if (expireAtNumber !== 0 && now > expireAt) {
           logoutHandler();
           setIsExpireModalOpen(true);
           cleanup();

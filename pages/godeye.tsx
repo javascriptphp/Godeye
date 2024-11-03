@@ -70,7 +70,7 @@ const GodeyeIndexPage = () => {
 				<MainContentWrapper>
 					{/*<Flex justify={"center"} align={"center"} vertical={true}>*/}
 						<Space align={"center"} size={100} direction={"vertical"} style={{marginLeft: 100}}>
-							{userContext && userContext.logined ? '' : (metric === BUY ? <ThreeMonthBuyChart symbol={symbol} metric={metric}/> : <ThreeMonthSellChart symbol={symbol} metric={metric}/>) }
+							{(userContext && userContext.logined) ? '' : (metric === BUY ? <ThreeMonthBuyChart symbol={symbol} metric={metric}/> : <ThreeMonthSellChart symbol={symbol} metric={metric}/>) }
 							{metric === BUY ? <HistoricalBuyChart symbol={symbol} metric={metric}/> : <HistoricalSellChart symbol={symbol} metric={metric}/>}
 							{metric === BUY ? <RealtimeBuyChart symbol={symbol} metric={metric}/> : <RealtimeSellChart symbol={symbol} metric={metric}/>}
 							{/*<StockChart/>*/}

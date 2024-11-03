@@ -8,18 +8,19 @@ const { Sider } = Layout;
 const { SubMenu } = Menu;
 
 const siderStyle: React.CSSProperties = {
-	overflow: 'hidden',  // 禁止整个 Sider 滚动
-	height: '100vh',
+	overflowX: 'hidden',  // 禁止整个 Sider 滚动
+	overflowY: 'scroll',  // 禁止整个 Sider 滚动
+	height: '80vh',
 	position: 'fixed',
 	top: 0,  // 从顶部开始布局
 	bottom: 0,
 	marginTop: '100px',
 };
 const scrollStyle: React.CSSProperties = {
-	scrollbarWidth: 'thin',
-	scrollbarColor: 'unset',
-	overflowY: 'auto', 
-	height: 'calc(100vh - 72px)'
+	// scrollbarWidth: 'thin',
+	// scrollbarColor: 'unset',
+	// overflowY: 'auto', 
+	// height: 'calc(100vh - 72px)'
 }
 
 const Sidebar = ({symbolToggledHandler} : {symbolToggledHandler: (type: SymbolAndMetric) => void}) => {

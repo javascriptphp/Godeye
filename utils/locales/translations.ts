@@ -140,12 +140,12 @@ export const translations = {
 		"en": "T3 Indicator"
 	},
 	"priceUltimate": {
-		"zh": "(15+184) 美元/季",
-		"en": "(15+184) USD/quarter"
+		"zh": "(30+169) 美元/季",
+		"en": "(30+169) USD/quarter"
 	},
 	"noteUltimate": {
-		"zh": "说明：先支付15 USDT，获得三个月使用权限，赚钱后再补齐184 USDT",
-		"en": "Note: Pay 15 USDT first to gain three months of access, then pay an additional 184 USDT after making a profit"
+		"zh": "说明：先支付30 USDT，获得三个月使用权限，赚钱后再补齐169 USDT",
+		"en": "Note: Pay 30 USDT first to gain three months of access, then pay an additional 169 USDT after making a profit"
 	},
 	"notePrimary": {
 		"zh": "说明：注册后可免费查看T1数据",
@@ -168,8 +168,8 @@ export const translations = {
 		"en": "Subscription"
 	},
 	"subscriptionPrompt": {
-		"zh": "将 15 USDT 转入以下地址，然后发送付款截图、付款地址、注册邮箱到 godeye2099@outlook.com，我们将在1小时内开通您的会员权限。",
-		"en": "Transfer 15 USDT to the address below, then send a payment screenshot, payment address, and registered email to godeye2099@outlook.com. We will activate your membership within 1 hour."
+		"zh": "将 30 USDT 转入以下地址，然后发送付款截图、付款地址、注册邮箱到 godeye2099@outlook.com，我们将在1小时内开通您的会员权限。",
+		"en": "Transfer 30 USDT to the address below, then send a payment screenshot, payment address, and registered email to godeye2099@outlook.com. We will activate your membership within 1 hour."
 	},
 	"optimismAddress": {
 		"zh": "Optimism/Avalanche C-Chain",

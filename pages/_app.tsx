@@ -16,7 +16,7 @@ const theme: DefaultTheme = {
 
 export default function App({ Component, pageProps }: AppProps) {
   const router = useRouter();
-  const {updateExpireTime, loadSession, logoutHandler} = useStore();
+  const {updateExpireTime, getSystemContext, setSessionChecked, loadSession, logoutHandler} = useStore();
   const [isExpireModalOpen, setIsExpireModalOpen] = useState(false);
   const [checkTimer, setCheckTimer] = useState< NodeJS.Timeout | null>();
   const cleanup = () => {
@@ -24,16 +24,14 @@ export default function App({ Component, pageProps }: AppProps) {
       clearInterval(checkTimer);
       setCheckTimer(null);
     }
-    // 只删除 expire_at cookie
-    // document.cookie = `expire_at=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`;
   };
   useEffect(() => {
     loadSession();
-    
+    const systemContext = getSystemContext();
     const checkAndUpdateExpireTime = () => {
+      if (systemContext?.isSessionChecked) return;
       const cookies = document.cookie.split(';');
       const expireCookie = cookies.find(cookie => cookie.trim().startsWith('expire_at='));
-      console.log(expireCookie)
       if (expireCookie) {
         const expireAtNumber = parseInt(expireCookie.split('=')[1]);
         const expireAt = new Date(expireAtNumber);
@@ -49,6 +47,7 @@ export default function App({ Component, pageProps }: AppProps) {
           setCheckTimer(timer)
         }
       }
+      setSessionChecked(true);
     };
 
     checkAndUpdateExpireTime();

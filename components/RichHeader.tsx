@@ -57,8 +57,9 @@ const alterStyle: React.CSSProperties = {
 }
 const RichHeader = () => {
 	const router = useRouter();
-	const {userContext, setLanguage} = useStore();
+	const {getUserContext, setLanguage} = useStore();
 	const {t} = useTranslation();
+	const userContext = getUserContext();
 
 	const handleLanguageChange = (lang: string) => {
 		// i18n.changeLanguage(lang);

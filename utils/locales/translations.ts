@@ -328,6 +328,10 @@ export const translations = {
 		"zh": "日K",
 		"en": "Daily K-line"
 	},
+	"text_5minK": {
+		"zh": "5分钟K",
+		"en": "5 Mins K-line"
+	},
 	"text_buy_area": {
 		"zh": "买入区间",
 		"en": "Buying Range"

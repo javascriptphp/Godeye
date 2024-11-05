@@ -6,7 +6,10 @@ export type ExpireTimeHandler = (expireAt: Date) => void;
 export interface ZustandStore {
 	userContext: UserContext|null;
 	systemContext: SystemContext|null;
+	getUserContext: () => UserContext|null;
+	getSystemContext: () => SystemContext|null;
 	setLanguage: (language: string) => void;
+	setSessionChecked: (checked: boolean) => void;
 	loginHandler: UserContextHandler;
 	logoutHandler: VoidFunction;
 	loadSession: VoidFunction;
@@ -16,10 +19,21 @@ export interface ZustandStore {
 const useStore = create<ZustandStore>((set,getState) => ({
 	userContext: null,
 	systemContext: {
-		language: DEFAULT_LANGUAGE
+		language: DEFAULT_LANGUAGE,
+		isSessionChecked: false
+	},
+	getUserContext: () => {
+		return getState().userContext;
+	},
+	getSystemContext: () => {
+		return getState().systemContext;
 	},
 	setLanguage: (language: string) => {
 		set({systemContext: {...getState().systemContext, language: language}});
+		localStorage.setItem('systemContext', JSON.stringify(getState().systemContext));
+	},
+	setSessionChecked: (isChecked: boolean) => {
+		set({systemContext: {...getState().systemContext, isSessionChecked: isChecked}});
 		localStorage.setItem('systemContext', JSON.stringify(getState().systemContext));
 	},
 	loginHandler: (userContext : UserContext|null) => {
@@ -41,10 +55,7 @@ const useStore = create<ZustandStore>((set,getState) => ({
 		if (userContextStr) {
 			const expireTime = new Date((JSON.parse(userContextStr) as UserContext).expireTime);
 			if (new Date(expireTime) > new Date()) {
-				console.log("加载用户信息")
-
 				set({userContext: JSON.parse(userContextStr)});
-				console.log("加载用户信息后，立刻打印context",useStore.getState().userContext);
 			}
 		}
 	},

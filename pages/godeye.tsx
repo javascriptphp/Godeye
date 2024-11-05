@@ -55,15 +55,13 @@ const GodeyeIndexPage = () => {
 
 	const [symbol, setSymbol] = useState('BTC');
 	const [metric, setMetric] = useState('buy');
-	const {userContext} = useStore();
+	const userContext = useStore().getUserContext();
 	const symbolSwitchedHandler = ({symbol, metric}: SymbolAndMetric) => {
 		setSymbol(symbol);
 		setMetric(metric);
-	}
+	};
 	return (
 		<>
-
-			
 			<PageContainer>
 				<RichHeader/>
 				<Sidebar symbolToggledHandler={symbolSwitchedHandler}/>

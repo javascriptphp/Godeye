@@ -342,7 +342,7 @@ const GlobalFunctions = (t: TFunction) => {
 				legend: {
 					data: [
 						`${t('text_indicator')}`,
-						`${t('text_dailyK')}`,
+						`${t('text_5minK')}`,
 						{
 							name: t('text_sell_area'), // 图例项名称
 							icon: 'rect', // 图例项图标设置为矩形
@@ -465,7 +465,7 @@ const GlobalFunctions = (t: TFunction) => {
 						} : {}
 					},
 					{
-						name: t('text_dailyK'),
+						name: t('text_5minK'),
 						type: 'candlestick',
 						data: priceData,
 						yAxisIndex: 1,
@@ -495,8 +495,8 @@ const GlobalFunctions = (t: TFunction) => {
 						tooltip: {
 							show: false
 						}
-					}, 
-					{
+					},
+					includeMark && {
 						// 创建一个隐藏的 series 以模拟 markArea 的图例
 						name: t('text_sell_area'),
 						type: 'line',

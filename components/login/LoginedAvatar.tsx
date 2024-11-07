@@ -13,7 +13,8 @@ const enum MenuItemKeys {
 
 const LoginedAvatar: React.FC = () => {
 	const router = useRouter();
-	const {userContext, logoutHandler} = useStore();
+	const {getUserContext, logoutHandler} = useStore();
+	const userContext = getUserContext();
 	const { t } = useTranslation();
 	const items: MenuProps['items'] = [
 		// {

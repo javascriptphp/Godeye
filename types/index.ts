@@ -163,7 +163,8 @@ export interface UserContext {
 	expireTime: Date;
 }
 export interface SystemContext {
-	language: string;
+	language?: string;
+	isSessionChecked?: boolean;
 }
 export const DEFAULT_LANGUAGE = 'en' as string;
 export enum ErrorTypeEnum {

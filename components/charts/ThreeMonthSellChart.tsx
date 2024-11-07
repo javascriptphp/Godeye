@@ -37,7 +37,8 @@ const HistoricalChart = ({symbol, metric}: { symbol: string, metric: string }) =
 	const chartRef = useRef<echarts.ECharts | null>(null);  // Store chart instance in a ref
 	const hasFetchedData = useRef(false);  // Track if data has been fetched
 
-	const {userContext} = useStore();
+	const {getUserContext} = useStore();
+	const userContext = getUserContext();
 
 	// Fetch data and update the state
 	useEffect(() => {

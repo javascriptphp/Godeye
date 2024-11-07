@@ -30,7 +30,8 @@ const ThreeMonthBuyChart = ({symbol, metric}: { symbol: string, metric: string }
 
 	const chartRef = useRef<echarts.ECharts | null>(null);  // Store chart instance in a ref
 	const [messageApi, contextHolder] = message.useMessage();
-	const {userContext} = useStore();
+	const {getUserContext} = useStore();
+	const userContext = getUserContext();
 	const { t } = useTranslation();
 	const Functions = GlobalFunctions(t);
 	// Fetch data and update the state

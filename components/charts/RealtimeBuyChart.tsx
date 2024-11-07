@@ -77,7 +77,8 @@ const RealtimeBuyChart = ({metric, symbol}: { metric: string, symbol: string }) 
 		setTimestamps([]);
 	}, [metric, symbol]);
 	const chartRef = useRef<echarts.ECharts | null>(null);  // Store chart instance in a ref
-	const {userContext} = useStore();
+	const {getUserContext} = useStore();
+	const userContext = getUserContext();
 
 	const [websocketUrl, setWebsocketUrl] = useState<string>('');
 	// 请求websocket url

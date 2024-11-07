@@ -23,7 +23,8 @@ const HistoricalSellChart = ({symbol, metric}: { symbol: string, metric: string 
 	const chartRef = useRef<echarts.ECharts | null>(null);  // Store chart instance in a ref
 	const hasFetchedData = useRef(false);  // Track if data has been fetched
 
-	const {userContext} = useStore();
+	const {getUserContext} = useStore();
+	const userContext = getUserContext();
 	const {t} = useTranslation();
 	const Functions = GlobalFunctions(t);
 	const buildCustomerOption = function () {

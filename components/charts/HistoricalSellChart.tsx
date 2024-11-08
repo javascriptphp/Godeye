@@ -86,6 +86,7 @@ const HistoricalSellChart = ({symbol, metric}: { symbol: string, metric: string 
 			priceData: priceValues,
 			watermark: (userContext && userContext.email) || t('watermarkText'),
 			includeMark: true,
+			kLine: t('text_dailyK')
 		});
 		const echartsOption = {
 			..._option,

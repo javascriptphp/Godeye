@@ -259,6 +259,7 @@ const GlobalFunctions = (t: TFunction) => {
 			          priceData,
 			          watermark,
 			          includeMark,
+					  kLine
 		          }: SellOptionBuilderParam): EChartsOption {
 			// 辅助函数：查找指标低于阈值的时间范围
 			const findBelowThresholdRanges = (metricData: number[], threshold: number[]): {
@@ -342,7 +343,7 @@ const GlobalFunctions = (t: TFunction) => {
 				legend: {
 					data: [
 						`${t('text_indicator')}`,
-						`${t('text_5minK')}`,
+						`${kLine}`,
 						{
 							name: t('text_sell_area'), // 图例项名称
 							icon: 'rect', // 图例项图标设置为矩形
@@ -465,7 +466,7 @@ const GlobalFunctions = (t: TFunction) => {
 						} : {}
 					},
 					{
-						name: t('text_5minK'),
+						name: kLine,
 						type: 'candlestick',
 						data: priceData,
 						yAxisIndex: 1,

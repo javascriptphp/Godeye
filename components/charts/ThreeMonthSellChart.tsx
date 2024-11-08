@@ -89,6 +89,7 @@ const HistoricalChart = ({symbol, metric}: { symbol: string, metric: string }) =
 			priceData: priceValues,
 			watermark: (userContext && userContext.email) || t('watermarkText'),
 			includeMark: true,
+			kLine: t('text_dailyK')
 		})
 		createChart({chartRef, containerRef, echartsOption})
 

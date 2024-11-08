@@ -206,6 +206,7 @@ export type SellOptionBuilderParam = {
 	priceData: any,
 	watermark: string,
 	includeMark: boolean,
+	kLine: string,
 }
 export function isHistoricalSellValues(data: HistoricalBuyValues | HistoricalSellValues): data is HistoricalSellValues {
 	return Array.isArray((data as HistoricalSellValues).threshold);

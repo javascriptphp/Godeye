@@ -131,6 +131,7 @@ const RealtimeChart = ({metric, symbol}: { metric: string, symbol: string }) => 
 			priceData: priceValues,
 			watermark: (userContext && userContext.email) || t('watermarkText'),
 			includeMark: false,
+			kLine: t('text_5minK')
 		})
 		const echartsOption = {
 			..._option,

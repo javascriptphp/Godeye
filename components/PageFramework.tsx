@@ -3,6 +3,6 @@ import Tabs from "@/components/Tabs";
 import React from "react";
 
 const PageFramework = () => {
-	return ;
+    return;
 };
 export default PageFramework;

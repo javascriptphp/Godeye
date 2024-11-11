@@ -1,6 +1,6 @@
-import React, {ReactNode} from 'react';
-import styled from 'styled-components';
-import {footerText} from "@/utils/global_constant";
+import React, { ReactNode } from "react";
+import styled from "styled-components";
+import { footerText } from "@/utils/global_constant";
 import RichHeader from "@/components/RichHeader";
 
 const Wrapper = styled.div`
@@ -25,16 +25,14 @@ const FooterContainer = styled.footer`
     font-family: Arial, sans-serif;
 `;
 
-const PageFrame = ({children}:{children : ReactNode | ReactNode[]}) => {
-	return (
-		<Wrapper>
-			<RichHeader/>
-			<Content>
-				{children}
-			</Content>
-			<FooterContainer>{footerText}</FooterContainer>
-		</Wrapper>
-	);
+const PageFrame = ({ children }: { children: ReactNode | ReactNode[] }) => {
+    return (
+        <Wrapper>
+            <RichHeader />
+            <Content>{children}</Content>
+            <FooterContainer>{footerText}</FooterContainer>
+        </Wrapper>
+    );
 };
 
 export default PageFrame;

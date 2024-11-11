@@ -3,35 +3,34 @@ type: docker
 name: default
 
 clone:
-  disable: true
-
+    disable: true
 
 steps:
-  - name: clone
-    image: alpine/git
-    commands:
-      - git clone http://47.236.100.38:32768/godeye/godeye-frontend.git .
-      - git checkout $DRONE_COMMIT
+    - name: clone
+      image: alpine/git
+      commands:
+          - git clone http://47.236.100.38:32768/godeye/godeye-frontend.git .
+          - git checkout $DRONE_COMMIT
 
-  - name: build_docker_image
-    image: docker:rc-dind
-    volumes:
-      - name: docker-sock
-        path: /var/run/docker.sock
-    commands:
-      - docker build -t godeye-frontend-test:latest .
+    - name: build_docker_image
+      image: docker:rc-dind
+      volumes:
+          - name: docker-sock
+            path: /var/run/docker.sock
+      commands:
+          - docker build -t godeye-frontend-test:latest .
 
-  - name: deploy
-    image: docker:rc-dind
-    volumes:
-      - name: docker-sock
-        path: /var/run/docker.sock
-    commands:
-      - docker stop godeye-frontend-test || true
-      - docker rm godeye-frontend-test || true
-      - docker run -d --name godeye-frontend-test  -p 8001:8001 godeye-frontend-test:latest
+    - name: deploy
+      image: docker:rc-dind
+      volumes:
+          - name: docker-sock
+            path: /var/run/docker.sock
+      commands:
+          - docker stop godeye-frontend-test || true
+          - docker rm godeye-frontend-test || true
+          - docker run -d --name godeye-frontend-test  -p 8001:8001 godeye-frontend-test:latest
 
 volumes:
-  - name: docker-sock
-    host:
-      path: /var/run/docker.sock
+    - name: docker-sock
+      host:
+          path: /var/run/docker.sock

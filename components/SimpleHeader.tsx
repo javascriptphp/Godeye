@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled from "styled-components";
 import Link from "next/link";
 
 const HeaderContainer = styled.header`
@@ -20,16 +20,14 @@ const Logo = styled.div`
     font-weight: bold;
 `;
 
-
-
 const SimpleHeader = () => {
-	return (
-		<HeaderContainer>
-			<Link href="/" style={{ textDecoration: 'none', color: '#f0b90b' }}>
-				<Logo>Godeye</Logo>
-			</Link>
-		</HeaderContainer>
-	);
+    return (
+        <HeaderContainer>
+            <Link href="/" style={{ textDecoration: "none", color: "#f0b90b" }}>
+                <Logo>Godeye</Logo>
+            </Link>
+        </HeaderContainer>
+    );
 };
 
 export default SimpleHeader;

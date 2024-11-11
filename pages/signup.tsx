@@ -1,11 +1,11 @@
-import React, {useState} from 'react';
-import styled from 'styled-components';
+import React, { useState } from "react";
+import styled from "styled-components";
 import EmailVerification from "@/components/login/EmailVerification";
-import {footerText} from "@/utils/global_constant";
+import { footerText } from "@/utils/global_constant";
 import RichHeader from "@/components/RichHeader";
-import {Col, Row, Steps} from "antd";
+import { Col, Row, Steps } from "antd";
 import Register2 from "@/components/login/Register2";
-import {useTranslation} from "react-i18next";
+import { useTranslation } from "react-i18next";
 
 const Wrapper = styled.div`
     display: flex;
@@ -33,59 +33,67 @@ const FooterContainer = styled.footer`
 `;
 
 const stepStyle: React.CSSProperties = {
-	marginTop: '150px',
-	height: '50vh',
-	minWidth: '100px'
+    marginTop: "150px",
+    height: "50vh",
+    minWidth: "100px",
 };
 
 export interface UserInfo {
-	username: string,
-	email: string,
-	password: string,
+    username: string;
+    email: string;
+    password: string;
 }
 
 const RegistrationForm = () => {
-	const [isRegistered, setIsRegistered] = useState(false);
-	const [userInfo, setUserInfo] = useState<UserInfo>({ email: "", password: "", username: "" });
-	const [curStep, setCurStep] = useState(0);
-	const { t } = useTranslation();
+    const [isRegistered, setIsRegistered] = useState(false);
+    const [userInfo, setUserInfo] = useState<UserInfo>({
+        email: "",
+        password: "",
+        username: "",
+    });
+    const [curStep, setCurStep] = useState(0);
+    const { t } = useTranslation();
 
-	const handleRegister = (userInfo: UserInfo) => {
-		setCurStep(1);
-		setIsRegistered(true); // 切换到验证页面
-		setUserInfo(userInfo);
-	};
-	return (
-		<Wrapper>
-			<RichHeader />
-			<Content>
-				<Row>
-					<Col span={4} offset={3}>
-						<Steps
-							style={stepStyle}
-							size={"small"}
-							direction={"vertical"}
-							current={curStep}
-							items={[
-								{
-									title: t("registrationStepTitle"),
-								},
-								{
-									title: t("emailVerificationStepTitle"),
-								},
-							]}
-						/>
-					</Col>
-					<Col span={8} offset={1}>
-						<Container>
-							{isRegistered ? <EmailVerification userInfo={userInfo} /> : <Register2 onRegister={handleRegister} />}
-						</Container>
-					</Col>
-				</Row>
-			</Content>
-			<FooterContainer>{footerText}</FooterContainer>
-		</Wrapper>
-	);
+    const handleRegister = (userInfo: UserInfo) => {
+        setCurStep(1);
+        setIsRegistered(true); // 切换到验证页面
+        setUserInfo(userInfo);
+    };
+    return (
+        <Wrapper>
+            <RichHeader />
+            <Content>
+                <Row>
+                    <Col span={4} offset={3}>
+                        <Steps
+                            style={stepStyle}
+                            size={"small"}
+                            direction={"vertical"}
+                            current={curStep}
+                            items={[
+                                {
+                                    title: t("registrationStepTitle"),
+                                },
+                                {
+                                    title: t("emailVerificationStepTitle"),
+                                },
+                            ]}
+                        />
+                    </Col>
+                    <Col span={8} offset={1}>
+                        <Container>
+                            {isRegistered ? (
+                                <EmailVerification userInfo={userInfo} />
+                            ) : (
+                                <Register2 onRegister={handleRegister} />
+                            )}
+                        </Container>
+                    </Col>
+                </Row>
+            </Content>
+            <FooterContainer>{footerText}</FooterContainer>
+        </Wrapper>
+    );
 };
 
 export default RegistrationForm;

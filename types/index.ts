@@ -1,213 +1,222 @@
 export type BaseMetric = {
-	metric_value: number;
-	price: number;
-	timestamp: Date;
-}
+    metric_value: number;
+    price: number;
+    timestamp: Date;
+};
 
 export type BaseResponse = {
-	code: number;
-	message: string;
-	message_level: string;
-	data: null;
+    code: number;
+    message: string;
+    message_level: string;
+    data: null;
 };
 export type ThreeMonthResponse = {
-	code: number;
-	message: string;
-	message_level: string;
-	data: ThreeMonthData;
+    code: number;
+    message: string;
+    message_level: string;
+    data: ThreeMonthData;
 };
 export type HistoricalResponse = {
-	code: number;
-	message: string;
-	message_level: string;
-	data: HistoricalData;
+    code: number;
+    message: string;
+    message_level: string;
+    data: HistoricalData;
 };
 export type WebsocketUrlResponse = {
-	code: number;
-	message: string;
-	message_level: string;
-	data: {
-		websocket_url: string;
-	};
+    code: number;
+    message: string;
+    message_level: string;
+    data: {
+        websocket_url: string;
+    };
 };
 export type RegisterResponse = {
-	code: number;
-	message: string;
-	message_level: string;
-	data: RegisterData;
-}
+    code: number;
+    message: string;
+    message_level: string;
+    data: RegisterData;
+};
 export type RegisterData = {
-	user?: string;
-	role?: string;
+    user?: string;
+    role?: string;
 };
 export type LoginData = RegisterData;
 export type LoginResponse = RegisterResponse;
 export type ThreeMonthData = {
-	symbol: string;
-	threshold: number;
-	values: ThreeMonthBuyValues[] | ThreeMonthSellValues[];
+    symbol: string;
+    threshold: number;
+    values: ThreeMonthBuyValues[] | ThreeMonthSellValues[];
 };
 export type ThreeMonthBuyData = {
-	symbol: string;
-	values: ThreeMonthBuyValues[];
+    symbol: string;
+    values: ThreeMonthBuyValues[];
 };
 export type ThreeMonthSellData = {
-	symbol: string;
-	values: ThreeMonthSellValues[];
+    symbol: string;
+    values: ThreeMonthSellValues[];
 };
 
-export function isErrorTypeEnum(data: ThreeMonthBuyData | ThreeMonthSellData | ErrorTypeEnum): boolean {
-	return typeof data === "number";
+export function isErrorTypeEnum(
+    data: ThreeMonthBuyData | ThreeMonthSellData | ErrorTypeEnum
+): boolean {
+    return typeof data === "number";
 }
 
-export function isThreeMonthBuyData(data: ThreeMonthBuyData | ThreeMonthSellData): data is ThreeMonthBuyData {
-	return (data as ThreeMonthBuyData).values !== undefined;
+export function isThreeMonthBuyData(
+    data: ThreeMonthBuyData | ThreeMonthSellData
+): data is ThreeMonthBuyData {
+    return (data as ThreeMonthBuyData).values !== undefined;
 }
 
-export function isThreeMonthBuyValues(data: ThreeMonthBuyValues | ThreeMonthSellValues): data is ThreeMonthBuyValues {
-	const _data = data as ThreeMonthBuyValues;
-	return _data.timestamp !== undefined && _data.price !== undefined && _data.metric_value !== undefined;
+export function isThreeMonthBuyValues(
+    data: ThreeMonthBuyValues | ThreeMonthSellValues
+): data is ThreeMonthBuyValues {
+    const _data = data as ThreeMonthBuyValues;
+    return (
+        _data.timestamp !== undefined &&
+        _data.price !== undefined &&
+        _data.metric_value !== undefined
+    );
 }
 
 export type HistoricalData = {
-	symbol: string;
-	values: HistoricalBuyValues[] | HistoricalSellValues[];
-}
+    symbol: string;
+    values: HistoricalBuyValues[] | HistoricalSellValues[];
+};
 export type HistoricalBuyData = ThreeMonthBuyData;
 export type HistoricalSellData = {
-	symbol: string;
-	values: HistoricalSellValues[];
+    symbol: string;
+    values: HistoricalSellValues[];
 };
 export type HistoricalBuyValues = ThreeMonthBuyValues;
 // 更新后的 HistoricalSellValues，包含 threshold 数组
 export type HistoricalSellValues = {
-	timestamp: Date;
-	symbol: string;
-	open: number;
-	high: number;
-	low: number;
-	close: number;
-	metric: string;
-	metric_value: number;
-	threshold: number; 
+    timestamp: Date;
+    symbol: string;
+    open: number;
+    high: number;
+    low: number;
+    close: number;
+    metric: string;
+    metric_value: number;
+    threshold: number;
 };
 export type ThreeMonthBuyValues = {
-	timestamp: Date;
-	price: number;
-	metric_value: number;
-	threshold: number;
+    timestamp: Date;
+    price: number;
+    metric_value: number;
+    threshold: number;
 };
 export type ThreeMonthSellValues = {
-	timestamp: Date;
-	open: number;
-	high: number;
-	low: number;
-	close: number;
-	threshold: number;
-	metric_value: number;
+    timestamp: Date;
+    open: number;
+    high: number;
+    low: number;
+    close: number;
+    threshold: number;
+    metric_value: number;
 };
 export type RealtimeResponse = {
-	message: string;
-	message_level: string;
-	code: number;
-	data: RealtimeBuyData[] | RealtimeSellData[];
-}
+    message: string;
+    message_level: string;
+    code: number;
+    data: RealtimeBuyData[] | RealtimeSellData[];
+};
 export type RealtimeBuyData = {
-	timestamp: Date;
-	symbol: string;
-	price: number;
-	metric: string;
-	metric_value: number;
-	threshold: number;
+    timestamp: Date;
+    symbol: string;
+    price: number;
+    metric: string;
+    metric_value: number;
+    threshold: number;
 };
 export type RealtimeSellData = {
-	timestamp: Date;
-	symbol: string;
-	open: number;
-	high: number;
-	low: number;
-	close: number;
-	metric: string;
-	metric_value: number;
-	threshold: number;
+    timestamp: Date;
+    symbol: string;
+    open: number;
+    high: number;
+    low: number;
+    close: number;
+    metric: string;
+    metric_value: number;
+    threshold: number;
 };
-export const BUY = 'buy';
-export const SELL = 'sell';
+export const BUY = "buy";
+export const SELL = "sell";
 export type BARealtimeData = {
-	e: string,
-	E: Date,
-	s: string,
-	k: {
-		t: Date,
-		T: Date,
-		s: string,
-		i: string,
-		o: string,
-	}
-}
+    e: string;
+    E: Date;
+    s: string;
+    k: {
+        t: Date;
+        T: Date;
+        s: string;
+        i: string;
+        o: string;
+    };
+};
 
 export enum MetricTypeEnum {
-	free, pay
+    free,
+    pay,
 }
 
 export type SymbolAndMetric = {
-	symbol: string;
-	metric: string;
-}
+    symbol: string;
+    metric: string;
+};
 
 export interface UserContext {
-	email: string | '';
-	username: string | '';
-	logined: boolean | false;
-	role: string | '';
-	expireTime: Date;
+    email: string | "";
+    username: string | "";
+    logined: boolean | false;
+    role: string | "";
+    expireTime: Date;
 }
 export interface SystemContext {
-	language?: string;
-	isSessionChecked?: boolean;
+    language?: string;
+    isSessionChecked?: boolean;
 }
-export const DEFAULT_LANGUAGE = 'en' as string;
+export const DEFAULT_LANGUAGE = "en" as string;
 export enum ErrorTypeEnum {
-	FALSE,
-	NULL,
-	NO_PERMISSION,
-	EMAIL_EXISTS,
-	INVALID_VERIFICATION_CODE,
-	INVALID_CREDENTIALS,
-	SYSTEM_ERROR,
-
+    FALSE,
+    NULL,
+    NO_PERMISSION,
+    EMAIL_EXISTS,
+    INVALID_VERIFICATION_CODE,
+    INVALID_CREDENTIALS,
+    SYSTEM_ERROR,
 }
 
 export type XaxisType = {
-	xAxis: string;
+    xAxis: string;
 };
-export type CoordType = [
-	XaxisType,
-	XaxisType
-]
+export type CoordType = [XaxisType, XaxisType];
 export type BuyOptionBuilderParam = {
-	title: string,
-	symbol: string,
-	metric: string,
-	timestamps: string[],
-	threshold: number,
-	metricData: number[],
-	priceData: any,
-	watermark: string,
-	includeMark: boolean,
-}
+    title: string;
+    symbol: string;
+    metric: string;
+    timestamps: string[];
+    threshold: number;
+    metricData: number[];
+    priceData: any;
+    watermark: string;
+    includeMark: boolean;
+};
 export type SellOptionBuilderParam = {
-	title: string,
-	symbol: string,
-	metric: string,
-	timestamps: string[],
-	threshold: number[],
-	metricData: number[],
-	priceData: any,
-	watermark: string,
-	includeMark: boolean,
-	kLine: string,
-}
-export function isHistoricalSellValues(data: HistoricalBuyValues | HistoricalSellValues): data is HistoricalSellValues {
-	return Array.isArray((data as HistoricalSellValues).threshold);
+    title: string;
+    symbol: string;
+    metric: string;
+    timestamps: string[];
+    threshold: number[];
+    metricData: number[];
+    priceData: any;
+    watermark: string;
+    includeMark: boolean;
+    kLine: string;
+};
+export function isHistoricalSellValues(
+    data: HistoricalBuyValues | HistoricalSellValues
+): data is HistoricalSellValues {
+    return Array.isArray((data as HistoricalSellValues).threshold);
 }

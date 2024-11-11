@@ -1,12 +1,12 @@
-import styled from 'styled-components';
-import {useRouter} from "next/router";
-import {Button, Dropdown, Flex, MenuProps, Space} from "antd";
+import styled from "styled-components";
+import { useRouter } from "next/router";
+import { Button, Dropdown, Flex, MenuProps, Space } from "antd";
 import Link from "next/link";
 import React from "react";
 import LoginedAvatar from "@/components/login/LoginedAvatar";
 import useStore from "@/utils/store";
-import {useTranslation} from 'react-i18next';
-import {GlobalOutlined} from '@ant-design/icons';
+import { useTranslation } from "react-i18next";
+import { GlobalOutlined } from "@ant-design/icons";
 
 const HeaderContainer = styled.header`
     display: flex;
@@ -32,7 +32,7 @@ const Nav = styled.span`
     &:hover {
         cursor: pointer;
     }
-`
+`;
 
 const NavLinks = styled.div`
     display: flex;
@@ -45,99 +45,117 @@ const NavLinks = styled.div`
     }
 `;
 const alterStyle: React.CSSProperties = {
-	textAlign: "center",
-	paddingLeft: 14,
-	paddingRight: 14,
-	paddingTop: 5,
-	paddingBottom: 5,
-	fontSize: 12,
-	color: "#000",
-	// position: "fixed",
-	border: "none"
-}
+    textAlign: "center",
+    paddingLeft: 14,
+    paddingRight: 14,
+    paddingTop: 5,
+    paddingBottom: 5,
+    fontSize: 12,
+    color: "#000",
+    // position: "fixed",
+    border: "none",
+};
 const RichHeader = () => {
-	const router = useRouter();
-	const {getUserContext, setLanguage} = useStore();
-	const {t} = useTranslation();
-	const userContext = getUserContext();
+    const router = useRouter();
+    const { getUserContext, setLanguage } = useStore();
+    const { t } = useTranslation();
+    const userContext = getUserContext();
 
-	const handleLanguageChange = (lang: string) => {
-		// i18n.changeLanguage(lang);
-		setLanguage(lang);
-		// i18n.loadLanguages(lang);
-	};
+    const handleLanguageChange = (lang: string) => {
+        // i18n.changeLanguage(lang);
+        setLanguage(lang);
+        // i18n.loadLanguages(lang);
+    };
 
-	const languageMenu: MenuProps = {
-		items: [
-			{
-				key: 'zh',
-				label: '简体中文',
-				onClick: () => handleLanguageChange('zh')
-			},
-			{
-				key: 'en',
-				label: 'English',
-				onClick: () => handleLanguageChange('en')
-			}
-		]
-	};
+    const languageMenu: MenuProps = {
+        items: [
+            {
+                key: "zh",
+                label: "简体中文",
+                onClick: () => handleLanguageChange("zh"),
+            },
+            {
+                key: "en",
+                label: "English",
+                onClick: () => handleLanguageChange("en"),
+            },
+        ],
+    };
 
-
-	const handleSignup = async () => {
-		await router.push('/signup')
-	}
-	const handleSignin = async () => {
-		await router.push('/signin')
-	}
-	const routeUrl = (url: string) => {
-		router.push(url).then(r => r)
-	}
-	return (
-		<Wrapper>
-			{/*删除顶部声明*/}
-			{/*<Alert*/}
-			{/*	style={alterStyle}*/}
-			{/*	message={t('topAnnouncement')}*/}
-			{/*	type="warning"*/}
-			{/*	closable*/}
-			{/*	// onClose={}*/}
-			{/*/>*/}
-			<HeaderContainer>
-				<Link href={"/"}>
-					<Space direction={"horizontal"} align={"center"} size={"middle"}>
-						<Logo>Godeye</Logo>
-						<span style={{
-							fontSize: 12,
-							color: "red"
-							// background: 'linear-gradient(to right, red, blue)',
-							// color: 'transparent',
-							// WebkitBackgroundClip: 'text'
-						}}>{t('shortDescription')}</span>
-					</Space>
-				</Link>
-				<NavLinks>
-					<Space direction={"horizontal"} align={"baseline"} size={"large"}>
-						<Nav onClick={() => routeUrl("/pay")}>{t("pricing")}</Nav>
-						<Nav onClick={() => routeUrl("/contact")}>{t("contactUs")}</Nav>
-					</Space>
-				</NavLinks>
-				<Flex gap={"middle"} justify="center" align="center">
-					<Dropdown menu={languageMenu} placement="bottomRight">
-						<GlobalOutlined style={{fontSize: '18px', cursor: 'pointer'}}/>
-					</Dropdown>
-					{
-						(userContext && userContext.logined) ?
-							<LoginedAvatar/>
-							:
-							<>
-								<Button onClick={handleSignin}>{t('login')}</Button>
-								<Button type="primary" onClick={handleSignup}>{t('register')}</Button>
-							</>
-					}
-				</Flex>
-			</HeaderContainer>
-		</Wrapper>
-	);
+    const handleSignup = async () => {
+        await router.push("/signup");
+    };
+    const handleSignin = async () => {
+        await router.push("/signin");
+    };
+    const routeUrl = (url: string) => {
+        router.push(url).then((r) => r);
+    };
+    return (
+        <Wrapper>
+            {/*删除顶部声明*/}
+            {/*<Alert*/}
+            {/*	style={alterStyle}*/}
+            {/*	message={t('topAnnouncement')}*/}
+            {/*	type="warning"*/}
+            {/*	closable*/}
+            {/*	// onClose={}*/}
+            {/*/>*/}
+            <HeaderContainer>
+                <Link href={"/"}>
+                    <Space
+                        direction={"horizontal"}
+                        align={"center"}
+                        size={"middle"}
+                    >
+                        <Logo>Godeye</Logo>
+                        <span
+                            style={{
+                                fontSize: 12,
+                                color: "red",
+                                // background: 'linear-gradient(to right, red, blue)',
+                                // color: 'transparent',
+                                // WebkitBackgroundClip: 'text'
+                            }}
+                        >
+                            {t("shortDescription")}
+                        </span>
+                    </Space>
+                </Link>
+                <NavLinks>
+                    <Space
+                        direction={"horizontal"}
+                        align={"baseline"}
+                        size={"large"}
+                    >
+                        <Nav onClick={() => routeUrl("/pay")}>
+                            {t("pricing")}
+                        </Nav>
+                        <Nav onClick={() => routeUrl("/contact")}>
+                            {t("contactUs")}
+                        </Nav>
+                    </Space>
+                </NavLinks>
+                <Flex gap={"middle"} justify="center" align="center">
+                    <Dropdown menu={languageMenu} placement="bottomRight">
+                        <GlobalOutlined
+                            style={{ fontSize: "18px", cursor: "pointer" }}
+                        />
+                    </Dropdown>
+                    {userContext && userContext.logined ? (
+                        <LoginedAvatar />
+                    ) : (
+                        <>
+                            <Button onClick={handleSignin}>{t("login")}</Button>
+                            <Button type="primary" onClick={handleSignup}>
+                                {t("register")}
+                            </Button>
+                        </>
+                    )}
+                </Flex>
+            </HeaderContainer>
+        </Wrapper>
+    );
 };
 
 export default RichHeader;

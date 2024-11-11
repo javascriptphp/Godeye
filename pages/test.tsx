@@ -1,34 +1,32 @@
-import React from 'react';
-import {Steps} from 'antd';
+import React from "react";
+import { Steps } from "antd";
 
-const description = 'This is a description.';
+const description = "This is a description.";
 const App: React.FC = () => {
-	const stepStyle: React.CSSProperties = {
-		height: '100vh',
-	}
-	return < Steps
-		style={stepStyle}
-		direction="vertical"
-		current={1}
-		items={
-			[
-				{
-					title: 'Finished',
-					description,
-				},
-				{
-					title: 'In Progress',
-					description,
-				}
-				,
-				{
-					title: 'Waiting',
-					description,
-				}
-				,
-			]
-		}
-	/>
+    const stepStyle: React.CSSProperties = {
+        height: "100vh",
+    };
+    return (
+        <Steps
+            style={stepStyle}
+            direction="vertical"
+            current={1}
+            items={[
+                {
+                    title: "Finished",
+                    description,
+                },
+                {
+                    title: "In Progress",
+                    description,
+                },
+                {
+                    title: "Waiting",
+                    description,
+                },
+            ]}
+        />
+    );
 };
 
 export default App;

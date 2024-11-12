@@ -376,10 +376,6 @@ export const translations = {
         zh: "注册成功，已为您自动登录~",
         en: "Registration successful ~",
     },
-    metricUpdateInfo: {
-        zh: "指标升级中，请先使用OP的买入指标",
-        en: "The metric is being upgraded, please use the OP buy metric first",
-    },
 } as {
     [key: string]: {
         zh?: string;

@@ -186,7 +186,7 @@ const RealtimeChart = ({
                     width: "100%",
                     height: "100%",
                     backgroundColor: "rgba(255, 255, 255, 0.8)",
-                    backdropFilter: "blur(5px)",
+                    backdropFilter: "blur(10px)",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",

@@ -185,7 +185,8 @@ const RealtimeChart = ({
                     left: 0,
                     width: "100%",
                     height: "100%",
-                    backgroundColor: "rgba(255, 255, 255, 0.9)", // 设置为半透明
+                    backgroundColor: "rgba(255, 255, 255, 0.8)",
+                    backdropFilter: "blur(5px)",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",

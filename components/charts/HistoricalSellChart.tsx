@@ -118,12 +118,33 @@ const HistoricalSellChart = ({
     }, [timestamps, threshold, metricData, priceData, t]); // Update chart when `data` or `symbol` changes
 
     return (
-        <div>
+        <div
+            style={{
+                position: "relative",
+                width: chartWidth,
+                height: chartHeight,
+            }}
+        >
             {contextHolder}
+            <div ref={containerRef} style={{ width: "100%", height: "100%" }} />
             <div
-                ref={containerRef}
-                style={{ width: chartWidth, height: chartHeight }}
-            ></div>
+                style={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    width: "100%",
+                    height: "100%",
+                    backgroundColor: "rgba(255, 255, 255, 0.9)", // 设置为半透明
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontSize: "1.5em",
+                    color: "#333",
+                    zIndex: 1,
+                }}
+            >
+                {t("metricUpdateInfo")}
+            </div>
         </div>
     );
 };

@@ -125,7 +125,8 @@ const GlobalFunctions = (t: TFunction) => {
                             item.seriesName +
                             ":</span>" +
                             '<span style="font-weight: bold; text-align: right; min-width: 60px;">' +
-                            (item.seriesName.toLowerCase().includes("price")
+                            (item.seriesName.toLowerCase().includes("price") ||
+                            item.seriesType === "candlestick"
                                 ? item.value
                                 : item.value.toFixed(4)) +
                             "</span>" +

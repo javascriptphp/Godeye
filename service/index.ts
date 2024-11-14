@@ -121,6 +121,7 @@ export const getRealtimeDataUrl = async function (
     const response = await request("/api/getRealtimeDataUrl", {
         metric: metric,
         symbol: symbol,
+        version: "v2",
     });
     const responseData = response.data as WebsocketUrlResponse;
     if (response.status === 200) {

@@ -328,6 +328,10 @@ export const translations = {
         zh: "日K",
         en: "Daily K-line",
     },
+    text_1hourK: {
+        zh: "1小时K",
+        en: "1 Hour K-line",
+    },
     text_5minK: {
         zh: "5分钟K",
         en: "5 Mins K-line",

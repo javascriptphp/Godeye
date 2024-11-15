@@ -132,9 +132,14 @@ export const buildCustomConfig = function ({
             //     },
             // },
         ],
+        legend: {
+            data: [`${symbol} ${t("text_1hourK")}`],
+            left: "center",
+            top: 55,
+        },
         series: [
             {
-                name: `${symbol} ${t("text_price")}`,
+                name: `${symbol} ${t("text_1hourK")}`,
                 type: "candlestick",
                 data: transformToRawData(data),
                 markPoint: {
@@ -181,15 +186,15 @@ export const buildCustomConfig = function ({
             //         ].filter(Boolean),
             //     },
             // },
-            {
-                // 创建一个隐藏的 series 以模拟 markArea 的图例
-                name: t("text_buy_area"),
-                type: "line",
-                xAxisIndex: 0,
-                yAxisIndex: 0,
-                data: [],
-                itemStyle: { color: buyAreaColor, opacity: 0.9 },
-            },
+            // {
+            //     // 创建一个隐藏的 series 以模拟 markArea 的图例
+            //     name: t("text_buy_area"),
+            //     type: "line",
+            //     xAxisIndex: 0,
+            //     yAxisIndex: 0,
+            //     data: [],
+            //     itemStyle: { color: buyAreaColor, opacity: 0.9 },
+            // },
         ],
     };
 };

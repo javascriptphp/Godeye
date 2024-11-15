@@ -9,6 +9,7 @@ import useStore from "@/utils/store";
 import useWebSocket from "react-use-websocket";
 import { getRealtimeDataUrl } from "@/service";
 import { BUY } from "@/types";
+import { formatTimestampToString } from "@/utils/time";
 
 const initialRealtimeData: RealtimeData = {
     timestamps: [],
@@ -34,11 +35,11 @@ function RealtimeBuyChart({
     const { getUserContext } = useStore();
     const userContext = getUserContext();
     const [url, setUrl] = useState<string>("");
-    const [lastMessage, setLastMessage] = useState<any>(null);
-    const { sendJsonMessage, lastJsonMessage } = useWebSocket(url, {
+    const { lastMessage } = useWebSocket(url, {
         onOpen: () => console.log("Connected to WebSocket"),
-        onMessage: () => setLastMessage(lastJsonMessage),
-        shouldReconnect: () => true,
+        reconnectInterval: 5000,
+        reconnectAttempts: 5,
+        shouldReconnect: () => !!url,
     });
 
     useEffect(() => {
@@ -48,7 +49,8 @@ function RealtimeBuyChart({
 
     useEffect(() => {
         if (lastMessage) {
-            processData(lastMessage);
+            const response = JSON.parse(lastMessage.data);
+            processData(response);
         }
     }, [lastMessage]);
 
@@ -84,7 +86,7 @@ function RealtimeBuyChart({
         const data = lastMessage.data;
         const updatedData: RealtimeData = {
             timestamps: data.map((item: any) =>
-                new Date(item.timestamp).toLocaleTimeString()
+                formatTimestampToString(item.timestamp)
             ),
             metric: data.map((item: any) => item.metric_value),
             threshold: data[0].threshold,

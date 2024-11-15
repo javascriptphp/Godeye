@@ -19,12 +19,12 @@ export const buildCustomConfig = function ({
         },
         grid: [
             {
-                left: 60,
+                left: 70,
                 right: 50,
                 height: "35%",
             },
             {
-                left: 60,
+                left: 70,
                 right: 50,
                 top: "55%",
                 height: "35%",

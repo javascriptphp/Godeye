@@ -9,11 +9,9 @@ export interface ZustandStore {
     getUserContext: () => UserContext | null;
     getSystemContext: () => SystemContext | null;
     setLanguage: (language: string) => void;
-    setSessionChecked: (checked: boolean) => void;
     loginHandler: UserContextHandler;
     logoutHandler: VoidFunction;
     loadSession: VoidFunction;
-    updateExpireTime: ExpireTimeHandler;
 }
 
 const useStore = create<ZustandStore>((set, getState) => ({
@@ -31,18 +29,6 @@ const useStore = create<ZustandStore>((set, getState) => ({
     setLanguage: (language: string) => {
         set({
             systemContext: { ...getState().systemContext, language: language },
-        });
-        localStorage.setItem(
-            "systemContext",
-            JSON.stringify(getState().systemContext)
-        );
-    },
-    setSessionChecked: (isChecked: boolean) => {
-        set({
-            systemContext: {
-                ...getState().systemContext,
-                isSessionChecked: isChecked,
-            },
         });
         localStorage.setItem(
             "systemContext",
@@ -68,20 +54,7 @@ const useStore = create<ZustandStore>((set, getState) => ({
             set({ systemContext: JSON.parse(systemContextStr) });
         }
         if (userContextStr) {
-            const expireTime = new Date(
-                (JSON.parse(userContextStr) as UserContext).expireTime
-            );
-            if (new Date(expireTime) > new Date()) {
-                set({ userContext: JSON.parse(userContextStr) });
-            }
-        }
-    },
-    updateExpireTime: (expireAt: Date) => {
-        const userContext = getState().userContext;
-        if (userContext) {
-            const updatedContext = { ...userContext, expireTime: expireAt };
-            set({ userContext: updatedContext });
-            localStorage.setItem("userContext", JSON.stringify(updatedContext));
+            set({ userContext: JSON.parse(userContextStr) });
         }
     },
 }));

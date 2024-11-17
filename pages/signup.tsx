@@ -4,7 +4,7 @@ import EmailVerification from "@/components/login/EmailVerification";
 import { footerText } from "@/utils/global_constant";
 import RichHeader from "@/components/RichHeader";
 import { Col, Row, Steps } from "antd";
-import Register2 from "@/components/login/Register2";
+import Register from "@/components/login/Register";
 import { useTranslation } from "react-i18next";
 
 const Wrapper = styled.div`
@@ -85,7 +85,7 @@ const RegistrationForm = () => {
                             {isRegistered ? (
                                 <EmailVerification userInfo={userInfo} />
                             ) : (
-                                <Register2 onRegister={handleRegister} />
+                                <Register onRegister={handleRegister} />
                             )}
                         </Container>
                     </Col>

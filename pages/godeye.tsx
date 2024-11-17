@@ -72,7 +72,7 @@ const GodeyeIndexPage = () => {
                         direction={"vertical"}
                         style={{ marginLeft: 100 }}
                     >
-                        {userContext && userContext.logined ? (
+                        {userContext ? (
                             ""
                         ) : metric === BUY ? (
                             <ThreeMonthBuyChart

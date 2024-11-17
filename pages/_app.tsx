@@ -6,6 +6,7 @@ import useStore from "@/utils/store";
 import Internationalization from "@/utils/i18n";
 import { Modal } from "antd";
 import { useRouter } from "next/router";
+import { isLoginValid } from "@/utils/auth";
 
 const theme: DefaultTheme = {
     colors: {
@@ -16,63 +17,32 @@ const theme: DefaultTheme = {
 
 export default function App({ Component, pageProps }: AppProps) {
     const router = useRouter();
-    const {
-        updateExpireTime,
-        getSystemContext,
-        setSessionChecked,
-        loadSession,
-        logoutHandler,
-    } = useStore();
+    const { logoutHandler, loadSession } = useStore();
     const [isExpireModalOpen, setIsExpireModalOpen] = useState(false);
-    const [checkTimer, setCheckTimer] = useState<NodeJS.Timeout | null>();
-    const cleanup = () => {
-        if (checkTimer) {
-            clearInterval(checkTimer);
-            setCheckTimer(null);
-        }
-    };
+
     useEffect(() => {
         loadSession();
-        const systemContext = getSystemContext();
-        const checkAndUpdateExpireTime = () => {
-            if (systemContext?.isSessionChecked) return;
-            const cookies = document.cookie.split(";");
-            const expireCookie = cookies.find((cookie) =>
-                cookie.trim().startsWith("expire_at=")
-            );
-            if (expireCookie) {
-                const expireAtNumber = parseInt(expireCookie.split("=")[1]);
-                const expireAt = new Date(expireAtNumber);
-                const now = new Date();
+    }, []);
 
-                if (expireAtNumber === 0 || now > expireAt) {
-                    logoutHandler();
-                    setIsExpireModalOpen(true);
-                    cleanup();
-                } else {
-                    updateExpireTime(expireAt);
-                    const timer = setInterval(
-                        checkAndUpdateExpireTime,
-                        60 * 1000
-                    );
-                    setCheckTimer(timer);
-                }
+    useEffect(() => {
+        const checkLogin = () => {
+            if (!isLoginValid()) {
+                logoutHandler();
+                setIsExpireModalOpen(true);
             }
-            setSessionChecked(true);
         };
-
-        checkAndUpdateExpireTime();
+        checkLogin();
+        const interval = setInterval(checkLogin, 60 * 1000); // check every minute
+        return () => clearInterval(interval);
     }, []);
 
     const handleExpireModalOk = () => {
         setIsExpireModalOpen(false);
-        cleanup();
         router.push("/signin").then((r) => r);
     };
 
     const handleExpireModalCancel = () => {
         setIsExpireModalOpen(false);
-        cleanup();
         window.location.reload();
     };
 

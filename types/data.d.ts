@@ -8,3 +8,10 @@ interface RealtimeData {
     high: number[];
     low: number[];
 }
+
+interface HistoricalData {
+    timestamps: string[];
+    price: number[];
+    metric: number[];
+    threshold: number;
+}

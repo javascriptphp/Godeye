@@ -4,7 +4,7 @@ import { EChartsOption } from "echarts";
 import { chartHeight, chartWidth } from "@/utils/global_constant";
 import { useTranslation } from "react-i18next";
 import GlobalFunctions from "@/utils/global_functions";
-import { buildCustomConfig } from "@/components/charts/realtimeBuyConfig";
+import { buildCustomConfig } from "@/configs/realtimeBuy";
 import useStore from "@/utils/store";
 import useWebSocket from "react-use-websocket";
 import { getRealtimeDataUrl } from "@/service";
@@ -22,13 +22,13 @@ const initialRealtimeData: RealtimeData = {
     low: [],
 };
 
-function RealtimeBuyChart({
+const RealtimeBuyChart = ({
     metric,
     symbol,
 }: {
     metric: string;
     symbol: string;
-}) {
+}) => {
     const [realtimeData, setRealtimeData] =
         useState<RealtimeData>(initialRealtimeData);
     const { t } = useTranslation();
@@ -138,6 +138,6 @@ function RealtimeBuyChart({
     };
 
     return render();
-}
+};
 
 export default RealtimeBuyChart;

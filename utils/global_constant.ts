@@ -1,9 +1,6 @@
 import * as echarts from "echarts";
 import { EChartsOption } from "echarts";
 import React from "react";
-import { BUY, CoordType, XaxisType } from "@/types";
-import { findTimestamp, findTimestampRanges } from "@/utils/utils";
-import range from "@rc-component/async-validator/es/rule/range";
 
 export const sidebarWidth = "200px";
 export const chartWidth = "1100px";

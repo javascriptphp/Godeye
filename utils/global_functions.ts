@@ -1,5 +1,4 @@
 import { EChartsOption } from "echarts";
-import { findTimestamp, findTimestampRanges } from "@/utils/utils";
 import {
     BUY,
     BuyOptionBuilderParam,
@@ -16,6 +15,7 @@ import {
     upColor,
 } from "@/utils/global_constant";
 import type { TFunction } from "i18next";
+import { calculateAreaRanges, calculateLineTimestamp } from "@/configs/common";
 
 const GlobalFunctions = (t: TFunction) => {
     const buildOptionForBuyChart = function ({
@@ -29,53 +29,22 @@ const GlobalFunctions = (t: TFunction) => {
         watermark,
         includeMark,
     }: BuyOptionBuilderParam): EChartsOption {
-        const ranges = includeMark
-            ? findTimestampRanges(metricData, timestamps, threshold)
+        const areaRanges = includeMark
+            ? calculateAreaRanges({
+                  timestamps,
+                  metricData,
+                  threshold,
+              })
             : [];
-        const calculateAreaRanges = function (): CoordType[] {
-            return ranges.map((range: string[]) => {
-                return [
-                    {
-                        xAxis: range[0],
-                    },
-                    {
-                        xAxis: range[1],
-                    },
-                ];
-            });
-        };
-        const areaRanges = includeMark ? calculateAreaRanges() : [];
-        const lineTimestamp = includeMark ? findTimestamp(ranges) : [];
-        const calculateLineTimestamp = function (): any {
-            const _lines = lineTimestamp.map((s: string) => {
-                return {
-                    xAxis: s,
-                    label: {
-                        show: false,
-                    },
-                    lineStyle: {
-                        width: 5,
-                        type: "solid",
-                        color: buyAreaColor, // 阈值线的颜色
-                        opacity: 0.9,
-                    },
-                };
-            }) as any;
-            _lines.push({
-                yAxis: threshold, // 这里设置阈值线的 y 轴位置
-                label: {
-                    position: "start",
-                    formatter: t("text_indicator_threshold") + " {c}", // 显示的文本
-                },
-                lineStyle: {
-                    width: 2,
-                    color: metric === BUY ? "#44ee11" : "#ec3939", // 阈值线的颜色
-                    type: "dashed", // 阈值线的样式，'dashed' 表示虚线
-                },
-            });
-            return _lines;
-        };
-        const lineRanges = includeMark ? calculateLineTimestamp() : [];
+        const lineRanges = includeMark
+            ? calculateLineTimestamp({
+                  metric,
+                  timestamps,
+                  metricData,
+                  threshold,
+                  t,
+              })
+            : [];
         return {
             title: {
                 text: title,

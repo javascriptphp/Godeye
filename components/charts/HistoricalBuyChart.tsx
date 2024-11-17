@@ -40,7 +40,7 @@ const HistoricalBuyChart = ({
     const Functions = GlobalFunctions(t);
     // console.log("在historicalchart中拿到的usercontext", userContext)
     const buildCustomerOption = function () {
-        if (userContext && userContext.logined) {
+        if (userContext) {
             return {
                 dataZoom: [
                     {

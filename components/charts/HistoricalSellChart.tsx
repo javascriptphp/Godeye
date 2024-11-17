@@ -38,7 +38,7 @@ const HistoricalSellChart = ({
     const { t } = useTranslation();
     const Functions = GlobalFunctions(t);
     const buildCustomerOption = function () {
-        if (userContext && userContext.logined) {
+        if (userContext) {
             return {
                 dataZoom: [
                     {

@@ -142,7 +142,7 @@ const RichHeader = () => {
                             style={{ fontSize: "18px", cursor: "pointer" }}
                         />
                     </Dropdown>
-                    {userContext && userContext.logined ? (
+                    {userContext ? (
                         <LoginedAvatar />
                     ) : (
                         <>

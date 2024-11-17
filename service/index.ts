@@ -215,21 +215,10 @@ export const invokeLogin = async function (
     if (response.status === 200) {
         if (responseData.code === 200) {
             data = responseData.data as LoginData;
-            // 从 cookie 中获取 expire_at
-            const cookies = document.cookie.split(";");
-            const expireCookie = cookies.find((cookie) =>
-                cookie.trim().startsWith("expire_at=")
-            );
-            const expireAt = expireCookie
-                ? new Date(parseInt(expireCookie.split("=")[1]))
-                : new Date(new Date().setHours(new Date().getHours() + 24));
-
             loginHandler({
-                logined: true,
                 email: loginInfo.email,
                 username: data.user || "",
                 role: data.role || "",
-                expireTime: expireAt, // 使用从 cookie 中获取的过期时间
             });
         } else if (responseData.message_level === "user") {
             console.log(responseData.message);

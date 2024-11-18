@@ -89,6 +89,32 @@ const Sidebar = ({
             ],
         },
         {
+            symbol: "DOGE",
+            metrics: [
+                {
+                    key: "buy",
+                    metric: t("buyMetric"),
+                },
+                // {
+                // 	key: 'sell',
+                // 	metric: t('sellMetric')
+                // }
+            ],
+        },
+        {
+            symbol: "BONK",
+            metrics: [
+                {
+                    key: "buy",
+                    metric: t("buyMetric"),
+                },
+                // {
+                // 	key: 'sell',
+                // 	metric: t('sellMetric')
+                // }
+            ],
+        },
+        {
             symbol: "PEPE",
             metrics: [
                 {
@@ -207,32 +233,6 @@ const Sidebar = ({
         },
         {
             symbol: "STX",
-            metrics: [
-                {
-                    key: "buy",
-                    metric: t("buyMetric"),
-                },
-                // {
-                // 	key: 'sell',
-                // 	metric: t('sellMetric')
-                // }
-            ],
-        },
-        {
-            symbol: "DOGE",
-            metrics: [
-                {
-                    key: "buy",
-                    metric: t("buyMetric"),
-                },
-                // {
-                // 	key: 'sell',
-                // 	metric: t('sellMetric')
-                // }
-            ],
-        },
-        {
-            symbol: "BONK",
             metrics: [
                 {
                     key: "buy",

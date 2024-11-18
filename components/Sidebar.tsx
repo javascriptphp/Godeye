@@ -218,6 +218,32 @@ const Sidebar = ({
                 // }
             ],
         },
+        {
+            symbol: "DOGE",
+            metrics: [
+                {
+                    key: "buy",
+                    metric: t("buyMetric"),
+                },
+                // {
+                // 	key: 'sell',
+                // 	metric: t('sellMetric')
+                // }
+            ],
+        },
+        {
+            symbol: "BONK",
+            metrics: [
+                {
+                    key: "buy",
+                    metric: t("buyMetric"),
+                },
+                // {
+                // 	key: 'sell',
+                // 	metric: t('sellMetric')
+                // }
+            ],
+        },
     ];
     const payMetrics = [
         {

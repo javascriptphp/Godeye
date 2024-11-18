@@ -1,94 +1,117 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState, useEffect } from "react";
 import * as echarts from "echarts";
-import {
-    BUY,
-    isErrorTypeEnum,
-    ThreeMonthBuyData,
-    ThreeMonthBuyValues,
-    ThreeMonthData,
-    ThreeMonthSellValues,
-} from "@/types";
-import { getThreeMonthData } from "@/service";
-import { message } from "antd";
-import { chartHeight, chartWidth, createChart } from "@/utils/global_constant";
-import useStore from "@/utils/store";
+import { EChartsOption } from "echarts";
+import { chartHeight, chartWidth } from "@/utils/global_constant";
 import { useTranslation } from "react-i18next";
 import GlobalFunctions from "@/utils/global_functions";
+import { buildCustomConfig } from "@/configs/threeMonthBuy";
+import useStore from "@/utils/store";
+import { getThreeMonthData } from "@/service";
+import { BUY } from "@/types";
+import { formatTimestampToString } from "@/utils/time";
+
+const initialThreeMonthData: HistoricalData = {
+    timestamps: [],
+    price: [],
+    metric: [],
+    threshold: 0,
+};
 
 const ThreeMonthBuyChart = ({
-    symbol,
     metric,
+    symbol,
 }: {
-    symbol: string;
     metric: string;
+    symbol: string;
 }) => {
-    // console.log("three",symbol,metric);
-    const containerRef = useRef<HTMLDivElement>(null);
-    const [metricData, setMetricData] = useState<number[]>([]);
-    const [priceData, setPriceData] = useState<number[]>([]);
-    const [threshold, setThreshold] = useState<number>(0);
-    const [timestamps, setTimestamps] = useState<string[]>([]);
-
-    const chartRef = useRef<echarts.ECharts | null>(null); // Store chart instance in a ref
-    const [messageApi, contextHolder] = message.useMessage();
-    const { getUserContext } = useStore();
-    const userContext = getUserContext();
+    const [historicalData, setHistoricalData] = useState<HistoricalData>(
+        initialThreeMonthData
+    );
     const { t } = useTranslation();
     const Functions = GlobalFunctions(t);
-    // Fetch data and update the state
-    useEffect(() => {
-        const fetchData = async () => {
-            const result = await getThreeMonthData(symbol, metric);
-            if (isErrorTypeEnum(result)) {
-            } else {
-                const nonNullResult = result as ThreeMonthData;
-                const _timestamps = nonNullResult.values.map(
-                    (item: ThreeMonthBuyValues | ThreeMonthSellValues) =>
-                        new Date(item.timestamp).toLocaleDateString()
-                );
-                setTimestamps(_timestamps);
-                const _buyMetricData = nonNullResult.values.map(
-                    (item: ThreeMonthBuyValues | ThreeMonthSellValues) =>
-                        item.metric_value
-                );
-                setMetricData(_buyMetricData);
-                const buyResult = nonNullResult as ThreeMonthBuyData;
-                const _buyPriceData = buyResult.values.map(
-                    (item: ThreeMonthBuyValues) => item.price
-                );
-                setPriceData(_buyPriceData);
-                setThreshold(nonNullResult.values[0].threshold);
-            }
-        };
+    const { getUserContext } = useStore();
+    const userContext = getUserContext();
 
-        fetchData().then((data) => data);
-    }, [symbol, metric]);
     useEffect(() => {
-        const echartsOption = Functions.buildOptionForBuyChart({
+        initData();
+        fetchData();
+    }, [metric, symbol]);
+
+    useEffect(() => {
+        buildChart();
+    }, [historicalData]);
+
+    const render = () => {
+        return (
+            <div
+                id="ThreeMonthBuyChart"
+                style={{ width: chartWidth, height: chartHeight }}
+            />
+        );
+    };
+
+    const initData = () => {
+        setHistoricalData(initialThreeMonthData);
+    };
+
+    const fetchData = async () => {
+        try {
+            const response: any = await getThreeMonthData(symbol, metric);
+            if (response) {
+                processData(response.values);
+            }
+        } catch (e) {
+            console.error(e);
+        }
+    };
+
+    const processData = (data: any) => {
+        const updatedData: HistoricalData = {
+            timestamps: data.map((item: any) =>
+                formatTimestampToString(item.timestamp)
+            ),
+            price: data.map((item: any) => item.price),
+            metric: data.map((item: any) => item.metric_value),
+            threshold: data[0].threshold,
+        };
+        setHistoricalData((prev) => {
+            return {
+                timestamps: [...prev.timestamps, ...updatedData.timestamps],
+                price: [...prev.price, ...updatedData.price],
+                metric: [...prev.metric, ...updatedData.metric],
+                threshold: updatedData.threshold,
+            };
+        });
+    };
+
+    const buildChart = () => {
+        const _option = Functions.buildOptionForBuyChart({
             title: t("t1Title"),
             symbol: symbol,
             metric: BUY,
-            timestamps: timestamps,
-            threshold: threshold,
-            metricData: metricData,
-            priceData: priceData,
+            timestamps: historicalData.timestamps,
+            threshold: historicalData.threshold,
+            metricData: historicalData.metric,
+            priceData: historicalData.price,
             watermark: (userContext && userContext.email) || t("watermarkText"),
             includeMark: true,
         });
-        createChart({ chartRef, containerRef, echartsOption });
+        const echartsOption = {
+            ..._option,
+            ...buildCustomConfig({
+                symbol,
+                metric: BUY,
+                data: historicalData,
+                t,
+            }),
+        } as EChartsOption;
 
-        // 用对象包装依赖对象，可以保证在所有元素都变化之后才执行副作用
-    }, [timestamps, threshold, metricData, priceData, t]); // Update chart when `data` or `symbol` changes
+        const chartDom = document.getElementById("ThreeMonthBuyChart");
+        const myChart = echarts.init(chartDom);
+        echartsOption && myChart.setOption(echartsOption);
+    };
 
-    return (
-        <div>
-            {contextHolder}
-            <div
-                ref={containerRef}
-                style={{ width: chartWidth, height: chartHeight }}
-            ></div>
-        </div>
-    );
+    return render();
 };
 
 export default ThreeMonthBuyChart;

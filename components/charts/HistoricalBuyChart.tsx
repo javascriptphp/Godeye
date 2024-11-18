@@ -17,7 +17,7 @@ const initialHistoricalData: HistoricalData = {
     threshold: 0,
 };
 
-const RealtimeBuyChart = ({
+const HistoricalBuyChart = ({
     metric,
     symbol,
 }: {
@@ -114,4 +114,4 @@ const RealtimeBuyChart = ({
     return render();
 };
 
-export default RealtimeBuyChart;
+export default HistoricalBuyChart;

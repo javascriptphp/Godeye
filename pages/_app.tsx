@@ -43,7 +43,6 @@ export default function App({ Component, pageProps }: AppProps) {
 
     const handleExpireModalCancel = () => {
         setIsExpireModalOpen(false);
-        window.location.reload();
     };
 
     return (

@@ -90,11 +90,12 @@ export const getHistoricalData = async (
 export const getRealtimeDataUrl = async (
     metric: string,
     symbol: string,
+    version?: string,
     messageApi?: MessageInstance
 ): Promise<string | null> => {
     return fetchApi(
         "/api/getRealtimeDataUrl",
-        { metric, symbol, version: "v2" },
+        { metric, symbol, version },
         (data) => data.websocket_url,
         messageApi
     );

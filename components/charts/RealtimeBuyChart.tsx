@@ -74,7 +74,7 @@ const RealtimeBuyChart = ({
 
     const fetchData = async () => {
         try {
-            const websocketUrl = await getRealtimeDataUrl(metric, symbol);
+            const websocketUrl = await getRealtimeDataUrl(metric, symbol, "v2");
             if (websocketUrl) {
                 setUrl(websocketUrl);
             }

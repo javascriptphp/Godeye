@@ -63,6 +63,10 @@ export const translations = {
         zh: "T3—实时数据",
         en: "T3—Realtime Data",
     },
+    t3Title_hourly: {
+        zh: "T3—小时数据",
+        en: "T3—Hourly Data",
+    },
     watermarkText: {
         zh: "水印文字",
         en: "watermark",
@@ -379,6 +383,30 @@ export const translations = {
     registrationSuccess: {
         zh: "注册成功，已为您自动登录~",
         en: "Registration successful ~",
+    },
+    memeMarketValueList: {
+        zh: "Meme 市值榜",
+        en: "Meme Market Value List",
+    },
+    marketName: {
+        zh: "名称",
+        en: "Name",
+    },
+    marketPrice: {
+        zh: "价格",
+        en: "Price",
+    },
+    marketVolume: {
+        zh: "24小时交易量",
+        en: "Volume(24h)",
+    },
+    marketCap: {
+        zh: "流通市值",
+        en: "Market Cap",
+    },
+    marketFdv: {
+        zh: "全稀释市值",
+        en: "FDV",
     },
 } as {
     [key: string]: {

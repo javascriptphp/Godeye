@@ -93,14 +93,6 @@ const RichHeader = () => {
     };
     return (
         <Wrapper>
-            {/*删除顶部声明*/}
-            {/*<Alert*/}
-            {/*	style={alterStyle}*/}
-            {/*	message={t('topAnnouncement')}*/}
-            {/*	type="warning"*/}
-            {/*	closable*/}
-            {/*	// onClose={}*/}
-            {/*/>*/}
             <HeaderContainer>
                 <Link href={"/"}>
                     <Space
@@ -128,6 +120,9 @@ const RichHeader = () => {
                         align={"baseline"}
                         size={"large"}
                     >
+                        <Nav onClick={() => routeUrl("/market")}>
+                            {t("memeMarketValueList")}
+                        </Nav>
                         <Nav onClick={() => routeUrl("/pay")}>
                             {t("pricing")}
                         </Nav>

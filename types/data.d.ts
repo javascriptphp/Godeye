@@ -1,3 +1,15 @@
+interface RegisterInfo {
+    username: string;
+    password: string;
+    email: string;
+    verification_code: string;
+}
+
+interface LoginInfo {
+    password: string;
+    email: string;
+}
+
 interface RealtimeData {
     timestamps: string[];
     metric: number[];

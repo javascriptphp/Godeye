@@ -1,11 +1,11 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { apiHandler } from "@/service/handler";
+import { memeApiHandler } from "@/service/handler";
 
-const url = "/api/user/register/send-verification-code";
+const url = "/api/rootdata/market_meme";
 
 export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse
 ): Promise<void> {
-    return apiHandler(req, res, url);
+    return memeApiHandler(req, res, url);
 }

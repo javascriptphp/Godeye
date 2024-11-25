@@ -113,7 +113,7 @@ const RealtimeBuyChart = ({
 
     const buildChart = () => {
         const _option = Functions.buildOptionForBuyChart({
-            title: t("t3Title"),
+            title: t("t3Title_hourly"),
             symbol: symbol,
             metric: BUY,
             timestamps: realtimeData.timestamps,

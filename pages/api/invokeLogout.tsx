@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { apiHandler } from "@/service";
+import { apiHandler } from "@/service/handler";
 
 const url = "/api/user/logout";
 

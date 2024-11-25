@@ -12,7 +12,7 @@ import {
 import styled from "styled-components";
 import { footerText } from "@/utils/global_constant";
 import RichHeader from "@/components/RichHeader";
-import { invokeLogin, LoginInfo } from "@/service";
+import { invokeLogin } from "@/service";
 import { useRouter } from "next/router";
 import useStore from "@/utils/store";
 import { useTranslation } from "react-i18next";

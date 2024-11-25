@@ -1,263 +1,175 @@
 import {
-    BaseResponse,
     BUY,
     ErrorTypeEnum,
     HistoricalBuyData,
-    HistoricalResponse,
     HistoricalSellData,
     LoginData,
-    LoginResponse,
     RegisterData,
-    RegisterResponse,
-    SELL,
     ThreeMonthBuyData,
-    ThreeMonthResponse,
     ThreeMonthSellData,
-    WebsocketUrlResponse,
 } from "@/types";
-import { message } from "antd";
 import axios, { AxiosResponse } from "axios";
-import { NextApiRequest, NextApiResponse } from "next";
-import { SERVER_HOST } from "@/utils/axios";
 import { UserContextHandler } from "@/utils/store";
 import type { MessageInstance } from "antd/es/message/interface";
 
-export const apiHandler = async function (
-    req: NextApiRequest,
-    res: NextApiResponse,
-    url: string
-): Promise<void> {
-    const { method, body, headers } = req;
+async function fetchApi<T>(
+    endpoint: string,
+    requestData: any,
+    responseMapper: (response: any) => T,
+    messageApi?: MessageInstance,
+    method: "POST" | "GET" = "POST"
+): Promise<T | ErrorTypeEnum> {
     try {
-        const response = await axios({
-            method: method,
-            url: SERVER_HOST + url,
-            headers: headers,
-            responseType: "json",
-            data: body,
-            withCredentials: true,
-            timeout: 15000,
-        });
-        const cookies = response.headers["set-cookie"] as string[];
-        res.setHeader("Set-Cookie", cookies);
-        res.status(response.status).json(response.data);
-    } catch (error: any) {
-        message.error(error);
-    }
-};
+        let response: AxiosResponse;
 
-export const request = function (
-    url: string,
-    data: any
-): Promise<AxiosResponse> {
-    return axios.post(url, data, {
-        timeout: 0,
-        responseType: "json",
-    });
-};
-function capitalizeFirstLetter(str: string) {
-    if (!str) return str; // 确保字符串非空
-    return str.charAt(0).toUpperCase() + str.slice(1);
-}
+        if (method === "POST") {
+            response = await axios.post(endpoint, requestData);
+        } else {
+            response = await axios.get(endpoint, { params: requestData });
+        }
 
-export const getThreeMonthData = async function (
-    symbol: string,
-    metric: string,
-    messageApi?: MessageInstance
-): Promise<ThreeMonthBuyData | ThreeMonthSellData | ErrorTypeEnum> {
-    let data;
-    const response = await request(
-        "/api/getThreeMonth" + capitalizeFirstLetter(metric) + "Data",
-        {
-            symbol: symbol,
-        }
-    );
-    const responseData = response.data as ThreeMonthResponse;
-    if (response.status === 200) {
-        if (responseData.code === 200) {
-            if (metric === BUY) {
-                data = responseData.data as ThreeMonthBuyData;
-            } else if (metric === SELL) {
-                data = responseData.data as ThreeMonthSellData;
-            }
-        } else if (responseData.code === 401) {
-            data = ErrorTypeEnum.NO_PERMISSION;
-        }
-    }
-    return data || ErrorTypeEnum.NULL;
-};
-export const getHistoricalData = async function (
-    symbol: string,
-    metric: string,
-    messageApi?: MessageInstance
-): Promise<HistoricalBuyData | HistoricalSellData | ErrorTypeEnum> {
-    let data;
-    const response = await request(
-        "/api/getHistorical" + capitalizeFirstLetter(metric) + "Data",
-        {
-            symbol: symbol,
-        }
-    );
-    const responseData = response.data as HistoricalResponse;
-    if (response.status === 200) {
-        if (responseData.code === 200) {
-            if (metric === BUY) {
-                data = responseData.data as HistoricalBuyData;
-            } else if (metric === SELL) {
-                data = responseData.data as HistoricalSellData;
-            }
-        } else if (responseData.code === 401) {
-            data = ErrorTypeEnum.NO_PERMISSION;
-        }
-    }
-    return data || ErrorTypeEnum.NULL;
-};
-export const getRealtimeDataUrl = async function (
-    metric: string,
-    symbol: string,
-    messageApi?: MessageInstance
-): Promise<string | null> {
-    let url = null;
-    const response = await request("/api/getRealtimeDataUrl", {
-        metric: metric,
-        symbol: symbol,
-        version: "v2",
-    });
-    const responseData = response.data as WebsocketUrlResponse;
-    if (response.status === 200) {
-        if (responseData.code === 200) {
-            url = responseData.data.websocket_url;
-        } else if (responseData.message_level === "user") {
-            messageApi &&
-                messageApi
-                    .open({
+        if (response.status === 200) {
+            const responseData = response.data;
+            if (Number(responseData.code) === 200) {
+                return responseMapper(responseData.data);
+            } else if (Number(responseData.code) === 401) {
+                return ErrorTypeEnum.NO_PERMISSION;
+            } else if (responseData.message_level === "user") {
+                messageApi &&
+                    messageApi.open({
                         type: "error",
                         content: responseData.message,
                         duration: 3,
-                    })
-                    .then((r) => r);
+                    });
+            }
         }
+
+        return ErrorTypeEnum.NULL;
+    } catch (error: any) {
+        messageApi?.error(error.message || "Request failed");
+        return ErrorTypeEnum.NULL;
     }
-    return url;
+}
+
+const capitalizeFirstLetter = (str: string): string => {
+    return str ? str[0].toUpperCase() + str.slice(1) : str;
 };
-export const getVerificationCode = async function (
+
+export const getThreeMonthData = async (
+    symbol: string,
+    metric: string,
+    messageApi?: MessageInstance
+): Promise<ThreeMonthBuyData | ThreeMonthSellData | ErrorTypeEnum> => {
+    return fetchApi(
+        `/api/getThreeMonth${capitalizeFirstLetter(metric)}Data`,
+        { symbol },
+        (data) =>
+            metric === BUY
+                ? (data as ThreeMonthBuyData)
+                : (data as ThreeMonthSellData),
+        messageApi
+    );
+};
+
+export const getHistoricalData = async (
+    symbol: string,
+    metric: string,
+    messageApi?: MessageInstance
+): Promise<HistoricalBuyData | HistoricalSellData | ErrorTypeEnum> => {
+    return fetchApi(
+        `/api/getHistorical${capitalizeFirstLetter(metric)}Data`,
+        { symbol },
+        (data) =>
+            metric === BUY
+                ? (data as HistoricalBuyData)
+                : (data as HistoricalSellData),
+        messageApi
+    );
+};
+
+export const getRealtimeDataUrl = async (
+    metric: string,
+    symbol: string,
+    messageApi?: MessageInstance
+): Promise<string | null> => {
+    return fetchApi(
+        "/api/getRealtimeDataUrl",
+        { metric, symbol, version: "v2" },
+        (data) => data.websocket_url,
+        messageApi
+    );
+};
+
+export const getVerificationCode = async (
     email: string,
     messageApi: MessageInstance
-): Promise<boolean> {
-    let isCodeSent = false;
-    const response = await request("/api/getVerificationCode", {
-        email: email,
-    });
-    const responseData = response.data as BaseResponse;
-    if (response.status === 200) {
-        if (responseData.code === 200) {
-            isCodeSent = true;
-        } else if (responseData.message_level === "user") {
-            messageApi &&
-                messageApi
-                    .open({
-                        type: "error",
-                        content: responseData.message,
-                        duration: 3,
-                    })
-                    .then((r) => r);
-        }
-    }
-    return isCodeSent;
+): Promise<boolean> => {
+    const res = fetchApi(
+        "/api/getVerificationCode",
+        { email },
+        () => true,
+        messageApi
+    );
+    return Boolean(res);
 };
 
-export interface RegisterInfo {
-    username: string;
-    password: string;
-    email: string;
-    verification_code: string;
-}
-
-export const invokeRegister = async function (
+export const invokeRegister = async (
     registerInfo: RegisterInfo,
     messageApi?: MessageInstance
-): Promise<RegisterData | null> {
-    let data = null;
-    const response = await request("/api/invokeRegister", { ...registerInfo });
-    const responseData = response.data as RegisterResponse;
-    if (response.status === 200) {
-        if (responseData.code === 200) {
-            data = responseData.data as RegisterData;
-        } else if (responseData.message_level === "user") {
-            console.log(responseData.message);
-            console.log(messageApi);
-            messageApi &&
-                messageApi
-                    .open({
-                        type: "error",
-                        content: responseData.message,
-                        duration: 3,
-                    })
-                    .then((r) => r);
-        }
-    }
-    return data;
+): Promise<RegisterData | ErrorTypeEnum> => {
+    return fetchApi(
+        "/api/invokeRegister",
+        { ...registerInfo },
+        (data) => data as RegisterData,
+        messageApi
+    );
 };
 
-export interface LoginInfo {
-    password: string;
-    email: string;
-}
-
-export const invokeLogin = async function (
+export const invokeLogin = async (
     loginInfo: LoginInfo,
     loginHandler: UserContextHandler,
     messageApi?: MessageInstance
-): Promise<LoginData | null> {
-    let data = null;
-    const response = await request("/api/invokeLogin", { ...loginInfo });
-    const responseData = response.data as LoginResponse;
-    if (response.status === 200) {
-        if (responseData.code === 200) {
-            data = responseData.data as LoginData;
+): Promise<LoginData | ErrorTypeEnum> => {
+    return fetchApi(
+        "/api/invokeLogin",
+        { ...loginInfo },
+        (data) => {
             loginHandler({
                 email: loginInfo.email,
                 username: data.user || "",
                 role: data.role || "",
             });
-        } else if (responseData.message_level === "user") {
-            console.log(responseData.message);
-            console.log(messageApi);
-            messageApi &&
-                messageApi
-                    .open({
-                        type: "error",
-                        content: responseData.message,
-                        duration: 3,
-                    })
-                    .then((r) => r);
-        }
-    }
-    return data;
+            return data as LoginData;
+        },
+        messageApi
+    );
 };
 
-export const invokeLogout = async function (
+export const invokeLogout = async (
     email: string,
     logoutHandler: VoidFunction,
     messageApi?: MessageInstance
-): Promise<boolean> {
-    let data = false;
-    const response = await request("/api/invokeLogout", { email: email });
-    const responseData = response.data as BaseResponse;
-    if (response.status === 200) {
-        if (responseData.code === 200) {
-            data = true;
+): Promise<boolean> => {
+    const res = fetchApi(
+        "/api/invokeLogout",
+        { email },
+        () => {
             logoutHandler();
-        } else if (responseData.message_level === "user") {
-            messageApi &&
-                messageApi
-                    .open({
-                        type: "error",
-                        content: responseData.message,
-                        duration: 3,
-                    })
-                    .then((r) => r);
-        }
-    }
-    return data;
+            return true;
+        },
+        messageApi
+    );
+    return Boolean(res);
+};
+
+export const getMemeMarketList = async (
+    messageApi?: MessageInstance
+): Promise<any> => {
+    return fetchApi(
+        "/api/getMemeMarketList",
+        null,
+        (data) => data,
+        messageApi,
+        "GET"
+    );
 };

@@ -5,7 +5,7 @@ import { message } from "antd";
 export const SERVER_HOST =
     process.env.NEXT_PUBLIC_API_HOST || "http://47.236.100.38:8888";
 
-export const MEME_SERVER_HOST = "http://47.236.100.38:4444";
+export const MEME_SERVER_HOST = "http://47.236.100.38:34320";
 
 // 创建 Axios 实例
 const axiosInstance: AxiosInstance = axios.create({

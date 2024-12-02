@@ -174,3 +174,43 @@ export const getMemeMarketList = async (
         "GET"
     );
 };
+
+export const getChainData = async (): Promise<any> => {
+    return axios.get("/api/getChainData").then((res) => {
+        return res.data;
+    });
+};
+
+export const getCoinData = async (
+    chain: string,
+    token: string
+): Promise<any> => {
+    return fetchApi("/api/getCoinData", { chain, token }, (data) => data);
+};
+
+export const getCirculationInData = async (params: {
+    chain: string;
+    token: string;
+    startTime: string;
+    endTime: string;
+}): Promise<any> => {
+    return fetchApi("/api/getCirculationInData", params, (data) => data);
+};
+
+export const getCirculationOutData = async (params: {
+    chain: string;
+    token: string;
+    startTime: string;
+    endTime: string;
+}): Promise<any> => {
+    return fetchApi("/api/getCirculationOutData", params, (data) => data);
+};
+
+export const getCirculationPriceData = async (params: {
+    chain: string;
+    token: string;
+    startTime: string;
+    endTime: string;
+}): Promise<any> => {
+    return fetchApi("/api/getCirculationPriceData", params, (data) => data);
+};

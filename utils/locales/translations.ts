@@ -412,6 +412,34 @@ export const translations = {
         zh: "全稀释市值",
         en: "FDV",
     },
+    ExchangeDepositsAndWithdrawals: {
+        zh: "交易所存取数据",
+        en: "Exchange Deposits & Withdrawals",
+    },
+    tokenExplorerTitle: {
+        zh: "代币浏览器",
+        en: "Token Explorer",
+    },
+    tokenExplorerDescription: {
+        zh: "选择链和代币名称，以探索相关价格数据，交易所流入和流出的深度仪表板",
+        en: "Select a chain and token name to explore related price data and a dashboard of exchange inflow and outflow",
+    },
+    coinCardPrice: {
+        zh: "价格",
+        en: "Price",
+    },
+    coinCardMarketCap: {
+        zh: "市值",
+        en: "Market Cap",
+    },
+    coinCardCirculating: {
+        zh: "流通量",
+        en: "Circulating Supply",
+    },
+    coinCardSupply: {
+        zh: "总供应量",
+        en: "Total Supply",
+    },
 } as {
     [key: string]: {
         zh?: string;

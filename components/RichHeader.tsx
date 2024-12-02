@@ -120,6 +120,9 @@ const RichHeader = () => {
                         align={"baseline"}
                         size={"large"}
                     >
+                        <Nav onClick={() => routeUrl("/exchange")}>
+                            {t("ExchangeDepositsAndWithdrawals")}
+                        </Nav>
                         <Nav onClick={() => routeUrl("/market")}>
                             {t("memeMarketValueList")}
                         </Nav>

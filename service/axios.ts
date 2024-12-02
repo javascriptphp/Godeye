@@ -7,6 +7,8 @@ export const SERVER_HOST =
 
 export const MEME_SERVER_HOST = "http://47.236.100.38:34320";
 
+export const EXCHANGE_SERVER_HOST = "http://47.236.100.38:30105";
+
 // 创建 Axios 实例
 const axiosInstance: AxiosInstance = axios.create({
     baseURL: SERVER_HOST,

@@ -1,7 +1,5 @@
 /** @type {import('next').NextConfig} */
-
 const nextConfig = {
-    // output: "standalone",
     reactStrictMode: true,
     compiler: {
         styledComponents: true,
@@ -16,6 +14,22 @@ const nextConfig = {
         // your project has ESLint errors.
         ignoreDuringBuilds: true,
     },
+    // images: {},
+    // output: "standalone",
+    // async rewrites() {
+    //     const apiHost = "http://47.236.100.38:30105";
+    //     if (apiHost) {
+    //         return [
+    //             {
+    //                 source: "/api/:path*",
+    //                 destination: `${apiHost}/:path*`,
+    //                 basePath: false,
+    //             },
+    //         ];
+    //     } else {
+    //         return [];
+    //     }
+    // },
 };
 
-module.exports = nextConfig;
+export default nextConfig;

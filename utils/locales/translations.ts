@@ -417,8 +417,8 @@ export const translations = {
         en: "Token Explorer",
     },
     tokenExplorerDescription: {
-        zh: "选择链和代币名称，以探索相关价格数据，交易所流入和流出的深度仪表板",
-        en: "Select a chain and token name to explore related price data and a dashboard of exchange inflow and outflow",
+        zh: "请选择链和代币，查看代币在交易所的流入流出数据，大额流出通常代表有人在抄底",
+        en: "Please select a chain and token to view the inflow and outflow data of the token on the exchange. Large outflows usually mean that someone is buying at the bottom.",
     },
     coinCardPrice: {
         zh: "价格",

@@ -60,7 +60,7 @@ function exchange() {
                         <SearchContainer>
                             <Select
                                 showSearch
-                                placeholder="Select Chain"
+                                placeholder="Select Coin"
                                 onChange={handleTokenChange}
                                 style={{ width: "90%" }}
                                 options={formatDataForSelect(chainTokenList)}

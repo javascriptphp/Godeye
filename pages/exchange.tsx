@@ -13,18 +13,24 @@ import {
     getCirculationPriceData,
 } from "@/service";
 
-const { Option } = Select;
 const { Paragraph } = Typography;
+const SPLITTER = " - ";
 
 interface DataProps {
     [key: string]: string[];
 }
 
+interface SelectedToken {
+    chain: string;
+    token: string;
+}
+
 function exchange() {
     const { t } = useTranslation();
     const [chainTokenList, setChainTokenList] = useState<DataProps>({});
-    const [selectedKey, setSelectedKey] = useState<string | null>(null);
-    const [selectedValue, setSelectedValue] = useState<string | null>(null);
+    const [selectedToken, setSelectedToken] = useState<SelectedToken | null>(
+        null
+    );
     const [coinData, setCoinData] = useState<any>(null);
     const [depositData, setDepositData] = useState<any>(null);
     const [withdrawalsData, setWithdrawalsData] = useState<any>(null);
@@ -36,8 +42,8 @@ function exchange() {
     }, []);
 
     useEffect(() => {
-        if (selectedKey && selectedValue) fetchCoinData();
-    }, [selectedKey, selectedValue]);
+        if (selectedToken) fetchCoinData();
+    }, [selectedToken]);
 
     const render = () => {
         return (
@@ -55,30 +61,10 @@ function exchange() {
                             <Select
                                 showSearch
                                 placeholder="Select Chain"
-                                onChange={handleKeyChange}
-                                style={{ width: "48%" }}
-                                options={Object.keys(chainTokenList).map(
-                                    (key) => ({
-                                        label: key,
-                                        value: key,
-                                    })
-                                )}
+                                onChange={handleTokenChange}
+                                style={{ width: "90%" }}
+                                options={formatDataForSelect(chainTokenList)}
                             />
-                            <Select
-                                showSearch
-                                placeholder="Select Token"
-                                value={selectedValue || undefined}
-                                onChange={handleValueChange}
-                                style={{ width: "48%" }}
-                                disabled={!selectedKey}
-                            >
-                                {selectedKey &&
-                                    chainTokenList[selectedKey].map((item) => (
-                                        <Option key={item} value={item}>
-                                            {item}
-                                        </Option>
-                                    ))}
-                            </Select>
                         </SearchContainer>
                     </Card>
                     <StatisticContainer>
@@ -92,51 +78,59 @@ function exchange() {
                             </Flex>
                         )}
                         {coinData && !isLoading && (
-                            <Row gutter={24}>
-                                <Col span={6}>
-                                    <Card
-                                        title={selectedValue}
-                                        bordered={false}
-                                    >
-                                        <Statistic
-                                            title={t("coinCardPrice")}
-                                            value={coinData.price}
-                                            precision={2}
-                                            suffix="USD"
-                                        />
-                                        <Statistic
-                                            title={t("coinCardMarketCap")}
-                                            value={coinData.marketCap}
-                                            precision={2}
-                                            formatter={() =>
-                                                formatNumberWithUnits(
-                                                    coinData.marketCap
-                                                )
-                                            }
-                                        />
-                                        <Statistic
-                                            title={t("coinCardCirculating")}
-                                            value={coinData.circulating}
-                                            precision={2}
-                                            formatter={() =>
-                                                formatNumberWithUnits(
-                                                    coinData.circulating
-                                                )
-                                            }
-                                        />
-                                        <Statistic
-                                            title={t("coinCardSupply")}
-                                            value={coinData.supply}
-                                            precision={2}
-                                            formatter={() =>
-                                                formatNumberWithUnits(
-                                                    coinData.supply
-                                                )
-                                            }
-                                        />
-                                    </Card>
-                                </Col>
-                                <Col span={18}>
+                            <>
+                                <Card
+                                    title={selectedToken?.token}
+                                    bordered={false}
+                                >
+                                    <Row gutter={24}>
+                                        <Col span={6}>
+                                            <Statistic
+                                                title={t("coinCardPrice")}
+                                                value={coinData.price}
+                                                precision={2}
+                                                suffix="USD"
+                                            />
+                                        </Col>
+                                        <Col span={6}>
+                                            <Statistic
+                                                title={t("coinCardMarketCap")}
+                                                value={coinData.marketCap}
+                                                precision={2}
+                                                formatter={() =>
+                                                    formatNumberWithUnits(
+                                                        coinData.marketCap
+                                                    )
+                                                }
+                                            />
+                                        </Col>
+                                        <Col span={6}>
+                                            <Statistic
+                                                title={t("coinCardCirculating")}
+                                                value={coinData.circulating}
+                                                precision={2}
+                                                formatter={() =>
+                                                    formatNumberWithUnits(
+                                                        coinData.circulating
+                                                    )
+                                                }
+                                            />
+                                        </Col>
+                                        <Col span={6}>
+                                            <Statistic
+                                                title={t("coinCardSupply")}
+                                                value={coinData.supply}
+                                                precision={2}
+                                                formatter={() =>
+                                                    formatNumberWithUnits(
+                                                        coinData.supply
+                                                    )
+                                                }
+                                            />
+                                        </Col>
+                                    </Row>
+                                </Card>
+                                <Card bordered={false}>
                                     <MarketChart
                                         dates={depositData.dateList}
                                         deposits={depositData.exchangeInList}
@@ -145,8 +139,8 @@ function exchange() {
                                         }
                                         prices={priceData.priceList}
                                     />
-                                </Col>
-                            </Row>
+                                </Card>
+                            </>
                         )}
                     </StatisticContainer>
                 </ExchangeContainer>
@@ -165,12 +159,13 @@ function exchange() {
 
     const fetchCoinData = async () => {
         setIsLoading(true);
+        if (!selectedToken) return;
         try {
             const { startTime, endTime } = getDateRange();
 
             const commonParams = {
-                chain: selectedKey as string,
-                token: selectedValue as string,
+                chain: selectedToken.chain,
+                token: selectedToken.token,
                 startTime,
                 endTime,
             };
@@ -181,7 +176,7 @@ function exchange() {
                 circulationOutData,
                 circulationPriceData,
             ] = await Promise.all([
-                getCoinData(selectedKey as string, selectedValue as string),
+                getCoinData(selectedToken.chain, selectedToken.token),
                 getCirculationInData(commonParams),
                 getCirculationOutData(commonParams),
                 getCirculationPriceData(commonParams),
@@ -197,13 +192,20 @@ function exchange() {
         setIsLoading(false);
     };
 
-    const handleKeyChange = (value: string) => {
-        setSelectedKey(value);
-        setSelectedValue(null);
+    const handleTokenChange = (value: string) => {
+        const [token, chain] = value.split(SPLITTER);
+        setSelectedToken({ chain, token });
     };
 
-    const handleValueChange = (value: string) => {
-        setSelectedValue(value);
+    const formatDataForSelect = (
+        data: Record<string, string[]>
+    ): Array<{ label: string; value: any }> => {
+        return Object.entries(data).flatMap(([key, values]) =>
+            values.map((value) => ({
+                label: `${key}${SPLITTER}${value}`,
+                value: `${key}${SPLITTER}${value}`,
+            }))
+        );
     };
 
     const getDateRange = () => {
@@ -218,12 +220,13 @@ function exchange() {
         return { startTime: startDate, endTime: endDate };
     };
 
-    const formatNumberWithUnits = (value: number): string => {
-        if (value >= 1e12) return (value / 1e12).toFixed(4) + "T"; // 万亿
-        if (value >= 1e9) return (value / 1e9).toFixed(4) + "B"; // 十亿
-        if (value >= 1e6) return (value / 1e6).toFixed(4) + "M"; // 百万
-        if (value >= 1e3) return (value / 1e3).toFixed(4) + "K"; // 千
-        return value.toString(); // 小于千的数字不带单位
+    const formatNumberWithUnits = (value: string): string => {
+        const valueNum = parseFloat(value);
+        if (valueNum >= 1e12) return (valueNum / 1e12).toFixed(4) + "T"; // 万亿
+        if (valueNum >= 1e9) return (valueNum / 1e9).toFixed(4) + "B"; // 十亿
+        if (valueNum >= 1e6) return (valueNum / 1e6).toFixed(4) + "M"; // 百万
+        if (valueNum >= 1e3) return (valueNum / 1e3).toFixed(4) + "K"; // 千
+        return valueNum.toFixed(4); // 小于千的数字不带单位
     };
 
     return render();
@@ -245,7 +248,7 @@ const SearchContainer = styled.div`
 
 const StatisticContainer = styled.div`
     width: 70%;
-    margin-top: 20px;
+    margin-top: 10px;
 `;
 
 export default exchange;

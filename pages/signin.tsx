@@ -68,12 +68,12 @@ const Login: React.FC = () => {
             "email",
             "password",
         ]) as LoginInfo;
-        invokeLogin(loginInfo, loginHandler, messageApi).then((isSuccess) => {
-            if (isSuccess) {
+        invokeLogin(loginInfo, loginHandler, messageApi).then((data: any) => {
+            if (data.user) {
                 message.success(t("signInSuccessfully")).then((r) => r);
                 router.push("/").then((r) => r);
             } else {
-                console.log("登录失败");
+                message.error(t("signInFailed")).then((r) => r);
             }
         });
     };

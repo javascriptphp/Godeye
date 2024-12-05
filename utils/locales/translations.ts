@@ -107,6 +107,10 @@ export const translations = {
         zh: "登录成功~",
         en: "Sign In Successfully",
     },
+    signInFailed: {
+        zh: "登录失败，请检查您的邮箱和密码",
+        en: "Sign In Failed, please check your email and password",
+    },
     payPageTitle: {
         zh: "选择适合您需求的订阅计划",
         en: "Choose Your Subscription Plan",

@@ -46,7 +46,7 @@ const RealtimeBuyChart = ({
     useEffect(() => {
         initData();
         fetchData();
-    }, [metric, symbol]);
+    }, [metric, symbol, userContext]);
 
     useEffect(() => {
         if (lastMessage) {

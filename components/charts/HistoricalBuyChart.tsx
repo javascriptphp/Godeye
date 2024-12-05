@@ -35,7 +35,7 @@ const HistoricalBuyChart = ({
     useEffect(() => {
         initData();
         fetchData();
-    }, [metric, symbol]);
+    }, [metric, symbol, userContext]);
 
     useEffect(() => {
         buildChart();

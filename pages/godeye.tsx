@@ -23,7 +23,6 @@ const PageContainer = styled.div`
     flex-direction: column;
     height: 100vh;
     min-width: 1000px;
-    //padding: 0 20px;
 `;
 
 const TabsWrapper = styled.div`
@@ -59,13 +58,13 @@ const GodeyeIndexPage = () => {
         setSymbol(symbol);
         setMetric(metric);
     };
+
     return (
         <>
             <PageContainer>
                 <RichHeader />
                 <Sidebar symbolToggledHandler={symbolSwitchedHandler} />
                 <MainContentWrapper>
-                    {/*<Flex justify={"center"} align={"center"} vertical={true}>*/}
                     <Space
                         align={"center"}
                         size={100}
@@ -104,10 +103,8 @@ const GodeyeIndexPage = () => {
                                 metric={metric}
                             />
                         )}
-                        {/*<StockChart/>*/}
                         <MetricIntroduction metric={metric} />
                     </Space>
-                    {/*</Flex>*/}
                 </MainContentWrapper>
                 <Footer>{footerText}</Footer>
             </PageContainer>

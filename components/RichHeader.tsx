@@ -52,7 +52,6 @@ const alterStyle: React.CSSProperties = {
     paddingBottom: 5,
     fontSize: 12,
     color: "#000",
-    // position: "fixed",
     border: "none",
 };
 const RichHeader = () => {
@@ -62,9 +61,7 @@ const RichHeader = () => {
     const userContext = getUserContext();
 
     const handleLanguageChange = (lang: string) => {
-        // i18n.changeLanguage(lang);
         setLanguage(lang);
-        // i18n.loadLanguages(lang);
     };
 
     const languageMenu: MenuProps = {
@@ -105,9 +102,6 @@ const RichHeader = () => {
                             style={{
                                 fontSize: 12,
                                 color: "red",
-                                // background: 'linear-gradient(to right, red, blue)',
-                                // color: 'transparent',
-                                // WebkitBackgroundClip: 'text'
                             }}
                         >
                             {t("shortDescription")}

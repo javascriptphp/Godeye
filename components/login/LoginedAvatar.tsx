@@ -17,15 +17,6 @@ const LoginedAvatar: React.FC = () => {
     const userContext = getUserContext();
     const { t } = useTranslation();
     const items: MenuProps["items"] = [
-        // {
-        // 	label: (
-        // 		<Button type="link">{t('profile')}</Button>
-        // 	),
-        // 	key: MenuItemKeys.INFO,
-        // },
-        // {
-        // 	type: 'divider',
-        // },
         {
             label: <Button type="link">{t("logout")}</Button>,
             key: MenuItemKeys.LOGOUT,
@@ -37,9 +28,7 @@ const LoginedAvatar: React.FC = () => {
                 break;
             case MenuItemKeys.LOGOUT:
                 if (userContext && userContext.email) {
-                    invokeLogout(userContext.email, logoutHandler).then((r) => {
-                        window.location.reload();
-                    });
+                    invokeLogout(userContext.email, logoutHandler);
                 }
                 break;
         }

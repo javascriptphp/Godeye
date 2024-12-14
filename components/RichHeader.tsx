@@ -117,9 +117,9 @@ const RichHeader = () => {
                         <Nav onClick={() => routeUrl("/exchange")}>
                             {t("ExchangeDepositsAndWithdrawals")}
                         </Nav>
-                        <Nav onClick={() => routeUrl("/market")}>
+                        {/* <Nav onClick={() => routeUrl("/market")}>
                             {t("memeMarketValueList")}
-                        </Nav>
+                        </Nav> */}
                         <Nav onClick={() => routeUrl("/pay")}>
                             {t("pricing")}
                         </Nav>

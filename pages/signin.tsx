@@ -69,7 +69,7 @@ const Login: React.FC = () => {
             "password",
         ]) as LoginInfo;
         invokeLogin(loginInfo, loginHandler, messageApi).then((data: any) => {
-            if (data.user) {
+            if (data.email) {
                 message.success(t("signInSuccessfully")).then((r) => r);
                 router.push("/").then((r) => r);
             } else {

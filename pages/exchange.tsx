@@ -104,7 +104,7 @@ function exchange() {
                                                 }
                                             />
                                         </Col>
-                                        <Col span={6}>
+                                        {/* <Col span={6}>
                                             <Statistic
                                                 title={t("coinCardCirculating")}
                                                 value={coinData.circulating}
@@ -127,7 +127,7 @@ function exchange() {
                                                     )
                                                 }
                                             />
-                                        </Col>
+                                        </Col> */}
                                     </Row>
                                 </Card>
                                 <Card bordered={false}>

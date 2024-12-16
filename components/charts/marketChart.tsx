@@ -31,7 +31,7 @@ const DepositWithdrawalChart: React.FC<ChartProps> = ({
                 },
                 legend: {
                     data: ["Deposit", "Withdrawals", "Price"],
-                    top: "10%",
+                    top: "6%",
                 },
                 grid: {
                     left: "5%",

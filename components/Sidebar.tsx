@@ -244,6 +244,78 @@ const Sidebar = ({
                 // }
             ],
         },
+        {
+            symbol: "ONDO",
+            metrics: [
+                {
+                    key: "buy",
+                    metric: t("buyMetric"),
+                },
+            ],
+        },
+        {
+            symbol: "OM",
+            metrics: [
+                {
+                    key: "buy",
+                    metric: t("buyMetric"),
+                },
+            ],
+        },
+        {
+            symbol: "ENA",
+            metrics: [
+                {
+                    key: "buy",
+                    metric: t("buyMetric"),
+                },
+            ],
+        },
+        {
+            symbol: "ZRX",
+            metrics: [
+                {
+                    key: "buy",
+                    metric: t("buyMetric"),
+                },
+            ],
+        },
+        {
+            symbol: "VIRTUAL",
+            metrics: [
+                {
+                    key: "buy",
+                    metric: t("buyMetric"),
+                },
+            ],
+        },
+        {
+            symbol: "CETUS",
+            metrics: [
+                {
+                    key: "buy",
+                    metric: t("buyMetric"),
+                },
+            ],
+        },
+        {
+            symbol: "TAO",
+            metrics: [
+                {
+                    key: "buy",
+                    metric: t("buyMetric"),
+                },
+            ],
+        },
+        {
+            symbol: "CKB",
+            metrics: [
+                {
+                    key: "buy",
+                    metric: t("buyMetric"),
+                },
+            ],
+        },
     ];
     const payMetrics = [
         {

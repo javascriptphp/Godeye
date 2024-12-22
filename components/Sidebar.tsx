@@ -280,24 +280,24 @@ const Sidebar = ({
                 },
             ],
         },
-        {
-            symbol: "VIRTUAL",
-            metrics: [
-                {
-                    key: "buy",
-                    metric: t("buyMetric"),
-                },
-            ],
-        },
-        {
-            symbol: "CETUS",
-            metrics: [
-                {
-                    key: "buy",
-                    metric: t("buyMetric"),
-                },
-            ],
-        },
+        // {
+        //     symbol: "VIRTUAL",
+        //     metrics: [
+        //         {
+        //             key: "buy",
+        //             metric: t("buyMetric"),
+        //         },
+        //     ],
+        // },
+        // {
+        //     symbol: "CETUS",
+        //     metrics: [
+        //         {
+        //             key: "buy",
+        //             metric: t("buyMetric"),
+        //         },
+        //     ],
+        // },
         {
             symbol: "TAO",
             metrics: [

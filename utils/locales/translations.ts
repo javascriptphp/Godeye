@@ -412,7 +412,7 @@ export const translations = {
         zh: "全稀释市值",
         en: "FDV",
     },
-    ExchangeDepositsAndWithdrawals: {
+    exchangeDepositsAndWithdrawals: {
         zh: "交易所存取数据",
         en: "Exchange Deposits & Withdrawals",
     },
@@ -439,6 +439,10 @@ export const translations = {
     coinCardSupply: {
         zh: "总供应量",
         en: "Total Supply",
+    },
+    chatGPT: {
+        zh: "聊天 GPT",
+        en: "Chat GPT",
     },
 } as {
     [key: string]: {

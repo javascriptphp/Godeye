@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import type { AppProps } from "next/app";
 import { type DefaultTheme, ThemeProvider } from "styled-components";
-import GlobalStyle from "@/components/globalstyles";
+import GlobalStyle from "@/style/globalstyles";
 import useStore from "@/utils/store";
 import Internationalization from "@/utils/i18n";
 import { Modal } from "antd";
 import { useRouter } from "next/router";
 import { isLoginValid } from "@/utils/auth";
+import "@/style/tailwind_output.css";
 
 const theme: DefaultTheme = {
     colors: {

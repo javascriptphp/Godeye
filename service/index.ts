@@ -214,3 +214,27 @@ export const getCirculationPriceData = async (params: {
 }): Promise<any> => {
     return fetchApi("/api/getCirculationPriceData", params, (data) => data);
 };
+
+export const getChatResponse = async (message: string): Promise<string> => {
+    return fetchApi(
+        "/api/getChatResponse",
+        { user_text: message },
+        (data) => data
+    );
+};
+
+export const getChatHistory = async (message: string): Promise<string> => {
+    return fetchApi(
+        "/api/getChatHistory",
+        { user_text: message },
+        (data) => data
+    );
+};
+
+export const getChatClearance = async (message: string): Promise<string> => {
+    return fetchApi(
+        "/api/getChatClearance",
+        { user_text: message },
+        (data) => data
+    );
+};

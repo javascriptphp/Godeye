@@ -114,8 +114,11 @@ const RichHeader = () => {
                         align={"baseline"}
                         size={"large"}
                     >
+                        <Nav onClick={() => routeUrl("/chat")}>
+                            {t("chatGPT")}
+                        </Nav>
                         <Nav onClick={() => routeUrl("/exchange")}>
-                            {t("ExchangeDepositsAndWithdrawals")}
+                            {t("exchangeDepositsAndWithdrawals")}
                         </Nav>
                         {/* <Nav onClick={() => routeUrl("/market")}>
                             {t("memeMarketValueList")}

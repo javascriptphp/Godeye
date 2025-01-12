@@ -445,8 +445,12 @@ export const translations = {
         en: "Total Supply",
     },
     chatGPT: {
-        zh: "聊天 GPT",
-        en: "Chat GPT",
+        zh: "Godchat",
+        en: "Godchat",
+    },
+    chatGPTDescription: {
+        zh: "欢迎向我提问，了解最新币圈市场趋势。",
+        en: "Ask me anything about the latest coin market trends.",
     },
 } as {
     [key: string]: {

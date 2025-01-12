@@ -5,11 +5,13 @@ import { useImmer } from "use-immer";
 import ChatMessages from "@/components/chat/ChatMessages";
 import ChatInput from "@/components/chat/ChatInput";
 import { getChatHistory, getChatResponse } from "@/service";
+import { useTranslation } from "react-i18next";
 
 function Chatbot() {
     const [chatId, setChatId] = useState(null);
     const [messages, setMessages] = useImmer([]);
     const [newMessage, setNewMessage] = useState("");
+    const { t } = useTranslation();
 
     const isLoading = (
         messages.length && (messages[messages.length - 1] as any)
@@ -68,7 +70,7 @@ function Chatbot() {
                         leading institutions like the World Bank, the World
                         Economic Forum, McKinsey, Deloitte and the OECD.
                     </p> */}
-                    <p>Ask me anything about the latest coin market trends.</p>
+                    <p>{t("chatGPTDescription")}</p>
                 </div>
             )}
             <ChatMessages messages={messages} isLoading={isLoading} />

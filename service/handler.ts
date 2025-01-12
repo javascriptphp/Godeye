@@ -18,6 +18,7 @@ export const apiHandler = async function (
             url,
             headers,
             data: body,
+            timeout: 60000,
         });
         const cookies = response.headers["set-cookie"] as string[];
         res.setHeader("Set-Cookie", cookies);

@@ -13,7 +13,7 @@ function ChatPage() {
                                 <img src={logo} className="w-32" alt="logo" />
                             </a> */}
                             <h1 className="font-urbanist text-[1.65rem] font-semibold">
-                                God Chat
+                                Godchat
                             </h1>
                         </div>
                     </header>

@@ -83,6 +83,10 @@ export const translations = {
         zh: "Godeye登录",
         en: "Sign In",
     },
+    signInAlert: {
+        zh: "登录后即可使用该功能",
+        en: "Sign in to use this feature",
+    },
     emailRequiredWarning: {
         zh: "请输入您的邮箱!",
         en: "Please input your email",

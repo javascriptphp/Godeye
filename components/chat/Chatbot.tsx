@@ -1,16 +1,19 @@
 import { useState } from "react";
 import { useImmer } from "use-immer";
+import { message } from "antd";
 // import api from "@/api";
 // import { parseSSEStream } from "@/utils";
 import ChatMessages from "@/components/chat/ChatMessages";
 import ChatInput from "@/components/chat/ChatInput";
 import { getChatHistory, getChatResponse } from "@/service";
 import { useTranslation } from "react-i18next";
+import { isLoginValid } from "@/utils/auth";
 
 function Chatbot() {
     const [chatId, setChatId] = useState(null);
     const [messages, setMessages] = useImmer([]);
     const [newMessage, setNewMessage] = useState("");
+    const [messageApi, contextHolder] = message.useMessage();
     const { t } = useTranslation();
 
     const isLoading = (
@@ -18,6 +21,11 @@ function Chatbot() {
     ).loading;
 
     async function submitNewMessage() {
+        if (!isLoginValid()) {
+            messageApi.error(t("signInAlert"));
+            return;
+        }
+
         const trimmedMessage = newMessage.trim();
         if (!trimmedMessage || isLoading) return;
 
@@ -46,13 +54,11 @@ function Chatbot() {
             //     });
             // }
             const data: any = await getChatResponse(trimmedMessage);
-            console.log(data);
             setMessages((draft: any) => {
                 draft[draft.length - 1].content = data.bot_text;
                 draft[draft.length - 1].loading = false;
             });
         } catch (err) {
-            console.log(err);
             setMessages((draft: any) => {
                 draft[draft.length - 1].loading = false;
                 draft[draft.length - 1].error = true;
@@ -62,6 +68,7 @@ function Chatbot() {
 
     return (
         <div className="relative grow flex flex-col gap-6 pt-6">
+            {contextHolder}
             {messages.length === 0 && (
                 <div className="mt-3 font-urbanist text-primary-blue text-xl font-light space-y-2">
                     <p>👋 Welcome!</p>

@@ -17,9 +17,9 @@ const theme: DefaultTheme = {
 };
 
 export default function App({ Component, pageProps }: AppProps) {
-    const router = useRouter();
+    // const router = useRouter();
     const { logoutHandler, loadSession } = useStore();
-    const [isExpireModalOpen, setIsExpireModalOpen] = useState(false);
+    // const [isExpireModalOpen, setIsExpireModalOpen] = useState(false);
 
     useEffect(() => {
         loadSession();
@@ -29,7 +29,7 @@ export default function App({ Component, pageProps }: AppProps) {
         const checkLogin = () => {
             if (!isLoginValid()) {
                 logoutHandler();
-                setIsExpireModalOpen(true);
+                // setIsExpireModalOpen(true);
             }
         };
         checkLogin();
@@ -37,14 +37,14 @@ export default function App({ Component, pageProps }: AppProps) {
         return () => clearInterval(interval);
     }, []);
 
-    const handleExpireModalOk = () => {
-        setIsExpireModalOpen(false);
-        router.push("/signin").then((r) => r);
-    };
+    // const handleExpireModalOk = () => {
+    //     setIsExpireModalOpen(false);
+    //     router.push("/signin").then((r) => r);
+    // };
 
-    const handleExpireModalCancel = () => {
-        setIsExpireModalOpen(false);
-    };
+    // const handleExpireModalCancel = () => {
+    //     setIsExpireModalOpen(false);
+    // };
 
     return (
         <>
@@ -52,7 +52,7 @@ export default function App({ Component, pageProps }: AppProps) {
                 <GlobalStyle />
                 <Internationalization />
                 <Component {...pageProps} />
-                <Modal
+                {/* <Modal
                     title="会话过期提醒"
                     open={isExpireModalOpen}
                     onOk={handleExpireModalOk}
@@ -61,7 +61,7 @@ export default function App({ Component, pageProps }: AppProps) {
                     cancelText="取消"
                 >
                     <p>您的登录会话已过期，请重新登录。</p>
-                </Modal>
+                </Modal> */}
             </ThemeProvider>
         </>
     );

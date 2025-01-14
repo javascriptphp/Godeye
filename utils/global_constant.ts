@@ -63,19 +63,19 @@ export const buildWatermarks = function (watermark: string) {
             });
         }
     }
-    // 添加网址
-    graphics.push({
-        type: "text",
-        // left: parseInt(chartWidth) *0.62,
-        // top: parseInt(chartHeight) *0.01,
-        left: "43%",
-        top: 0,
-        style: {
-            text: "www.godeye.top",
-            fontSize: 20,
-            fill: "rgba(255, 0, 0, 0.9)",
-        },
-    });
+    // // 添加网址
+    // graphics.push({
+    //     type: "text",
+    //     // left: parseInt(chartWidth) *0.62,
+    //     // top: parseInt(chartHeight) *0.01,
+    //     left: "43%",
+    //     top: 0,
+    //     style: {
+    //         text: "www.godeye.top",
+    //         fontSize: 20,
+    //         fill: "rgba(255, 0, 0, 0.9)",
+    //     },
+    // });
     // 添加公司名称水印
     graphics.push({
         type: "text",

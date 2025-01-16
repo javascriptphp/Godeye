@@ -1,5 +1,7 @@
 import { create } from "zustand";
-import { DEFAULT_LANGUAGE, SystemContext, UserContext } from "@/types";
+import { SystemContext, UserContext } from "@/types";
+
+export const DEFAULT_LANGUAGE = "zh" as string;
 
 export type UserContextHandler = (userContext: UserContext | null) => void;
 export type ExpireTimeHandler = (expireAt: Date) => void;

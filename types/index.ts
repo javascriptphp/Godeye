@@ -196,8 +196,6 @@ export interface SystemContext {
     language?: string;
 }
 
-export const DEFAULT_LANGUAGE = "en" as string;
-
 export enum ErrorTypeEnum {
     FALSE,
     NULL,

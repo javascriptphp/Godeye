@@ -2,8 +2,7 @@ import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 
 import { translations } from "./locales/translations";
-import useStore from "@/utils/store";
-import { useEffect } from "react";
+import useStore, { DEFAULT_LANGUAGE } from "@/utils/store";
 
 const Internationalization = () => {
     const zh: { [key: string]: string | undefined } = {};
@@ -22,7 +21,7 @@ const Internationalization = () => {
             zh: { translation: zh },
         },
         lng: systemContext?.language, // 默认语言
-        fallbackLng: "zh",
+        fallbackLng: DEFAULT_LANGUAGE,
         interpolation: {
             escapeValue: false,
         },

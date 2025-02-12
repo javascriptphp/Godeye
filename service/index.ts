@@ -11,6 +11,8 @@ import {
 import axios, { AxiosResponse } from "axios";
 import { UserContextHandler } from "@/utils/store";
 import type { MessageInstance } from "antd/es/message/interface";
+import { SERVER_HOST } from "@/service/axios";
+import { getCookie } from "@/utils/auth";
 
 async function fetchApi<T>(
     endpoint: string,
@@ -221,6 +223,49 @@ export const getChatResponse = async (message: string): Promise<string> => {
         { user_text: message },
         (data) => data
     );
+};
+
+export const getChatResponseSSE = (
+    message: string,
+    onMessage: (data: string) => void
+) => {
+    const email = getCookie("email");
+    const deviceId = getCookie("device_id");
+
+    const params = new URLSearchParams({
+        user_text: message,
+        ...(email && { email }),
+        ...(deviceId && { device_id: deviceId }),
+    });
+
+    const url = `${SERVER_HOST}/api/chatbot/generate_response?${params.toString()}`;
+
+    try {
+        const eventSource = new EventSource(url);
+
+        eventSource.onmessage = (event) => {
+            onMessage(JSON.parse(event.data));
+        };
+
+        eventSource.onerror = (error) => {
+            console.error("SSE 连接发生错误：", error);
+            eventSource.close();
+        };
+
+        // 添加连接建立的处理器
+        eventSource.onopen = () => {
+            console.log("SSE 连接已建立", {
+                email,
+                deviceId,
+                url,
+            });
+        };
+
+        return eventSource;
+    } catch (error) {
+        console.error("创建 EventSource 失败:", error);
+        throw error;
+    }
 };
 
 export const getChatHistory = async (message: string): Promise<string> => {

@@ -1,16 +1,13 @@
 import { useState } from "react";
 import { useImmer } from "use-immer";
 import { message } from "antd";
-// import api from "@/api";
-// import { parseSSEStream } from "@/utils";
 import ChatMessages from "@/components/chat/ChatMessages";
 import ChatInput from "@/components/chat/ChatInput";
-import { getChatHistory, getChatResponse } from "@/service";
+import { getChatResponseSSE } from "@/service";
 import { useTranslation } from "react-i18next";
 import { isLoginValid } from "@/utils/auth";
 
 function Chatbot() {
-    const [chatId, setChatId] = useState(null);
     const [messages, setMessages] = useImmer([]);
     const [newMessage, setNewMessage] = useState("");
     const [messageApi, contextHolder] = message.useMessage();
@@ -36,27 +33,16 @@ function Chatbot() {
         ]);
         setNewMessage("");
 
-        let chatIdOrNew = chatId;
         try {
-            // if (!chatId) {
-            //     const { id } = await api.createChat();
-            //     setChatId(id);
-            //     chatIdOrNew = id;
-            // }
-
-            // const stream = await api.sendChatMessage(
-            //     chatIdOrNew,
-            //     trimmedMessage
-            // );
-            // for await (const textChunk of parseSSEStream(stream)) {
-            //     setMessages((draft: any) => {
-            //         draft[draft.length - 1].content += textChunk;
-            //     });
-            // }
-            const data: any = await getChatResponse(trimmedMessage);
-            setMessages((draft: any) => {
-                draft[draft.length - 1].content = data.bot_text;
-                draft[draft.length - 1].loading = false;
+            await getChatResponseSSE(trimmedMessage, (data: any) => {
+                setMessages((draft: any) => {
+                    draft[draft.length - 1].content += data.data.bot_text;
+                });
+                if (data.data.is_completion) {
+                    setMessages((draft: any) => {
+                        draft[draft.length - 1].loading = false;
+                    });
+                }
             });
         } catch (err) {
             setMessages((draft: any) => {

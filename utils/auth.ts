@@ -1,4 +1,4 @@
-const getCookie = (key: string): string | null => {
+export const getCookie = (key: string): string | null => {
     const cookies = document.cookie.split("; ");
     const cookie = cookies.find((row) => row.startsWith(`${key}=`));
     return cookie ? cookie.split("=")[1] : null;

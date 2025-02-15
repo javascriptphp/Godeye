@@ -5,26 +5,20 @@ export default async function handler(
     req: NextApiRequest,
     res: NextApiResponse
 ) {
-    const { message, email, device_id } = req.query;
-
     // 设置 SSE 相关的响应头
     res.setHeader("Content-Type", "text/event-stream");
     res.setHeader("Cache-Control", "no-cache");
     res.setHeader("Connection", "keep-alive");
 
-    if (res.socket) {
-        res.socket.setTimeout(0);
-        res.socket.setNoDelay(true);
-        res.socket.setKeepAlive(true);
-    }
+    const { user_text, email, device_id } = req.query;
+
+    const params = new URLSearchParams({
+        user_text: user_text as string,
+        ...(email && { email: email as string }),
+        ...(device_id && { device_id: device_id as string }),
+    });
 
     try {
-        const params = new URLSearchParams({
-            user_text: message as string,
-            ...(email && { email: email as string }),
-            ...(device_id && { device_id: device_id as string }),
-        });
-
         const response = await fetch(
             `${SERVER_HOST}/api/chatbot/generate_response?${params.toString()}`,
             {
@@ -52,6 +46,8 @@ export default async function handler(
             // 将数据块发送到客户端
             const text = new TextDecoder().decode(value);
             res.write(text);
+
+            (res as any).flush();
         }
 
         res.end();

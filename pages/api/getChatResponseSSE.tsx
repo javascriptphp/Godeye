@@ -10,6 +10,14 @@ export default async function handler(
     res.setHeader("Cache-Control", "no-cache");
     res.setHeader("Connection", "keep-alive");
 
+    if (res.socket) {
+        res.socket.setTimeout(0);
+        res.socket.setNoDelay(true);
+        res.socket.setKeepAlive(true);
+    }
+
+    res.flushHeaders();
+
     const { user_text, email, device_id } = req.query;
 
     const params = new URLSearchParams({

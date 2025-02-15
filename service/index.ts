@@ -238,7 +238,8 @@ export const getChatResponseSSE = (
         ...(deviceId && { device_id: deviceId }),
     });
 
-    const url = `${SERVER_HOST}/api/chatbot/generate_response?${params.toString()}`;
+    const url = `/api/getChatResponseSSE?${params.toString()}`;
+    // const url = `${SERVER_HOST}/api/chatbot/generate_response?${params.toString()}`;
 
     try {
         const eventSource = new EventSource(url);

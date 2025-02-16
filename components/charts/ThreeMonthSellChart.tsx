@@ -1,135 +1,128 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState, useEffect } from "react";
 import * as echarts from "echarts";
-import {
-    HistoricalBuyValues,
-    HistoricalData,
-    HistoricalSellValues,
-    isErrorTypeEnum,
-    SELL,
-    ThreeMonthSellData,
-    ThreeMonthSellValues,
-} from "@/types";
-import { getThreeMonthData } from "@/service";
-import { message } from "antd";
-import { chartHeight, chartWidth, createChart } from "@/utils/global_constant";
-import useStore from "@/utils/store";
+import { EChartsOption } from "echarts";
+import { chartHeight, chartWidth } from "@/utils/global_constant";
 import { useTranslation } from "react-i18next";
 import GlobalFunctions from "@/utils/global_functions";
+import useStore from "@/utils/store";
+import { getThreeMonthData } from "@/service";
+import {
+    ThreeMonthSellData,
+    ThreeMonthSellValues,
+    isErrorTypeEnum,
+    SELL,
+} from "@/types";
+import { formatTimestampToString } from "@/utils/time";
 
-const HistoricalChart = ({
-    symbol,
+interface ThreeMonthSellItem {
+    timestamps: string[];
+    metric: number[];
+    threshold: number[];
+    price: any[];
+}
+
+const initialThreeMonthData: ThreeMonthSellItem = {
+    timestamps: [],
+    metric: [],
+    threshold: [],
+    price: [],
+};
+
+const ThreeMonthSellChart = ({
     metric,
+    symbol,
 }: {
-    symbol: string;
     metric: string;
+    symbol: string;
 }) => {
-    // console.log("historical", symbol, metric);
-    const upColor = "#00da3c";
-    const downColor = "#ec0000";
-    const containerRef = useRef<HTMLDivElement>(null);
-    const [metricData, setMetricData] = useState<number[]>([]);
-    const [openVal, setOpenVal] = useState<number[]>([]);
-    const [highVal, setHighVal] = useState<number[]>([]);
-    const [lowVal, setLowVal] = useState<number[]>([]);
-    const [priceValues, setPriceValues] = useState<number[][]>([][4]);
-    const [closeVal, setCloseVal] = useState<number[]>([]);
-    const [threshold, setThreshold] = useState<number[]>([]);
-    const [timestamps, setTimestamps] = useState<string[]>([]);
-    const [messageApi, contextHolder] = message.useMessage();
+    const [threeMonthData, setThreeMonthData] = useState(initialThreeMonthData);
     const { t } = useTranslation();
     const Functions = GlobalFunctions(t);
-
-    const chartRef = useRef<echarts.ECharts | null>(null); // Store chart instance in a ref
-    const hasFetchedData = useRef(false); // Track if data has been fetched
-
     const { getUserContext } = useStore();
     const userContext = getUserContext();
 
-    // Fetch data and update the state
     useEffect(() => {
-        const fetchData = async () => {
-            const result = await getThreeMonthData(symbol, metric);
-            if (isErrorTypeEnum(result)) {
-            } else {
-                const nonNullResult = result as HistoricalData;
-                console.log("sell data", nonNullResult.values);
-                const _timestamps = nonNullResult.values.map(
-                    (item: HistoricalBuyValues | HistoricalSellValues) =>
-                        new Date(item.timestamp).toLocaleDateString()
-                );
-                setTimestamps(_timestamps);
-                const _buyMetricData = nonNullResult.values.map(
-                    (item: HistoricalBuyValues | HistoricalSellValues) =>
-                        item.metric_value
-                );
-                setMetricData(_buyMetricData);
-                // todo 处理sell data
-                const sellResult = nonNullResult as ThreeMonthSellData;
-                const _openVal = sellResult.values.map(
-                    (item: ThreeMonthSellValues) => item.open
-                );
-                setOpenVal(_openVal);
-                const _highVal = sellResult.values.map(
-                    (item: ThreeMonthSellValues) => item.high
-                );
-                setHighVal(_highVal);
-                const _lowVal = sellResult.values.map(
-                    (item: ThreeMonthSellValues) => item.low
-                );
-                setLowVal(_lowVal);
-                const _closeVal = sellResult.values.map(
-                    (item: ThreeMonthSellValues) => item.close
-                );
-                setCloseVal(_closeVal);
-                const _threshold = sellResult.values.map(
-                    (item: ThreeMonthSellValues) => item.threshold
-                );
-                setThreshold(_threshold);
+        initData();
+        fetchData();
+    }, [metric, symbol, userContext]);
 
-                const _priceValues = sellResult.values.map(
-                    (item: ThreeMonthSellValues) => [
-                        item.open,
-                        item.close,
-                        item.low,
-                        item.high,
-                    ]
-                );
-                setPriceValues(_priceValues);
-            }
-        };
-        //
-        // if (!hasFetchedData.current) {
-        // 	hasFetchedData.current = true;
-        fetchData().then((r) => r);
-        // }
-    }, [symbol, metric]);
     useEffect(() => {
-        const echartsOption = Functions.buildOptionForSellChart({
+        buildChart();
+    }, [threeMonthData]);
+
+    const render = () => {
+        return (
+            <div
+                id="ThreeMonthSellChart"
+                style={{ width: chartWidth, height: chartHeight }}
+            />
+        );
+    };
+
+    const initData = () => {
+        setThreeMonthData(initialThreeMonthData);
+    };
+
+    const fetchData = async () => {
+        try {
+            const response = await getThreeMonthData(symbol, metric);
+
+            if (isErrorTypeEnum(response)) {
+                console.error("Error fetching three-month sell data");
+                return;
+            }
+
+            const sellData = response as ThreeMonthSellData;
+            if (sellData.values) {
+                processData(sellData.values);
+            }
+        } catch (e) {
+            console.error("Error in fetchData:", e);
+        }
+    };
+
+    const processData = (data: ThreeMonthSellValues[]) => {
+        const updatedData = {
+            timestamps: data.map((item) =>
+                formatTimestampToString(item.timestamp)
+            ),
+            metric: data.map((item) => item.metric_value),
+            threshold: data.map((item) => item.threshold),
+            price: data.map((item) => [
+                item.open,
+                item.close,
+                item.low,
+                item.high,
+            ]),
+        };
+
+        setThreeMonthData(updatedData);
+    };
+
+    const buildChart = () => {
+        const _option = Functions.buildOptionForSellChart({
             title: t("t1Title"),
             symbol: symbol,
             metric: SELL,
-            timestamps: timestamps,
-            threshold: threshold,
-            metricData: metricData,
-            priceData: priceValues,
+            timestamps: threeMonthData.timestamps,
+            threshold: threeMonthData.threshold,
+            metricData: threeMonthData.metric,
+            priceData: threeMonthData.price,
             watermark: (userContext && userContext.email) || t("watermarkText"),
             includeMark: true,
             kLine: t("text_dailyK"),
         });
-        createChart({ chartRef, containerRef, echartsOption });
 
-        // 用对象包装依赖对象，可以保证在所有元素都变化之后才执行副作用
-    }, [timestamps, threshold, metricData, closeVal, t]); // Update chart when `data` or `symbol` changes
+        const echartsOption = {
+            ..._option,
+        } as EChartsOption;
 
-    return (
-        <div>
-            {contextHolder}
-            <div
-                ref={containerRef}
-                style={{ width: chartWidth, height: chartHeight }}
-            ></div>
-        </div>
-    );
+        const chartDom = document.getElementById("ThreeMonthSellChart");
+        const myChart = echarts.init(chartDom);
+        echartsOption && myChart.setOption(echartsOption);
+    };
+
+    return render();
 };
 
-export default HistoricalChart;
+export default ThreeMonthSellChart;

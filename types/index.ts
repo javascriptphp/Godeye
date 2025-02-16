@@ -67,7 +67,11 @@ export type ThreeMonthSellData = {
 };
 
 export function isErrorTypeEnum(
-    data: ThreeMonthBuyData | ThreeMonthSellData | ErrorTypeEnum
+    data:
+        | ThreeMonthBuyData
+        | ThreeMonthSellData
+        | ErrorTypeEnum
+        | HistoricalSellData
 ): boolean {
     return typeof data === "number";
 }
@@ -104,13 +108,11 @@ export type HistoricalSellData = {
 export type HistoricalBuyValues = ThreeMonthBuyValues;
 
 export type HistoricalSellValues = {
-    timestamp: Date;
-    symbol: string;
+    timestamp: number;
     open: number;
     high: number;
     low: number;
     close: number;
-    metric: string;
     metric_value: number;
     threshold: number;
 };
@@ -123,7 +125,7 @@ export type ThreeMonthBuyValues = {
 };
 
 export type ThreeMonthSellValues = {
-    timestamp: Date;
+    timestamp: number;
     open: number;
     high: number;
     low: number;
@@ -149,7 +151,7 @@ export type RealtimeBuyData = {
 };
 
 export type RealtimeSellData = {
-    timestamp: Date;
+    timestamp: number;
     symbol: string;
     open: number;
     high: number;

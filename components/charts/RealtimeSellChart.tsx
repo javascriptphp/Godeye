@@ -1,204 +1,164 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState, useEffect } from "react";
 import * as echarts from "echarts";
 import { EChartsOption } from "echarts";
-import { RealtimeResponse, RealtimeSellData, SELL } from "@/types";
-import { getRealtimeDataUrl } from "@/service";
-import useWebSocket from "react-use-websocket";
-import { chartHeight, chartWidth, createChart } from "@/utils/global_constant";
-import useStore from "@/utils/store";
+import { chartHeight, chartWidth } from "@/utils/global_constant";
 import { useTranslation } from "react-i18next";
 import GlobalFunctions from "@/utils/global_functions";
+import { buildCustomConfig } from "@/configs/realtimeSell";
+import useStore from "@/utils/store";
+import useWebSocket from "react-use-websocket";
+import { getRealtimeDataUrl } from "@/service";
+import { RealtimeResponse, RealtimeSellData, SELL } from "@/types";
+import { formatTimestampToString } from "@/utils/time";
 
-interface RealtimeChartData {
-    metricData: number[];
-    priceData: number[];
-    threshold: number;
+interface RealtimeSellItem {
     timestamps: string[];
+    metric: number[];
+    threshold: number[];
+    price: any[];
 }
-const buildCustomerOption = function (symbol: string) {
-    return {
-        dataZoom: [
-            {
-                show: true,
-                realtime: true,
-                start: 90,
-                end: 100,
-            },
-            {
-                type: "inside",
-                realtime: true,
-                start: 95,
-                end: 100,
-            },
-        ],
-        yAxis: [
-            {
-                name: "指标",
-                nameLocation: "end",
-                nameTextStyle: {
-                    fontSize: 14,
-                },
-                type: "value",
-                min: (value: any) => value.min * 0.98,
-                max: (value: any) => value.max * 1.01,
-                axisLabel: {
-                    formatter: (value: any) => value.toFixed(3),
-                },
-            },
-            {
-                name: `${symbol}价格`,
-                nameLocation: "end",
-                nameTextStyle: {
-                    fontSize: 14,
-                },
-                type: "value",
-                min: (value: any) => value.min * 0.999,
-                max: (value: any) => value.max * 1.001,
-                axisLabel: {
-                    formatter: (value: any) => value.toFixed(3),
-                },
-            },
-        ],
-    };
+
+const initialRealtimeData: RealtimeSellItem = {
+    timestamps: [],
+    metric: [],
+    threshold: [],
+    price: [],
 };
-const RealtimeChart = ({
+
+const RealtimeSellChart = ({
     metric,
     symbol,
 }: {
     metric: string;
     symbol: string;
 }) => {
-    const containerRef = useRef<HTMLDivElement>(null);
-    const [metricData, setMetricData] = useState<number[]>([]);
-    const [priceData, setPriceData] = useState<number[]>([]);
-    const [priceValues, setPriceValues] = useState<number[][]>([][4]);
-    const [threshold, setThreshold] = useState<number[]>([]);
-    const [timestamps, setTimestamps] = useState<string[]>([]);
-    useEffect(() => {
-        setMetricData([]);
-        setPriceData([]);
-        setPriceValues([][4]);
-        setThreshold([]);
-        setTimestamps([]);
-    }, [metric, symbol]);
-    const chartRef = useRef<echarts.ECharts | null>(null); // Store chart instance in a ref
-    const { getUserContext } = useStore();
-    const userContext = getUserContext();
+    const [realtimeData, setRealtimeData] =
+        useState<RealtimeSellItem>(initialRealtimeData);
     const { t } = useTranslation();
     const Functions = GlobalFunctions(t);
-
-    const [websocketUrl, setWebsocketUrl] = useState<string>("");
-    // 请求websocket url
-    useEffect(() => {
-        getRealtimeDataUrl(metric, symbol).then((url) => {
-            if (url) {
-                setWebsocketUrl(url);
-            }
-        });
-    }, [symbol, metric]);
-    const { lastMessage } = useWebSocket(
-        websocketUrl,
-        {
-            reconnectInterval: 5000,
-            reconnectAttempts: 5,
-            // onOpen: () => console.log('WebSocket connected!'),
-            // onClose: () => console.log('WebSocket disconnected!'),
-            shouldReconnect: (e) => {
-                return !!websocketUrl;
-            }, // 自动重连
-        },
-        websocketUrl !== ""
-    );
+    const { getUserContext } = useStore();
+    const userContext = getUserContext();
+    const [url, setUrl] = useState<string>("");
+    const { lastMessage } = useWebSocket(url, {
+        onOpen: () => console.log("Connected to WebSocket for Sell Chart"),
+        reconnectInterval: 5000,
+        reconnectAttempts: 5,
+        shouldReconnect: () => !!url,
+    });
 
     useEffect(() => {
-        if (!lastMessage) return;
-        const response: RealtimeResponse = JSON.parse(lastMessage.data);
-        if (response.code !== 200) return;
-        console.log("lastMessage", lastMessage);
-        const realtimeDataArray: RealtimeSellData[] =
-            response.data as RealtimeSellData[];
-        if (realtimeDataArray.length <= 0) return;
+        initData();
+        fetchData();
+    }, [metric, symbol, userContext]);
 
-        const _timestamps: Array<string> = realtimeDataArray.map((data) =>
-            new Date(data.timestamp).toLocaleTimeString()
-        );
-        const _metricValues: Array<number> = realtimeDataArray.map(
-            (data) => data.metric_value
-        );
-        const _priceValues: Array<Array<number>> = realtimeDataArray.map(
-            (data) => [data.open, data.close, data.low, data.high]
-        );
-        const _thresholds: Array<number> = realtimeDataArray.map(
-            (data) => data.threshold
-        );
-        setTimestamps((prevTimeStamps) => [...prevTimeStamps, ..._timestamps]);
-        setMetricData((prevMetricData) => [
-            ...prevMetricData,
-            ..._metricValues,
-        ]);
-        setThreshold((prevThreshold) => [...prevThreshold, ..._thresholds]);
-        setPriceValues((prevPriceValues) =>
-            prevPriceValues
-                ? [...prevPriceValues, ..._priceValues]
-                : _priceValues
-        );
+    useEffect(() => {
+        if (lastMessage) {
+            const response = JSON.parse(lastMessage.data);
+            processData(response);
+        }
     }, [lastMessage]);
 
-    // Initialize and update the chart when data or symbol changes
     useEffect(() => {
+        buildChart();
+    }, [realtimeData]);
+
+    const render = () => {
+        return (
+            <div
+                id="RealtimeSellChart"
+                style={{ width: chartWidth, height: chartHeight }}
+            >
+                <div
+                    style={{
+                        position: "absolute",
+                        top: 0,
+                        left: 0,
+                        width: "100%",
+                        height: "100%",
+                        backgroundColor: "rgba(255, 255, 255, 0.8)",
+                        backdropFilter: "blur(10px)",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        fontSize: "1.5em",
+                        color: "#333",
+                        zIndex: 1,
+                    }}
+                >
+                    {t("metricUpdateInfo")}
+                </div>
+            </div>
+        );
+    };
+
+    const initData = () => {
+        setRealtimeData(initialRealtimeData);
+    };
+
+    const fetchData = async () => {
+        try {
+            const websocketUrl = await getRealtimeDataUrl(metric, symbol);
+            if (websocketUrl) {
+                setUrl(websocketUrl);
+            }
+        } catch (e) {
+            console.error(e);
+        }
+    };
+
+    const processData = (lastMessage: RealtimeResponse) => {
+        if (lastMessage.code !== 200 || !lastMessage.data) return;
+        console.log(lastMessage);
+
+        const data = lastMessage.data as RealtimeSellData[];
+        const updatedData: RealtimeSellItem = {
+            timestamps: data.map((item) =>
+                formatTimestampToString(item.timestamp)
+            ),
+            metric: data.map((item) => item.metric_value),
+            threshold: data.map((item) => item.threshold),
+            price: data.map((item) => [
+                item.open,
+                item.close,
+                item.low,
+                item.high,
+            ]),
+        };
+        setRealtimeData((prev) => ({
+            timestamps: [...prev.timestamps, ...updatedData.timestamps],
+            metric: [...prev.metric, ...updatedData.metric],
+            threshold: [...prev.threshold, ...updatedData.threshold],
+            price: [...prev.price, ...updatedData.price],
+        }));
+    };
+
+    const buildChart = () => {
         const _option = Functions.buildOptionForSellChart({
             title: t("t3Title"),
             symbol: symbol,
             metric: SELL,
-            timestamps: timestamps,
-            threshold: threshold,
-            metricData: metricData,
-            priceData: priceValues,
+            timestamps: realtimeData.timestamps,
+            threshold: realtimeData.threshold,
+            metricData: realtimeData.metric,
+            priceData: realtimeData.price,
             watermark: (userContext && userContext.email) || t("watermarkText"),
             includeMark: false,
             kLine: t("text_5minK"),
         });
+
         const echartsOption = {
             ..._option,
-            ...buildCustomerOption(symbol),
+            ...buildCustomConfig({
+                symbol,
+            }),
         } as EChartsOption;
-        createChart({
-            chartRef,
-            containerRef,
-            echartsOption,
-        });
-    }, [timestamps, threshold, metricData, priceValues, t]); // Update chart when `data` or `symbol` changes
 
-    return (
-        <div
-            style={{
-                position: "relative",
-                width: chartWidth,
-                height: chartHeight,
-            }}
-        >
-            <div ref={containerRef} style={{ width: "100%", height: "100%" }} />
-            <div
-                style={{
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    width: "100%",
-                    height: "100%",
-                    backgroundColor: "rgba(255, 255, 255, 0.8)",
-                    backdropFilter: "blur(10px)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    fontSize: "1.5em",
-                    color: "#333",
-                    zIndex: 1,
-                }}
-            >
-                {t("metricUpdateInfo")}
-            </div>
-        </div>
-    );
+        const chartDom = document.getElementById("RealtimeSellChart");
+        const myChart = echarts.init(chartDom);
+        echartsOption && myChart.setOption(echartsOption);
+    };
+
+    return render();
 };
 
-export default RealtimeChart;
+export default RealtimeSellChart;

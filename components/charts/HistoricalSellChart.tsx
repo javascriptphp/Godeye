@@ -1,134 +1,132 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState, useEffect } from "react";
 import * as echarts from "echarts";
 import { EChartsOption } from "echarts";
+import { chartHeight, chartWidth } from "@/utils/global_constant";
+import { useTranslation } from "react-i18next";
+import GlobalFunctions from "@/utils/global_functions";
+import { buildCustomConfig } from "@/configs/historicalSell";
+import useStore from "@/utils/store";
+import { getHistoricalData } from "@/service";
 import {
     HistoricalSellData,
     HistoricalSellValues,
     isErrorTypeEnum,
     SELL,
 } from "@/types";
-import { getHistoricalData } from "@/service";
-import { message } from "antd";
-import { chartHeight, chartWidth, createChart } from "@/utils/global_constant";
-import useStore from "@/utils/store";
-import { useTranslation } from "react-i18next";
-import GlobalFunctions from "@/utils/global_functions";
+import { formatTimestampToString } from "@/utils/time";
+
+interface HistoricalSellItem {
+    timestamps: string[];
+    metric: number[];
+    threshold: number[];
+    price: any[];
+}
+
+const initialHistoricalData: HistoricalSellItem = {
+    timestamps: [],
+    metric: [],
+    threshold: [],
+    price: [],
+};
 
 const HistoricalSellChart = ({
-    symbol,
     metric,
+    symbol,
 }: {
-    symbol: string;
     metric: string;
+    symbol: string;
 }) => {
-    // console.log("historical", symbol, metric);
-    const containerRef = useRef<HTMLDivElement>(null);
-    const [metricData, setMetricData] = useState<number[]>([]);
-    const [priceData, setPriceData] = useState<number[]>([]);
-    const [priceValues, setPriceValues] = useState<number[][]>([][4]);
-    const [threshold, setThreshold] = useState<number[]>([]);
-    const [timestamps, setTimestamps] = useState<string[]>([]);
-    const [messageApi, contextHolder] = message.useMessage();
-
-    const chartRef = useRef<echarts.ECharts | null>(null); // Store chart instance in a ref
-    const hasFetchedData = useRef(false); // Track if data has been fetched
-
-    const { getUserContext } = useStore();
-    const userContext = getUserContext();
+    const [historicalData, setHistoricalData] = useState(initialHistoricalData);
     const { t } = useTranslation();
     const Functions = GlobalFunctions(t);
-    const buildCustomerOption = function () {
-        if (userContext) {
-            return {
-                dataZoom: [
-                    {
-                        show: true,
-                        realtime: true,
-                        type: "slider",
-                        start: 0,
-                        end: 100,
-                    },
-                    {
-                        type: "inside",
-                        realtime: true,
-                        start: 0,
-                        end: 100,
-                    },
-                ],
-            };
-        } else {
-            return {};
+    const { getUserContext } = useStore();
+    const userContext = getUserContext();
+
+    useEffect(() => {
+        initData();
+        fetchData();
+    }, [metric, symbol, userContext]);
+
+    useEffect(() => {
+        buildChart();
+    }, [historicalData]);
+
+    const render = () => {
+        return (
+            <div
+                id="HistoricalSellChart"
+                style={{ width: chartWidth, height: chartHeight }}
+            />
+        );
+    };
+
+    const initData = () => {
+        setHistoricalData(initialHistoricalData);
+    };
+
+    const fetchData = async () => {
+        try {
+            const response = await getHistoricalData(symbol, metric);
+
+            if (isErrorTypeEnum(response)) {
+                console.error("Error fetching historical sell data");
+                return;
+            }
+
+            const sellData = response as HistoricalSellData;
+            if (sellData.values) {
+                processData(sellData.values);
+            }
+        } catch (e) {
+            console.error("Error in fetchData:", e);
         }
     };
 
-    // Fetch data and update the state
-    useEffect(() => {
-        const fetchData = async () => {
-            const result = await getHistoricalData(symbol, metric);
-            if (isErrorTypeEnum(result)) {
-            } else {
-                const nonNullResult = result as HistoricalSellData;
-                const _timestamps = nonNullResult.values.map(
-                    (item: HistoricalSellValues) =>
-                        new Date(item.timestamp).toLocaleDateString()
-                );
-                setTimestamps(_timestamps);
-                const _buyMetricData = nonNullResult.values.map(
-                    (item: HistoricalSellValues) => item.metric_value
-                );
-                setMetricData(_buyMetricData);
-
-                const _priceValues: Array<Array<number>> =
-                    nonNullResult.values.map((data) => [
-                        data.open,
-                        data.close,
-                        data.low,
-                        data.high,
-                    ]);
-                setPriceValues(_priceValues);
-
-                const _threshold = nonNullResult.values.map(
-                    (data) => data.threshold
-                );
-                setThreshold(_threshold);
-            }
+    const processData = (data: HistoricalSellValues[]) => {
+        const updatedData = {
+            timestamps: data.map((item) =>
+                formatTimestampToString(item.timestamp)
+            ),
+            metric: data.map((item) => item.metric_value),
+            threshold: data.map((item) => item.threshold),
+            price: data.map((item) => [
+                item.open,
+                item.close,
+                item.low,
+                item.high,
+            ]),
         };
-        fetchData().then((r) => r);
-    }, [symbol, metric]);
-    useEffect(() => {
+
+        setHistoricalData(updatedData);
+    };
+
+    const buildChart = () => {
         const _option = Functions.buildOptionForSellChart({
             title: t("t2Title"),
             symbol: symbol,
             metric: SELL,
-            timestamps: timestamps,
-            threshold: threshold,
-            metricData: metricData,
-            priceData: priceValues,
+            timestamps: historicalData.timestamps,
+            threshold: historicalData.threshold,
+            metricData: historicalData.metric,
+            priceData: historicalData.price,
             watermark: (userContext && userContext.email) || t("watermarkText"),
             includeMark: true,
             kLine: t("text_dailyK"),
         });
+
         const echartsOption = {
             ..._option,
-            ...buildCustomerOption(),
+            ...buildCustomConfig({
+                userContext,
+            }),
         } as EChartsOption;
-        createChart({ chartRef, containerRef, echartsOption });
 
-        // 用对象包装依赖对象，可以保证在所有元素都变化之后才执行副作用
-    }, [timestamps, threshold, metricData, priceData, t]); // Update chart when `data` or `symbol` changes
+        const chartDom = document.getElementById("HistoricalSellChart");
+        const myChart = echarts.init(chartDom);
+        echartsOption && myChart.setOption(echartsOption);
+    };
 
-    return (
-        <div
-            style={{
-                position: "relative",
-                width: chartWidth,
-                height: chartHeight,
-            }}
-        >
-            {contextHolder}
-            <div ref={containerRef} style={{ width: "100%", height: "100%" }} />
-        </div>
-    );
+    return render();
 };
 
 export default HistoricalSellChart;

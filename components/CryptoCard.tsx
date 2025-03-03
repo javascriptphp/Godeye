@@ -38,14 +38,11 @@ const CryptoCard: React.FC<CryptoCardProps> = ({
     const { t } = useTranslation();
     return (
         <div className="w-full">
-            <Card
-                className="w-full bg-background-color bg-opacity-50 text-white border border-gray-800 rounded-xl overflow-hidden shadow-lg"
-                bodyStyle={{ padding: "40px", backgroundColor: "transparent" }}
-            >
+            <StyledCard className="w-full bg-background-color bg-opacity-50 text-white border border-gray-800 rounded-xl overflow-hidden shadow-lg">
                 {/* 头部信息区域 */}
-                <div className="flex justify-between items-center mb-6">
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 sm:mb-6 gap-3 sm:gap-0">
                     <div>
-                        <div className="text-theme-color text-2xl font-bold tracking-wider font-custom">
+                        <div className="text-theme-color text-xl sm:text-2xl font-bold tracking-wider font-custom">
                             {symbol.toUpperCase()}
                         </div>
                         <div className="text-theme-color text-sm">
@@ -55,7 +52,7 @@ const CryptoCard: React.FC<CryptoCardProps> = ({
                             {t("shortDescription")}
                         </div>
                     </div>
-                    <div>
+                    <div className="self-end sm:self-auto">
                         <SwitchButton
                             icon={<RetweetOutlined />}
                             onClick={() => onSwitchMetric()}
@@ -104,12 +101,27 @@ const CryptoCard: React.FC<CryptoCardProps> = ({
                     </div> */}
 
                     {/* 渲染传入的图表组件 */}
-                    {children}
+                    <ChartWrapper className="w-full">{children}</ChartWrapper>
                 </div>
-            </Card>
+            </StyledCard>
         </div>
     );
 };
+
+const StyledCard = styled(Card)`
+    .ant-card-body {
+        padding: 20px !important;
+        background-color: transparent;
+
+        @media (min-width: 640px) {
+            padding: 30px !important;
+        }
+
+        @media (min-width: 768px) {
+            padding: 40px !important;
+        }
+    }
+`;
 
 const SwitchButton = styled(Button)`
     display: flex;
@@ -119,11 +131,18 @@ const SwitchButton = styled(Button)`
     color: #000;
     border: none;
     border-radius: 20px;
-    height: 40px;
-    padding: 0 20px;
+    height: 36px;
+    padding: 0 15px;
     font-weight: 500;
+    font-size: 0.9rem;
     box-shadow: 0 4px 10px rgba(40, 232, 155, 0.3);
     transition: all 0.3s ease;
+
+    @media (min-width: 640px) {
+        height: 40px;
+        padding: 0 20px;
+        font-size: 1rem;
+    }
 
     &:hover {
         transform: translateY(-2px);
@@ -138,8 +157,24 @@ const SwitchButton = styled(Button)`
     }
 
     .anticon {
-        margin-left: 8px;
-        font-size: 16px;
+        margin-left: 6px;
+        font-size: 14px;
+
+        @media (min-width: 640px) {
+            margin-left: 8px;
+            font-size: 16px;
+        }
+    }
+`;
+
+const ChartWrapper = styled.div`
+    width: 100%;
+    overflow: hidden;
+
+    /* 确保图表容器不会溢出 */
+    & > div {
+        width: 100% !important;
+        max-width: 100% !important;
     }
 `;
 

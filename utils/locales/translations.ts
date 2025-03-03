@@ -207,7 +207,6 @@ export const translations = {
         zh: "升级订阅",
         en: "Upgrade Subscription",
     },
-
     contactTitle: {
         zh: "联系方式",
         en: "Contact Information",
@@ -499,6 +498,10 @@ export const translations = {
     verificationFailed: {
         zh: "验证失败，请检查验证码",
         en: "Verification failed, please check the verification code",
+    },
+    scrollToSeeMore: {
+        zh: "滑动查看更多",
+        en: "Swipe to see more",
     },
 } as {
     [key: string]: {

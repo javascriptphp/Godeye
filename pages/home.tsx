@@ -19,7 +19,13 @@ import { MetricType } from "@/types";
 
 const ChartContainer = styled.div`
     margin: 0 auto;
-    padding: 20px;
+    padding: 10px;
+    max-width: 100%;
+    overflow-x: hidden;
+
+    @media (min-width: 768px) {
+        padding: 20px;
+    }
 `;
 
 const HomePage = () => {

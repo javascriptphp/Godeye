@@ -122,7 +122,7 @@ const PageContainer = styled.div`
     align-items: center;
     justify-content: center;
     position: relative;
-    background-image: url("/images/background.png");
+    background-image: url("/images/background.webp");
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -131,18 +131,18 @@ const PageContainer = styled.div`
 
 // 登录卡片
 const LoginCard = styled.div`
-    width: 400px;
+    width: 90%;
+    max-width: 400px;
     background: rgba(17, 23, 41, 0.7);
     backdrop-filter: blur(10px);
     border-radius: 16px;
-    padding: 40px;
+    padding: 30px;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
     border: 1px solid rgba(255, 255, 255, 0.05);
     z-index: 10;
 
     @media (max-width: 500px) {
-        width: 90%;
-        padding: 30px;
+        padding: 20px;
     }
 `;
 

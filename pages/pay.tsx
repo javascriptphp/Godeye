@@ -260,9 +260,12 @@ const PageContainer = styled.div`
 
 const ContentContainer = styled.div`
     max-width: 1200px;
-    width: 100%;
-    text-align: center;
-    margin-top: 4rem;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+
+    @media (max-width: 768px) {
+        padding: 1rem;
+    }
 `;
 
 const Title = styled.h1`
@@ -280,24 +283,38 @@ const Subtitle = styled.p`
 `;
 
 const PricingContainer = styled.div`
-    display: flex;
-    justify-content: center;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 2rem;
     margin-top: 2rem;
+
+    @media (max-width: 768px) {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
 `;
 
 const PricingCard = styled(Card)<{ $isActive?: boolean }>`
-    width: 400px;
-    background-color: #1a1e27 !important;
-    border: none !important;
-    border-radius: 12px !important;
+    border-radius: 12px;
     overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background: ${(props) =>
+        props.$isActive ? "rgba(23, 35, 50, 0.85)" : "rgba(17, 25, 40, 0.75)"};
+    backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+
+    &:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 20px rgba(0, 0, 0, 0.2);
+    }
 
     .ant-card-head {
-        background-color: ${(props) =>
-            props.$isActive ? "#1a1e27" : "#1a1e27"};
-        border-bottom: none !important;
+        border-bottom: none;
         padding: 1.5rem 1.5rem 0.5rem !important;
+        background-color: ${(props) =>
+            props.$isActive
+                ? "rgba(23, 35, 50, 0.85)"
+                : "rgba(17, 25, 40, 0.75)"};
     }
 
     .ant-card-head-title {
@@ -306,10 +323,18 @@ const PricingCard = styled(Card)<{ $isActive?: boolean }>`
         text-align: center;
         font-weight: bold;
         font-family: "YouSheBiaoTiHei", sans-serif;
+
+        @media (max-width: 768px) {
+            font-size: 1.3rem;
+        }
     }
 
     .ant-card-body {
         padding: 1.5rem !important;
+
+        @media (max-width: 768px) {
+            padding: 1.2rem !important;
+        }
     }
 `;
 
@@ -320,6 +345,10 @@ const PriceTag = styled.div`
     display: flex;
     align-items: center;
     justify-content: center;
+
+    @media (max-width: 768px) {
+        font-size: 1.5rem;
+    }
 `;
 
 const PriceDescription = styled.p`
@@ -328,10 +357,19 @@ const PriceDescription = styled.p`
     margin-bottom: 2rem;
     min-height: 80px;
     text-align: left;
+
+    @media (max-width: 768px) {
+        min-height: auto;
+        margin-bottom: 1.5rem;
+    }
 `;
 
 const FeatureList = styled.div`
     margin: 2rem 0;
+
+    @media (max-width: 768px) {
+        margin: 1.5rem 0;
+    }
 `;
 
 const FeatureItem = styled.div`
@@ -340,6 +378,11 @@ const FeatureItem = styled.div`
     margin-bottom: 1rem;
     color: white;
     justify-content: space-between;
+
+    @media (max-width: 768px) {
+        margin-bottom: 0.8rem;
+        font-size: 0.95rem;
+    }
 `;
 
 const FeatureIcon = styled.span<{ $available: boolean }>`

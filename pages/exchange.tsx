@@ -335,24 +335,41 @@ const TokenTitle = styled.div`
     font-size: 22px;
     font-weight: 500;
     font-family: "YouSheBiaoTiHei", sans-serif;
+
+    @media (max-width: 768px) {
+        font-size: 18px;
+    }
 `;
 
 const TokenSubtitle = styled.div`
     color: rgba(255, 255, 255, 0.7);
     font-size: 14px;
     margin-bottom: 20px;
+
+    @media (max-width: 768px) {
+        font-size: 12px;
+        margin-bottom: 15px;
+    }
 `;
 
 const PriceLabel = styled.div`
     color: rgba(255, 255, 255, 0.5);
     font-size: 14px;
     margin-bottom: 5px;
+
+    @media (max-width: 768px) {
+        font-size: 12px;
+    }
 `;
 
 const PriceValue = styled.div`
     color: #9ef886;
     font-size: 24px;
     font-weight: 500;
+
+    @media (max-width: 768px) {
+        font-size: 20px;
+    }
 `;
 
 const ChartCard = styled(Card)`

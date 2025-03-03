@@ -3,9 +3,9 @@ import { EChartsOption } from "echarts";
 import React from "react";
 
 export const sidebarWidth = "200px";
-export const chartWidth = "1100px";
-export const chartHeight = "700px";
-export const introductionWidth = (2 * parseInt(chartWidth)) / 3;
+export const chartWidth = "100%";
+export const chartHeight = "500px"; // 默认高度，会被媒体查询覆盖
+export const introductionWidth = "100%";
 export const footerText = `\u00A9 2024 Godeye Ltd. All rights reserved.`;
 export const downColor = "#ec0000";
 export const downBorderColor = "#8A0000";
@@ -43,9 +43,26 @@ export const buildWatermarks = function (watermark: string) {
     const text = watermark; // 你想要的水印文本
     const gap = 150; // 间隔
 
-    // 计算行和列
-    const cols = Math.ceil(parseInt(chartWidth) / gap);
-    const rows = Math.ceil(parseInt(chartHeight) / gap);
+    // 计算行和列 - 使用百分比计算
+    const containerWidth =
+        document.getElementById("HistoricalBuyChart")?.clientWidth ||
+        document.getElementById("RealtimeBuyChart")?.clientWidth ||
+        document.getElementById("ThreeMonthBuyChart")?.clientWidth ||
+        document.getElementById("HistoricalSellChart")?.clientWidth ||
+        document.getElementById("RealtimeSellChart")?.clientWidth ||
+        document.getElementById("ThreeMonthSellChart")?.clientWidth ||
+        1100;
+    const containerHeight =
+        document.getElementById("HistoricalBuyChart")?.clientHeight ||
+        document.getElementById("RealtimeBuyChart")?.clientHeight ||
+        document.getElementById("ThreeMonthBuyChart")?.clientHeight ||
+        document.getElementById("HistoricalSellChart")?.clientHeight ||
+        document.getElementById("RealtimeSellChart")?.clientHeight ||
+        document.getElementById("ThreeMonthSellChart")?.clientHeight ||
+        500;
+
+    const cols = Math.ceil(containerWidth / gap);
+    const rows = Math.ceil(containerHeight / gap);
 
     // 循环生成多个水印文字
     for (let i = 0; i < rows; i++) {
@@ -76,17 +93,19 @@ export const buildWatermarks = function (watermark: string) {
     //         fill: "rgba(255, 0, 0, 0.9)",
     //     },
     // });
-    // 添加公司名称水印
+    // 添加公司名称水印 - 使用百分比定位
     graphics.push({
         type: "text",
-        left: parseInt(chartWidth) * 0.37,
-        top: parseInt(chartHeight) * 0.42,
+        left: "50%", // 居中
+        top: "50%", // 居中
         style: {
             text: "G o d e y e",
             fontSize: 56,
             fill: "rgba(0, 0, 0, 0.1)", // 设置文字颜色和透明度
+            align: "center",
+            verticalAlign: "middle",
         },
-        rotation: 0, // 逆时针旋转 45 度
+        rotation: 0,
     });
 
     return graphics;

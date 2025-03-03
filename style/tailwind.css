@@ -67,3 +67,10 @@
         @apply mb-0;
     }
 }
+
+@font-face {
+    font-family: "YouSheBiaoTiHei";
+    src: url("/fonts/YouSheBiaoTiHei_Regular.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+}

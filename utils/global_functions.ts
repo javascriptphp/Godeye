@@ -46,14 +46,14 @@ const GlobalFunctions = (t: TFunction) => {
               })
             : [];
         return {
-            title: {
-                text: title,
-                textStyle: {
-                    fontSize: "26px",
-                },
-                left: "center",
-                top: 25,
-            },
+            // title: {
+            //     text: title,
+            //     textStyle: {
+            //         fontSize: "26px",
+            //     },
+            //     left: "center",
+            //     top: 25,
+            // },
             legend: {
                 data: [
                     `${t("text_indicator")}`,

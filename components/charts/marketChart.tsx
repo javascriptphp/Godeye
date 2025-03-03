@@ -21,10 +21,10 @@ const DepositWithdrawalChart: React.FC<ChartProps> = ({
             const chart = echarts.init(chartRef.current);
 
             const options = {
-                title: {
-                    text: "Price relation with Deposits & Withdrawals",
-                    left: "center",
-                },
+                // title: {
+                //     text: "Price relation with Deposits & Withdrawals",
+                //     left: "center",
+                // },
                 tooltip: {
                     trigger: "axis",
                     axisPointer: { type: "shadow" },

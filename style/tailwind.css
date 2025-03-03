@@ -68,6 +68,35 @@
     }
 }
 
+/* 图表容器样式 */
+.chart-container {
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+    border-radius: 0.5rem;
+}
+
+/* 移动端图表高度调整 - 小屏手机 */
+@media (max-width: 480px) {
+    .chart-container {
+        height: 300px !important;
+    }
+}
+
+/* 移动端图表高度调整 - 大屏手机 */
+@media (min-width: 481px) and (max-width: 640px) {
+    .chart-container {
+        height: 350px !important;
+    }
+}
+
+/* 平板图表高度调整 */
+@media (min-width: 641px) and (max-width: 1024px) {
+    .chart-container {
+        height: 450px !important;
+    }
+}
+
 @font-face {
     font-family: "YouSheBiaoTiHei";
     src: url("/fonts/YouSheBiaoTiHei_Regular.ttf") format("truetype");

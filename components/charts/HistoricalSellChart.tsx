@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import * as echarts from "echarts";
 import { EChartsOption } from "echarts";
 import { chartHeight, chartWidth } from "@/utils/global_constant";
@@ -41,10 +41,29 @@ const HistoricalSellChart = ({
     const Functions = GlobalFunctions(t);
     const { getUserContext } = useStore();
     const userContext = getUserContext();
+    const chartRef = useRef<echarts.ECharts | null>(null);
+    const chartContainerRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
         initData();
         fetchData();
+
+        // 添加窗口大小变化监听
+        const handleResize = () => {
+            if (chartRef.current) {
+                chartRef.current.resize();
+            }
+        };
+        window.addEventListener("resize", handleResize);
+
+        return () => {
+            window.removeEventListener("resize", handleResize);
+            // 清理图表实例
+            if (chartRef.current) {
+                chartRef.current.dispose();
+                chartRef.current = null;
+            }
+        };
     }, [metric, symbol, userContext]);
 
     useEffect(() => {
@@ -55,7 +74,13 @@ const HistoricalSellChart = ({
         return (
             <div
                 id="HistoricalSellChart"
-                style={{ width: chartWidth, height: chartHeight }}
+                ref={chartContainerRef}
+                style={{
+                    width: chartWidth,
+                    height: chartHeight,
+                    maxWidth: "100%",
+                }}
+                className="chart-container"
             />
         );
     };
@@ -119,11 +144,27 @@ const HistoricalSellChart = ({
             ...buildCustomConfig({
                 userContext,
             }),
+            // 添加响应式配置
+            grid: {
+                left: "5%",
+                right: "5%",
+                top: "15%",
+                bottom: "15%",
+                containLabel: true,
+            },
         } as EChartsOption;
 
         const chartDom = document.getElementById("HistoricalSellChart");
-        const myChart = echarts.init(chartDom);
-        echartsOption && myChart.setOption(echartsOption);
+        if (chartDom) {
+            // 如果已经有图表实例，先销毁
+            if (chartRef.current) {
+                chartRef.current.dispose();
+            }
+            // 创建新的图表实例
+            chartRef.current = echarts.init(chartDom);
+            // 设置图表选项
+            echartsOption && chartRef.current.setOption(echartsOption);
+        }
     };
 
     return render();

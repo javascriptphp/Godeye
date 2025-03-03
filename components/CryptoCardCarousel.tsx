@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "antd";
 import styled from "styled-components";
 import CryptoCard from "@/components/CryptoCard";
 import { DoubleLeftOutlined, DoubleRightOutlined } from "@ant-design/icons";
-
+import { useTranslation } from "react-i18next";
 // 组件定义
 const CryptoCardCarousel = ({
     charts,
@@ -17,6 +17,22 @@ const CryptoCardCarousel = ({
     onSwitchMetric,
 }: any) => {
     const [activeIndex, setActiveIndex] = useState(0);
+    const [isMobile, setIsMobile] = useState(false);
+    const { t } = useTranslation();
+
+    // 检测是否为移动设备
+    useEffect(() => {
+        const checkMobile = () => {
+            setIsMobile(window.innerWidth < 768);
+        };
+
+        checkMobile();
+        window.addEventListener("resize", checkMobile);
+
+        return () => {
+            window.removeEventListener("resize", checkMobile);
+        };
+    }, []);
 
     const goToNext = () => {
         setActiveIndex((prevIndex) =>
@@ -43,6 +59,7 @@ const CryptoCardCarousel = ({
                         shape="circle"
                         icon={<DoubleLeftOutlined />}
                         onClick={goToPrevious}
+                        className="nav-button-left"
                     />
                 </LeftButtonContainer>
 
@@ -78,6 +95,7 @@ const CryptoCardCarousel = ({
                         shape="circle"
                         icon={<DoubleRightOutlined />}
                         onClick={goToNext}
+                        className="nav-button-right"
                     />
                 </RightButtonContainer>
             </OuterContainer>
@@ -91,6 +109,13 @@ const CryptoCardCarousel = ({
                     />
                 ))}
             </Indicator>
+
+            {/* 移动端滑动指示文本 */}
+            {isMobile && (
+                <SwipeIndicator>
+                    <span>← {t("scrollToSeeMore")} →</span>
+                </SwipeIndicator>
+            )}
         </div>
     );
 };
@@ -104,20 +129,37 @@ const OuterContainer = styled.div`
     display: flex;
     align-items: center;
     justify-content: space-between;
+    position: relative;
 `;
 
 // 左侧按钮容器
 const LeftButtonContainer = styled.div`
     flex: 0 0 auto;
-    padding: 0 15px;
+    padding: 0 5px 0 0;
     z-index: 20;
+
+    @media (min-width: 640px) {
+        padding: 0 10px;
+    }
+
+    @media (min-width: 768px) {
+        padding: 0 15px;
+    }
 `;
 
 // 右侧按钮容器
 const RightButtonContainer = styled.div`
     flex: 0 0 auto;
-    padding: 0 15px;
+    padding: 0 0 0 5px;
     z-index: 20;
+
+    @media (min-width: 640px) {
+        padding: 0 10px;
+    }
+
+    @media (min-width: 768px) {
+        padding: 0 15px;
+    }
 `;
 
 // 轮播内容容器
@@ -125,7 +167,15 @@ const CarouselContainer = styled.div`
     position: relative;
     flex: 1;
     overflow: hidden;
-    max-width: calc(100% - 120px);
+    max-width: calc(100% - 80px);
+
+    @media (min-width: 640px) {
+        max-width: calc(100% - 100px);
+    }
+
+    @media (min-width: 768px) {
+        max-width: calc(100% - 120px);
+    }
 `;
 
 const CarouselWrapper = styled.div`
@@ -141,11 +191,17 @@ const SlideContainer = styled.div`
 const Indicator = styled.div`
     display: flex;
     justify-content: center;
-    margin-top: 20px;
+    margin-top: 15px;
     width: 100%;
-    height: 30px;
+    height: 20px;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
+
+    @media (min-width: 640px) {
+        margin-top: 20px;
+        height: 30px;
+        gap: 10px;
+    }
 `;
 
 interface LineIndicatorProps {
@@ -153,9 +209,9 @@ interface LineIndicatorProps {
 }
 
 const LineIndicator = styled.div<LineIndicatorProps>`
-    height: 6px;
+    height: 4px;
     flex: 1;
-    border-radius: 3px;
+    border-radius: 2px;
     background-color: ${(props) =>
         props.active
             ? "var(--theme-color, #10b981)"
@@ -172,16 +228,21 @@ const LineIndicator = styled.div<LineIndicatorProps>`
                 ? "var(--theme-color, #10b981)"
                 : "rgba(255, 255, 255, 0.3)"};
     }
+
+    @media (min-width: 640px) {
+        height: 6px;
+        border-radius: 3px;
+    }
 `;
 
 // 自定义导航按钮
 const NavButton = styled(Button)`
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 20px;
+    font-size: 16px;
     color: rgba(255, 255, 255, 0.6);
     background: transparent;
     border: none;
@@ -197,5 +258,39 @@ const NavButton = styled(Button)`
     &:focus {
         color: rgba(255, 255, 255, 0.9);
         background: rgba(255, 255, 255, 0.05);
+    }
+
+    @media (min-width: 640px) {
+        width: 45px;
+        height: 45px;
+        font-size: 18px;
+    }
+
+    @media (min-width: 768px) {
+        width: 50px;
+        height: 50px;
+        font-size: 20px;
+    }
+`;
+
+// 移动端滑动指示
+const SwipeIndicator = styled.div`
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
+    font-size: 0.8rem;
+    color: rgba(255, 255, 255, 0.5);
+    animation: pulse 2s infinite;
+
+    @keyframes pulse {
+        0% {
+            opacity: 0.5;
+        }
+        50% {
+            opacity: 1;
+        }
+        100% {
+            opacity: 0.5;
+        }
     }
 `;

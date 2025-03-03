@@ -50,7 +50,7 @@ const PageContainer = styled.div`
     display: flex;
     flex-direction: column;
     position: relative;
-    background-image: url("/images/background.png");
+    background-image: url("/images/background.webp");
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -63,7 +63,7 @@ const MainContent = styled.div`
     justify-content: center;
     align-items: center;
     position: relative;
-    padding: 40px 20px;
+    padding: 20px;
 `;
 
 const FormContainer = styled.div`
@@ -71,6 +71,18 @@ const FormContainer = styled.div`
     justify-content: center;
     align-items: center;
     z-index: 10;
+    width: 90%;
+    max-width: 400px;
+    background: rgba(17, 23, 41, 0.7);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+
+    @media (max-width: 500px) {
+        padding: 20px;
+    }
 `;
 
 const Footer = styled.footer`

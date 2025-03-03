@@ -31,6 +31,10 @@ export const translations = {
         zh: "退出登录",
         en: "Log Out",
     },
+    home: {
+        zh: "首页",
+        en: "Home",
+    },
     buyMetric: {
         zh: "买入指标",
         en: "Buy Metric",
@@ -79,10 +83,6 @@ export const translations = {
         zh: "欢迎回来！请使用您的邮箱登录",
         en: "Welcome back! Please log in with your email.",
     },
-    signInTitle: {
-        zh: "Godeye登录",
-        en: "Sign In",
-    },
     signInAlert: {
         zh: "登录后即可使用该功能",
         en: "Sign in to use this feature",
@@ -100,8 +100,12 @@ export const translations = {
         en: "Forget your Password?",
     },
     signInButtonText: {
-        zh: "登 录",
+        zh: "登录",
         en: "Sign In",
+    },
+    noAccount: {
+        zh: "没有账号？",
+        en: "No account?",
     },
     signUpNow: {
         zh: "立即注册",
@@ -127,7 +131,7 @@ export const translations = {
         zh: "上帝视角版",
         en: "God's View Version",
     },
-    price: {
+    pricePrimary: {
         zh: "免费",
         en: "Free",
     },
@@ -308,17 +312,21 @@ export const translations = {
         zh: "已经注册了？",
         en: "Already registered?",
     },
-    loginLinkText: {
-        zh: "登录",
-        en: "Sign In",
-    },
     registrationStepTitle: {
-        zh: "输入注册信息",
-        en: "Enter Registration Info",
+        zh: "账号注册",
+        en: "Account Registration",
+    },
+    registrationStepDescription: {
+        zh: "填写基本信息",
+        en: "Fill in basic information",
     },
     emailVerificationStepTitle: {
         zh: "邮箱验证",
         en: "Email Verification",
+    },
+    emailVerificationStepDescription: {
+        zh: "验证您的邮箱",
+        en: "Verify your email",
     },
     text_indicator: {
         zh: "指标",
@@ -373,8 +381,8 @@ export const translations = {
         en: "Please enter the verification code",
     },
     verificationCodeSent: {
-        zh: "验证码已发送",
-        en: "Verification code sent",
+        zh: "验证码已发送到您的邮箱，请查收并在下方输入6位验证码",
+        en: "The verification code has been sent to your email. Please check your email and enter the 6-digit code below.",
     },
     verificationResendLink: {
         zh: "重新发送",
@@ -451,6 +459,42 @@ export const translations = {
     chatGPTDescription: {
         zh: "欢迎向我提问，了解最新币圈市场趋势。",
         en: "Ask me anything about the latest coin market trends.",
+    },
+    nextStep: {
+        zh: "下一步",
+        en: "Next",
+    },
+    emailVerificationTitle: {
+        zh: "验证您的邮箱",
+        en: "Verify your email",
+    },
+    verificationCodeLength: {
+        zh: "验证码应为6位数字",
+        en: "The verification code should be 6 digits",
+    },
+    verificationCodePlaceholder: {
+        zh: "请输入6位验证码",
+        en: "Please enter the 6-digit verification code",
+    },
+    resendCode: {
+        zh: "重新发送",
+        en: "Resend",
+    },
+    resendCodeIn: {
+        zh: "重新发送倒计时",
+        en: "Resend Countdown",
+    },
+    verificationCodeResent: {
+        zh: "验证码已重新发送",
+        en: "Verification code resent",
+    },
+    completeRegistration: {
+        zh: "完成注册",
+        en: "Complete Registration",
+    },
+    verificationFailed: {
+        zh: "验证失败，请检查验证码",
+        en: "Verification failed, please check the verification code",
     },
 } as {
     [key: string]: {

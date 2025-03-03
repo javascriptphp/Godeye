@@ -1,222 +1,169 @@
 import React, { useState } from "react";
 import {
-    Alert,
     Button,
     Card,
-    Col,
-    Divider,
-    Flex,
-    List,
+    Tooltip,
     message,
+    ConfigProvider,
     Modal,
     Row,
+    Col,
     Space,
+    Divider,
+    Flex,
 } from "antd";
-import { CheckOutlined, CloseOutlined, CopyTwoTone } from "@ant-design/icons";
+import {
+    CheckOutlined,
+    CloseOutlined,
+    QuestionCircleOutlined,
+    CopyOutlined,
+    CopyTwoTone,
+} from "@ant-design/icons";
 import styled from "styled-components";
-import PageFrame from "@/components/PageFrame";
-import copy from "copy-to-clipboard";
-import { useTranslation } from "react-i18next";
 import { useRouter } from "next/router";
+import Head from "next/head";
+import Layout from "@/components/Layout";
+import { useTranslation } from "react-i18next";
 
-const Wrapper = styled.div`
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-`;
-const Container = styled.div`
-    padding: 10px 50px 20px 50px;
-`;
-
-const Heading = styled.h1`
-    text-align: center;
-    font-size: 32px;
-    margin-bottom: 35px;
-`;
-
-const CustomCard = styled(Card)`
-    text-align: center;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    background-color: #f9f8f7;
-
-    .ant-card-head {
-        font-size: 22px;
-    }
-`;
-
-const Price = styled.h2`
-    font-size: 18px;
-    margin: 0;
-`;
-
-const Description = styled.p`
-    font-size: 14px;
-    height: 70px;
-    color: #555;
-`;
-const Myp = styled.p`
-    margin: 0;
-`;
-const FooterContainer = styled.footer`
-    text-align: center;
-    padding: 10px 0;
-    font-size: 12px;
-    color: #999;
-    font-family: Arial, sans-serif;
-`;
-const alterStyle: React.CSSProperties = {
-    paddingLeft: 14,
-    paddingRight: 14,
-    paddingTop: 0,
-    paddingBottom: 0,
-    marginBottom: 20,
-    fontSize: 12,
-};
-const Pricing = () => {
-    const [showModal, setShowModal] = useState(false);
-    const { t } = useTranslation();
+const Pricing: React.FC = () => {
     const router = useRouter();
-    const plans = [
-        {
-            code: "primary",
-            title: t("primaryVersion"),
-            price: t("price"),
-            description: t("descriptionPrimary"),
-            features: [
-                { text: t("T1"), available: true },
-                { text: t("T2"), available: false },
-                { text: t("T3"), available: false },
-            ],
-        },
-        {
-            code: "ultimate",
-            title: t("ultimateVersion"),
-            price: t("priceUltimate"),
-            description: t("descriptionUltimate"),
-            features: [
-                { text: t("T1"), available: true },
-                { text: t("T2"), available: true },
-                { text: t("T3"), available: true },
-            ],
-        },
-    ];
-    const handlePay = () => {
-        setShowModal(true);
-    };
-    const handleSignup = async () => {
-        await router.push("/signup");
-    };
-    const handleOk = () => {
-        setShowModal(false);
-    };
-    const handleCancel = () => {
-        setShowModal(false);
-    };
+    const { t } = useTranslation();
+    const [messageApi, contextHolder] = message.useMessage();
+    const [showModal, setShowModal] = useState(false);
+
+    // Define wallet addresses and email
     const OptimismAddress = "0x16fe461fca0c3cd993f2fa8ef8b7daf27909a72a";
     const TronAddress = "TCUrNtyVxS4ELtZSN5TvJQK4yN3EK4Xxue";
     const Email = "godeye2099@outlook.com";
+
+    const handlePay = () => {
+        setShowModal(true);
+    };
+
+    const handleSignup = async () => {
+        router.push("/signup");
+    };
+
+    const handleOk = () => {
+        messageApi.success("操作成功");
+        setShowModal(false);
+    };
+
+    const handleCancel = () => {
+        messageApi.info("操作已取消");
+        setShowModal(false);
+    };
+
     const handleCopy = (text: string) => {
-        copy(text);
-        message.success(t("copySuccessMessage") + ": " + text).then((r) => r);
+        navigator.clipboard.writeText(text);
+        messageApi.success("复制成功");
     };
 
     return (
-        <PageFrame>
-            <Container>
-                <Heading>{t("payPageTitle")}</Heading>
-                <Row>
-                    <Col span={11} offset={7}>
-                        <Alert
-                            style={alterStyle}
-                            description={
-                                <div>
-                                    <p>
-                                        <span style={{ fontSize: "18px" }}>
-                                            ⚠️
-                                        </span>{" "}
-                                        {t("alert")}
-                                    </p>
-                                </div>
-                            }
-                            type="info"
-                        />
-                    </Col>
-                </Row>
-                <Row gutter={[32, 32]} justify="center">
-                    {plans.map((plan, index) => (
-                        <Col xs={24} sm={24} md={12} lg={12} xl={7} key={index}>
-                            <CustomCard title={plan.title} bordered={false}>
-                                <Price>{plan.price}</Price>
-                                <div style={{ height: "30px" }}>
-                                    {plan.code === "ultimate" ? (
-                                        <span
-                                            style={{
-                                                fontSize: 12,
-                                                color: "#888",
-                                            }}
-                                        >
-                                            {t("noteUltimate")}
-                                        </span>
-                                    ) : (
-                                        <span
-                                            style={{
-                                                fontSize: 12,
-                                                color: "#888",
-                                            }}
-                                        >
-                                            {t("notePrimary")}
-                                        </span>
-                                    )}
-                                </div>
-                                <Divider />
-                                <Description>{plan.description}</Description>
-                                <List
-                                    itemLayout="horizontal"
-                                    dataSource={plan.features}
-                                    renderItem={(item) => (
-                                        <List.Item>
-                                            <List.Item.Meta
-                                                avatar={
-                                                    item.available ? (
-                                                        <CheckOutlined
-                                                            style={{
-                                                                color: "green",
-                                                            }}
-                                                        />
-                                                    ) : (
-                                                        <CloseOutlined
-                                                            style={{
-                                                                color: "red",
-                                                            }}
-                                                        />
-                                                    )
-                                                }
-                                                title={item.text}
-                                            />
-                                        </List.Item>
-                                    )}
-                                />
-                                {plan.code === "primary" ? (
-                                    <Button
-                                        type="default"
-                                        onClick={handleSignup}
-                                        block
-                                    >
-                                        {t("register")}
-                                    </Button>
-                                ) : (
-                                    <Button
-                                        type="primary"
-                                        onClick={handlePay}
-                                        block
-                                    >
-                                        {t("upgrade")}
-                                    </Button>
-                                )}
-                            </CustomCard>
-                        </Col>
-                    ))}
-                </Row>
+        <Layout>
+            {contextHolder}
+            <PageContainer>
+                <ContentContainer>
+                    <Title>{t("payPageTitle")}</Title>
+                    <Subtitle>{t("alert")}</Subtitle>
+
+                    <PricingContainer>
+                        <PricingCard
+                            title={t("primaryVersion")}
+                            $isActive={false}
+                        >
+                            <PriceTag>
+                                \
+                                <StyledTooltip title={t("notePrimary")}>
+                                    <QuestionCircleOutlined
+                                        style={{
+                                            marginLeft: "8px",
+                                            fontSize: "16px",
+                                            color: "#a0a0a0",
+                                        }}
+                                    />
+                                </StyledTooltip>
+                            </PriceTag>
+
+                            <PriceDescription>
+                                {t("descriptionPrimary")}
+                            </PriceDescription>
+
+                            <FeatureList>
+                                <FeatureItem>
+                                    {t("T1")}
+                                    <FeatureIcon $available={true}>
+                                        <CheckOutlined />
+                                    </FeatureIcon>
+                                </FeatureItem>
+                                <FeatureItem>
+                                    {t("T2")}
+                                    <FeatureIcon $available={false}>
+                                        <CloseOutlined />
+                                    </FeatureIcon>
+                                </FeatureItem>
+                                <FeatureItem>
+                                    {t("T3")}
+                                    <FeatureIcon $available={false}>
+                                        <CloseOutlined />
+                                    </FeatureIcon>
+                                </FeatureItem>
+                            </FeatureList>
+
+                            <ActionButton onClick={handleSignup}>
+                                {t("signUpNow")}
+                            </ActionButton>
+                        </PricingCard>
+
+                        <PricingCard
+                            title={t("ultimateVersion")}
+                            $isActive={true}
+                        >
+                            <PriceTag>
+                                {t("priceUltimate")}
+                                <StyledTooltip title={t("noteUltimate")}>
+                                    <QuestionCircleOutlined
+                                        style={{
+                                            marginLeft: "8px",
+                                            fontSize: "16px",
+                                            color: "#a0a0a0",
+                                        }}
+                                    />
+                                </StyledTooltip>
+                            </PriceTag>
+
+                            <PriceDescription>
+                                {t("descriptionUltimate")}
+                            </PriceDescription>
+
+                            <FeatureList>
+                                <FeatureItem>
+                                    {t("T1")}
+                                    <FeatureIcon $available={true}>
+                                        <CheckOutlined />
+                                    </FeatureIcon>
+                                </FeatureItem>
+                                <FeatureItem>
+                                    {t("T2")}
+                                    <FeatureIcon $available={true}>
+                                        <CheckOutlined />
+                                    </FeatureIcon>
+                                </FeatureItem>
+                                <FeatureItem>
+                                    {t("T3")}
+                                    <FeatureIcon $available={true}>
+                                        <CheckOutlined />
+                                    </FeatureIcon>
+                                </FeatureItem>
+                            </FeatureList>
+
+                            <ActionButton $isPrimary onClick={handlePay}>
+                                {t("upgrade")}
+                            </ActionButton>
+                        </PricingCard>
+                    </PricingContainer>
+                </ContentContainer>
+
                 <Modal
                     open={showModal}
                     centered={true}
@@ -228,19 +175,19 @@ const Pricing = () => {
                     <Space direction="vertical" size={10}>
                         <Divider style={{ margin: "5px 0" }}></Divider>
                         <Flex justify={"space-between"} gap={"small"}>
-                            <Myp>{t("paymentPlan")}</Myp>
-                            <Myp>{t("ultimateVersion")}</Myp>
+                            <p style={{ margin: 0 }}>{t("paymentPlan")}</p>
+                            <p style={{ margin: 0 }}>{t("ultimateVersion")}</p>
                         </Flex>
                         <Flex justify={"space-between"} gap={"small"}>
-                            <Myp>{t("priceLabel")}</Myp>
-                            <Myp>
+                            <p style={{ margin: 0 }}>{t("priceLabel")}</p>
+                            <p style={{ margin: 0 }}>
                                 <span style={{ color: "red" }}>
                                     {t("priceUltimate")}
                                 </span>
-                            </Myp>
+                            </p>
                         </Flex>
                         <Flex justify={"right"} gap={"small"}>
-                            <Myp>{t("noteUltimate")}</Myp>
+                            <p style={{ margin: 0 }}>{t("noteUltimate")}</p>
                         </Flex>
                         <Divider style={{ margin: "5px 0" }}></Divider>
                         <p>
@@ -253,42 +200,186 @@ const Pricing = () => {
                         >
                             <Col span={12}>
                                 <Space direction={"vertical"} size={0}>
-                                    <Myp style={{ fontWeight: "bolder" }}>
+                                    <p
+                                        style={{
+                                            margin: 0,
+                                            fontWeight: "bolder",
+                                        }}
+                                    >
                                         {t("optimismAddress")}
-                                    </Myp>
-                                    <Myp>{t("optimismNote")}</Myp>
-                                    <Myp>
+                                    </p>
+                                    <p style={{ margin: 0 }}>
+                                        {t("optimismNote")}
+                                    </p>
+                                    <p style={{ margin: 0 }}>
                                         {OptimismAddress}{" "}
                                         <CopyTwoTone
                                             onClick={() =>
                                                 handleCopy(OptimismAddress)
                                             }
                                         />
-                                    </Myp>
+                                    </p>
                                 </Space>
                             </Col>
                             <Col span={10}>
                                 <Space direction={"vertical"} size={0}>
-                                    <Myp style={{ fontWeight: "bolder" }}>
+                                    <p
+                                        style={{
+                                            margin: 0,
+                                            fontWeight: "bolder",
+                                        }}
+                                    >
                                         {t("tronAddress")}
-                                    </Myp>
-                                    <Myp>{t("tronNote")}</Myp>
-                                    <Myp>
+                                    </p>
+                                    <p style={{ margin: 0 }}>{t("tronNote")}</p>
+                                    <p style={{ margin: 0 }}>
                                         {TronAddress}{" "}
                                         <CopyTwoTone
                                             onClick={() =>
                                                 handleCopy(TronAddress)
                                             }
                                         />
-                                    </Myp>
+                                    </p>
                                 </Space>
                             </Col>
                         </Row>
                     </Space>
                 </Modal>
-            </Container>
-        </PageFrame>
+            </PageContainer>
+        </Layout>
     );
 };
+
+// Styled Components
+const PageContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem;
+`;
+
+const ContentContainer = styled.div`
+    max-width: 1200px;
+    width: 100%;
+    text-align: center;
+    margin-top: 4rem;
+`;
+
+const Title = styled.h1`
+    color: white;
+    font-size: 2.5rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    font-family: "YouSheBiaoTiHei", sans-serif;
+`;
+
+const Subtitle = styled.p`
+    color: #a0a0a0;
+    font-size: 1rem;
+    margin-bottom: 3rem;
+`;
+
+const PricingContainer = styled.div`
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    margin-top: 2rem;
+`;
+
+const PricingCard = styled(Card)<{ $isActive?: boolean }>`
+    width: 400px;
+    background-color: #1a1e27 !important;
+    border: none !important;
+    border-radius: 12px !important;
+    overflow: hidden;
+
+    .ant-card-head {
+        background-color: ${(props) =>
+            props.$isActive ? "#1a1e27" : "#1a1e27"};
+        border-bottom: none !important;
+        padding: 1.5rem 1.5rem 0.5rem !important;
+    }
+
+    .ant-card-head-title {
+        color: white;
+        font-size: 1.5rem;
+        text-align: center;
+        font-weight: bold;
+        font-family: "YouSheBiaoTiHei", sans-serif;
+    }
+
+    .ant-card-body {
+        padding: 1.5rem !important;
+    }
+`;
+
+const PriceTag = styled.div`
+    font-size: 1.8rem;
+    color: white;
+    margin: 1rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+`;
+
+const PriceDescription = styled.p`
+    color: #a0a0a0;
+    font-size: 0.9rem;
+    margin-bottom: 2rem;
+    min-height: 80px;
+    text-align: left;
+`;
+
+const FeatureList = styled.div`
+    margin: 2rem 0;
+`;
+
+const FeatureItem = styled.div`
+    display: flex;
+    align-items: center;
+    margin-bottom: 1rem;
+    color: white;
+    justify-content: space-between;
+`;
+
+const FeatureIcon = styled.span<{ $available: boolean }>`
+    margin-right: 0.5rem;
+    color: ${(props) => (props.$available ? "#00ffa3" : "#ff4d4f")};
+`;
+
+const ActionButton = styled(Button)<{ $isPrimary?: boolean }>`
+    width: 100%;
+    height: 45px;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: bold;
+    margin-top: 1rem;
+
+    ${(props) =>
+        props.$isPrimary
+            ? `
+    background-color: #00ffa3 !important;
+    border-color: #00ffa3 !important;
+    color: #0a0e14 !important;
+    
+    &:hover {
+      background-color: #00cc82 !important;
+      border-color: #00cc82 !important;
+    }
+  `
+            : `
+    background-color: transparent !important;
+    border-color: #00ffa3 !important;
+    color: #00ffa3 !important;
+    
+    &:hover {
+      background-color: rgba(0, 255, 163, 0.1) !important;
+    }
+  `}
+`;
+
+const StyledTooltip = styled(Tooltip)`
+    margin-left: 0.5rem;
+`;
 
 export default Pricing;

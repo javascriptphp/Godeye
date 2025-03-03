@@ -163,8 +163,12 @@ export type RealtimeSellData = {
 };
 
 export const BUY = "buy";
-
 export const SELL = "sell";
+
+export enum MetricType {
+    BUY = "buy",
+    SELL = "sell",
+}
 
 export type BARealtimeData = {
     e: string;

@@ -33,9 +33,11 @@ function ChatMessages({ messages, isLoading }: any) {
                                 {loading && !content ? (
                                     <Spinner />
                                 ) : role === "assistant" ? (
-                                    <Markdown>{content}</Markdown>
+                                    <Markdown className="text-gray-400">
+                                        {content}
+                                    </Markdown>
                                 ) : (
-                                    <div className="whitespace-pre-line">
+                                    <div className="whitespace-pre-line text-gray-400">
                                         {content}
                                     </div>
                                 )}

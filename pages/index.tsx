@@ -1,5 +1,10 @@
-import GodeyeIndexPage from "@/pages/godeye";
+import Layout from "@/components/Layout";
+import HomePage from "@/pages/home";
 
 export default function Home() {
-    return <GodeyeIndexPage />;
+    return (
+        <Layout>
+            <HomePage />
+        </Layout>
+    );
 }

@@ -1,10 +1,19 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { Select } from "antd";
-import { Card, Row, Col, Typography, Statistic, Flex, Spin } from "antd";
+import {
+    Select,
+    Card,
+    Row,
+    Col,
+    Typography,
+    Statistic,
+    Flex,
+    Spin,
+} from "antd";
 import { useTranslation } from "react-i18next";
 import PageFrame from "@/components/PageFrame";
 import MarketChart from "@/components/charts/marketChart";
+import Layout from "@/components/Layout";
 import {
     getChainData,
     getCoinData,
@@ -47,90 +56,70 @@ function exchange() {
 
     const render = () => {
         return (
-            <PageFrame>
+            <Layout>
                 <ExchangeContainer>
-                    <Card
+                    <ExplorerCard
                         title={t("tokenExplorerTitle")}
                         bordered={false}
-                        style={{ width: "70%" }}
                     >
-                        <Paragraph strong>
+                        <ExplorerDescription>
                             {t("tokenExplorerDescription")}
-                        </Paragraph>
+                        </ExplorerDescription>
                         <SearchContainer>
-                            <Select
+                            <StyledSelect
                                 showSearch
                                 placeholder="Select Coin"
                                 onChange={handleTokenChange}
-                                style={{ width: "90%" }}
                                 options={formatDataForSelect(chainTokenList)}
                             />
                         </SearchContainer>
-                    </Card>
+                    </ExplorerCard>
+
                     <StatisticContainer>
                         {isLoading && (
-                            <Flex
-                                align="center"
-                                justify="center"
-                                style={{ height: "400px" }}
-                            >
+                            <LoadingContainer>
                                 <Spin size="large" />
-                            </Flex>
+                            </LoadingContainer>
                         )}
+
                         {coinData && !isLoading && (
                             <>
-                                <Card
-                                    title={selectedToken?.token}
+                                <TokenInfoCard
+                                    title={
+                                        <TokenTitle>
+                                            {selectedToken?.token}
+                                        </TokenTitle>
+                                    }
                                     bordered={false}
                                 >
+                                    <TokenSubtitle>
+                                        Price relation with Deposits &
+                                        Withdrawals
+                                    </TokenSubtitle>
+
                                     <Row gutter={24}>
-                                        <Col span={6}>
-                                            <Statistic
-                                                title={t("coinCardPrice")}
-                                                value={coinData.price}
-                                                precision={2}
-                                                suffix="USD"
-                                            />
+                                        <Col span={12}>
+                                            <PriceLabel>
+                                                {t("coinCardPrice")}
+                                            </PriceLabel>
+                                            <PriceValue>
+                                                {coinData.price}USD
+                                            </PriceValue>
                                         </Col>
-                                        <Col span={6}>
-                                            <Statistic
-                                                title={t("coinCardMarketCap")}
-                                                value={coinData.marketCap}
-                                                precision={2}
-                                                formatter={() =>
-                                                    formatNumberWithUnits(
-                                                        coinData.marketCap
-                                                    )
-                                                }
-                                            />
+                                        <Col span={12}>
+                                            <PriceLabel>
+                                                {t("coinCardMarketCap")}
+                                            </PriceLabel>
+                                            <PriceValue>
+                                                {formatNumberWithUnits(
+                                                    coinData.marketCap
+                                                )}
+                                            </PriceValue>
                                         </Col>
-                                        {/* <Col span={6}>
-                                            <Statistic
-                                                title={t("coinCardCirculating")}
-                                                value={coinData.circulating}
-                                                precision={2}
-                                                formatter={() =>
-                                                    formatNumberWithUnits(
-                                                        coinData.circulating
-                                                    )
-                                                }
-                                            />
-                                        </Col>
-                                        <Col span={6}>
-                                            <Statistic
-                                                title={t("coinCardSupply")}
-                                                value={coinData.supply}
-                                                precision={2}
-                                                formatter={() =>
-                                                    formatNumberWithUnits(
-                                                        coinData.supply
-                                                    )
-                                                }
-                                            />
-                                        </Col> */}
                                     </Row>
-                                </Card>
-                                <Card bordered={false}>
+                                </TokenInfoCard>
+
+                                <ChartCard bordered={false}>
                                     <MarketChart
                                         dates={depositData.dateList}
                                         deposits={depositData.exchangeInList}
@@ -139,12 +128,12 @@ function exchange() {
                                         }
                                         prices={priceData.priceList}
                                     />
-                                </Card>
+                                </ChartCard>
                             </>
                         )}
                     </StatisticContainer>
                 </ExchangeContainer>
-            </PageFrame>
+            </Layout>
         );
     };
 
@@ -192,8 +181,9 @@ function exchange() {
         setIsLoading(false);
     };
 
-    const handleTokenChange = (value: string) => {
-        const [token, chain] = value.split(SPLITTER);
+    const handleTokenChange = (value: unknown) => {
+        const valueStr = String(value);
+        const [token, chain] = valueStr.split(SPLITTER);
         setSelectedToken({ chain, token });
     };
 
@@ -232,23 +222,145 @@ function exchange() {
     return render();
 }
 
+// 样式定义
 const ExchangeContainer = styled.div`
-    margin: 40px;
+    max-width: 1200px;
+    margin: 20px auto;
     display: flex;
-    justify-content: center;
     flex-direction: column;
     align-items: center;
+    width: 100%;
+    padding: 0 20px;
+`;
+
+const ExplorerCard = styled(Card)`
+    width: 100%;
+    border-radius: 16px;
+    margin-bottom: 20px;
+
+    .ant-card-head {
+        border-bottom: none;
+        padding: 16px 24px;
+    }
+
+    .ant-card-head-title {
+        color: #9ef886;
+        font-size: 24px;
+        font-weight: 500;
+        font-family: "YouSheBiaoTiHei", sans-serif;
+    }
+
+    .ant-card-body {
+        padding: 0 24px 24px;
+    }
+`;
+
+const ExplorerDescription = styled(Paragraph)`
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 20px;
+    font-size: 14px;
 `;
 
 const SearchContainer = styled.div`
-    display: flex;
-    justify-content: space-between;
-    width: 70%;
+    width: 100%;
+    margin-bottom: 10px;
+`;
+
+const StyledSelect = styled(Select)`
+    width: 100%;
+
+    .ant-select-selector {
+        background-color: rgba(0, 0, 0, 0.2) !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        border-radius: 8px !important;
+        height: 45px !important;
+        padding: 0 15px !important;
+    }
+
+    .ant-select-selection-search-input {
+        height: 45px !important;
+    }
+
+    .ant-select-selection-placeholder,
+    .ant-select-selection-item {
+        line-height: 45px !important;
+        color: rgba(255, 255, 255, 0.8) !important;
+    }
+
+    .ant-select-arrow {
+        color: rgba(255, 255, 255, 0.5) !important;
+    }
+
+    &.ant-select-focused .ant-select-selector {
+        border-color: #9ef886 !important;
+        box-shadow: 0 0 0 2px rgba(158, 248, 134, 0.1) !important;
+    }
 `;
 
 const StatisticContainer = styled.div`
-    width: 70%;
-    margin-top: 10px;
+    width: 100%;
+`;
+
+const LoadingContainer = styled(Flex)`
+    height: 400px;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+
+    .ant-spin-dot-item {
+        background-color: #9ef886;
+    }
+`;
+
+const TokenInfoCard = styled(Card)`
+    border-radius: 16px;
+    margin-bottom: 20px;
+
+    .ant-card-head {
+        border-bottom: none;
+        padding: 16px 24px;
+    }
+
+    .ant-card-head-title {
+        padding: 0;
+    }
+
+    .ant-card-body {
+        padding: 0 24px 24px;
+    }
+`;
+
+const TokenTitle = styled.div`
+    color: #9ef886;
+    font-size: 22px;
+    font-weight: 500;
+    font-family: "YouSheBiaoTiHei", sans-serif;
+`;
+
+const TokenSubtitle = styled.div`
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 14px;
+    margin-bottom: 20px;
+`;
+
+const PriceLabel = styled.div`
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 14px;
+    margin-bottom: 5px;
+`;
+
+const PriceValue = styled.div`
+    color: #9ef886;
+    font-size: 24px;
+    font-weight: 500;
+`;
+
+const ChartCard = styled(Card)`
+    border-radius: 16px;
+
+    .ant-card-body {
+        padding: 24px;
+    }
 `;
 
 export default exchange;

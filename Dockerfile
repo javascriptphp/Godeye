@@ -5,8 +5,8 @@ FROM node:18-alpine AS builder
 WORKDIR /app
 
 # 复制 package.json 和 package-lock.json 并安装依赖
-COPY package.json package-lock.json ./
-RUN npm install
+COPY package*.json ./
+RUN npm install --production && npm cache clean --force
 
 # 复制源代码到容器
 COPY . .
@@ -27,7 +27,7 @@ COPY --from=builder /app/package.json ./package.json
 COPY --from=builder /app/node_modules ./node_modules
 
 # 环境变量
-ENV NODE_ENV production
+ENV NODE_ENV=production
 
 # 暴露端口
 EXPOSE 8000

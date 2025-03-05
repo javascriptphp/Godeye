@@ -1,3 +1,5 @@
+import { legendTextColor, gridLineColor } from "@/utils/global_constant";
+
 export const buildCustomConfig = ({ symbol }: { symbol: string }) => {
     return {
         dataZoom: [
@@ -18,20 +20,39 @@ export const buildCustomConfig = ({ symbol }: { symbol: string }) => {
             {
                 name: "指标",
                 nameLocation: "end",
-                nameTextStyle: { fontSize: 14 },
+                nameTextStyle: {
+                    fontSize: 14,
+                    color: legendTextColor,
+                },
                 type: "value",
-                min: (value: any) => value.min * 0.98,
-                max: (value: any) => value.max * 1.01,
-                axisLabel: { formatter: (value: any) => value.toFixed(3) },
+                splitLine: {
+                    show: true,
+                    lineStyle: {
+                        color: gridLineColor,
+                    },
+                },
+                axisLabel: {
+                    color: legendTextColor,
+                    formatter: (value: any) => value.toFixed(3),
+                },
             },
             {
                 name: `${symbol}价格`,
                 nameLocation: "end",
-                nameTextStyle: { fontSize: 14 },
+                nameTextStyle: {
+                    fontSize: 14,
+                    color: legendTextColor,
+                },
                 type: "value",
+                splitLine: {
+                    show: false,
+                },
                 min: (value: any) => value.min * 0.999,
                 max: (value: any) => value.max * 1.001,
-                axisLabel: { formatter: (value: any) => value.toFixed(3) },
+                axisLabel: {
+                    color: legendTextColor,
+                    formatter: (value: any) => value.toFixed(3),
+                },
             },
         ],
     };

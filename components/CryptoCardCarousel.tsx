@@ -51,7 +51,7 @@ const CryptoCardCarousel = ({
     };
 
     return (
-        <div>
+        <div className="w-full max-w-[1800px] mx-auto">
             <OuterContainer>
                 <LeftButtonContainer>
                     <NavButton
@@ -145,6 +145,14 @@ const LeftButtonContainer = styled.div`
     @media (min-width: 768px) {
         padding: 0 15px;
     }
+
+    @media (min-width: 1024px) {
+        padding: 0 20px;
+    }
+
+    @media (min-width: 1280px) {
+        padding: 0 25px;
+    }
 `;
 
 // 右侧按钮容器
@@ -159,6 +167,14 @@ const RightButtonContainer = styled.div`
 
     @media (min-width: 768px) {
         padding: 0 15px;
+    }
+
+    @media (min-width: 1024px) {
+        padding: 0 20px;
+    }
+
+    @media (min-width: 1280px) {
+        padding: 0 25px;
     }
 `;
 
@@ -175,6 +191,18 @@ const CarouselContainer = styled.div`
 
     @media (min-width: 768px) {
         max-width: calc(100% - 120px);
+    }
+
+    @media (min-width: 1024px) {
+        max-width: calc(100% - 140px);
+    }
+
+    @media (min-width: 1280px) {
+        max-width: calc(100% - 160px);
+    }
+
+    @media (min-width: 1536px) {
+        max-width: calc(100% - 180px);
     }
 `;
 
@@ -270,6 +298,18 @@ const NavButton = styled(Button)`
         width: 50px;
         height: 50px;
         font-size: 20px;
+    }
+
+    @media (min-width: 1024px) {
+        width: 55px;
+        height: 55px;
+        font-size: 22px;
+    }
+
+    @media (min-width: 1280px) {
+        width: 60px;
+        height: 60px;
+        font-size: 24px;
     }
 `;
 

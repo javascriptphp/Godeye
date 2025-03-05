@@ -1,5 +1,5 @@
 import { BUY, CoordType } from "@/types";
-import { buyAreaColor } from "@/utils/global_constant";
+import { buyAreaColor, legendTextColor } from "@/utils/global_constant";
 import { TFunction } from "i18next";
 
 export const calculateAreaRanges = function (data: {
@@ -50,6 +50,7 @@ export const calculateLineTimestamp = function (data: {
         label: {
             position: "start",
             formatter: t("text_indicator_threshold") + " {c}", // 显示的文本
+            color: legendTextColor, // 使用与图例相同的文字颜色
         },
         lineStyle: {
             width: 2,

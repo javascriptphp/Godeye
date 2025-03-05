@@ -271,9 +271,8 @@ const StyledSelect = styled(Select)`
 
     .ant-select-selector {
         background-color: rgba(0, 0, 0, 0.2) !important;
-        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        border: 1px solid rgba(255, 255, 255, 0.5) !important;
         border-radius: 8px !important;
-        height: 45px !important;
         padding: 0 15px !important;
     }
 

@@ -37,18 +37,18 @@ const CryptoCard: React.FC<CryptoCardProps> = ({
 }) => {
     const { t } = useTranslation();
     return (
-        <div className="w-full">
+        <div className="w-full max-w-[2000px] mx-auto">
             <StyledCard className="w-full bg-background-color bg-opacity-50 text-white border border-gray-800 rounded-xl overflow-hidden shadow-lg">
                 {/* 头部信息区域 */}
-                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 sm:mb-6 gap-3 sm:gap-0">
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 sm:mb-6 lg:mb-8 gap-3 sm:gap-0">
                     <div>
-                        <div className="text-theme-color text-xl sm:text-2xl font-bold tracking-wider font-custom">
+                        <div className="text-theme-color text-xl sm:text-2xl lg:text-3xl font-bold tracking-wider font-custom">
                             {symbol.toUpperCase()}
                         </div>
-                        <div className="text-theme-color text-sm">
+                        <div className="text-theme-color text-sm lg:text-base">
                             {description}
                         </div>
-                        <div className="text-theme-color text-xs mt-1 max-w-md">
+                        <div className="text-theme-color text-xs lg:text-sm mt-1 max-w-md lg:max-w-lg">
                             {t("shortDescription")}
                         </div>
                     </div>
@@ -63,43 +63,7 @@ const CryptoCard: React.FC<CryptoCardProps> = ({
                 </div>
 
                 {/* 图表区域 - 通过children接收图表组件 */}
-                <div className="relative w-full mb-4 mt-2">
-                    {/* 图表右上角的工具按钮 */}
-                    {/* <div className="absolute top-0 right-0 z-10 flex space-x-2">
-                        <Tooltip title="全屏">
-                            <div
-                                className="w-8 h-8 flex items-center justify-center border border-gray-700 rounded cursor-pointer hover:border-green-400 hover:bg-gray-800 transition-all duration-200"
-                                onClick={onFullscreen}
-                            >
-                                <FullscreenOutlined className="text-gray-400 hover:text-green-400" />
-                            </div>
-                        </Tooltip>
-                        <Tooltip title="刷新">
-                            <div
-                                className="w-8 h-8 flex items-center justify-center border border-gray-700 rounded cursor-pointer hover:border-green-400 hover:bg-gray-800 transition-all duration-200"
-                                onClick={onRefresh}
-                            >
-                                <ReloadOutlined className="text-gray-400 hover:text-green-400" />
-                            </div>
-                        </Tooltip>
-                        <Tooltip title="同步">
-                            <div
-                                className="w-8 h-8 flex items-center justify-center border border-gray-700 rounded cursor-pointer hover:border-green-400 hover:bg-gray-800 transition-all duration-200"
-                                onClick={onSync}
-                            >
-                                <SyncOutlined className="text-gray-400 hover:text-green-400" />
-                            </div>
-                        </Tooltip>
-                        <Tooltip title="下载">
-                            <div
-                                className="w-8 h-8 flex items-center justify-center border border-gray-700 rounded cursor-pointer hover:border-green-400 hover:bg-gray-800 transition-all duration-200"
-                                onClick={onDownload}
-                            >
-                                <DownloadOutlined className="text-gray-400 hover:text-green-400" />
-                            </div>
-                        </Tooltip>
-                    </div> */}
-
+                <div className="relative w-full mb-4 mt-2 lg:mb-6 lg:mt-4">
                     {/* 渲染传入的图表组件 */}
                     <ChartWrapper className="w-full">{children}</ChartWrapper>
                 </div>
@@ -119,6 +83,18 @@ const StyledCard = styled(Card)`
 
         @media (min-width: 768px) {
             padding: 40px !important;
+        }
+
+        @media (min-width: 1024px) {
+            padding: 40px 50px !important;
+        }
+
+        @media (min-width: 1280px) {
+            padding: 40px 60px !important;
+        }
+
+        @media (min-width: 1536px) {
+            padding: 40px 70px !important;
         }
     }
 `;

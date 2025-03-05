@@ -428,8 +428,8 @@ export const translations = {
         en: "FDV",
     },
     exchangeDepositsAndWithdrawals: {
-        zh: "交易所存取数据",
-        en: "Exchange Deposits & Withdrawals",
+        zh: "交易所",
+        en: "Exchange",
     },
     tokenExplorerTitle: {
         zh: "代币浏览器",

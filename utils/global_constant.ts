@@ -7,12 +7,17 @@ export const chartWidth = "100%";
 export const chartHeight = "500px"; // 默认高度，会被媒体查询覆盖
 export const introductionWidth = "100%";
 export const footerText = `\u00A9 2024 Godeye Ltd. All rights reserved.`;
+
 export const downColor = "#ec0000";
 export const downBorderColor = "#8A0000";
 export const upColor = "#00da3c";
 export const upBorderColor = "#008F28";
-export const buyAreaColor = "#d2f9df";
-export const sellAreaColor = "#f9d2df";
+export const buyAreaColor = "rgba(76, 175, 80, 0.3)"; // Brighter green with transparency
+export const sellAreaColor = "rgba(244, 67, 54, 0.3)"; // Brighter red with transparency
+export const indicatorColor = "#2196f3";
+export const priceColor = "#f44336";
+export const legendTextColor = "#f5f5f5"; // 图例文字颜色
+export const gridLineColor = "rgba(255, 255, 255, 0.1)"; // 图表背景网格线颜色
 
 export const createChart = function ({
     chartRef,

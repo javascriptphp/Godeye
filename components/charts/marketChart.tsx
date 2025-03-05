@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import * as echarts from "echarts";
+import { legendTextColor, gridLineColor } from "@/utils/global_constant";
 
 interface ChartProps {
     dates: string[];
@@ -31,7 +32,10 @@ const DepositWithdrawalChart: React.FC<ChartProps> = ({
                 },
                 legend: {
                     data: ["Deposit", "Withdrawals", "Price"],
-                    top: "6%",
+                    top: "3%",
+                    textStyle: {
+                        color: legendTextColor,
+                    },
                 },
                 grid: {
                     left: "5%",
@@ -39,23 +43,47 @@ const DepositWithdrawalChart: React.FC<ChartProps> = ({
                     bottom: "15%",
                     containLabel: true,
                 },
-                xAxis: [
-                    {
-                        type: "category",
-                        data: dates,
+                xAxis: {
+                    type: "category",
+                    data: dates,
+                    axisLabel: {
+                        color: legendTextColor,
                     },
-                ],
+                },
                 yAxis: [
                     {
                         type: "value",
                         name: "Volume",
                         position: "left",
+                        nameTextStyle: {
+                            color: legendTextColor,
+                        },
+                        axisLabel: {
+                            color: legendTextColor,
+                        },
+                        splitLine: {
+                            show: true,
+                            lineStyle: {
+                                color: gridLineColor,
+                            },
+                        },
                     },
                     {
                         type: "value",
                         name: "Price",
                         position: "right",
-                        splitLine: { show: false },
+                        nameTextStyle: {
+                            color: legendTextColor,
+                        },
+                        axisLabel: {
+                            color: legendTextColor,
+                        },
+                        splitLine: {
+                            show: false,
+                            lineStyle: {
+                                color: gridLineColor,
+                            },
+                        },
                     },
                 ],
                 dataZoom: [

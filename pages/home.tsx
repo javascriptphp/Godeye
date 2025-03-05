@@ -4,6 +4,7 @@ import styled from "styled-components";
 // Components
 import CryptoCardCarousel from "@/components/CryptoCardCarousel";
 import SymbolList from "@/components/SymbolList";
+import PartnershipsSection from "@/components/PartnershipsSection";
 
 // Charts
 import ThreeMonthBuyChart from "@/components/charts/ThreeMonthBuyChart";
@@ -141,23 +142,27 @@ const HomePage = () => {
     };
 
     return (
-        <ChartContainer>
-            <CryptoCardCarousel
-                charts={charts}
-                symbol={symbol}
-                metric={metric}
-                onRefresh={handleRefresh}
-                onFullscreen={handleFullscreen}
-                onSync={handleSync}
-                onDownload={handleDownload}
-                onSwitchMetric={handleSwitchMetric}
-            />
-            <SymbolList
-                symbols={symbolsData}
-                activeSymbol={symbol}
-                onSymbolChange={handleSymbolChange}
-            />
-        </ChartContainer>
+        <>
+            <ChartContainer>
+                <CryptoCardCarousel
+                    charts={charts}
+                    symbol={symbol}
+                    metric={metric}
+                    onRefresh={handleRefresh}
+                    onFullscreen={handleFullscreen}
+                    onSync={handleSync}
+                    onDownload={handleDownload}
+                    onSwitchMetric={handleSwitchMetric}
+                />
+                <SymbolList
+                    symbols={symbolsData}
+                    activeSymbol={symbol}
+                    onSymbolChange={handleSymbolChange}
+                />
+            </ChartContainer>
+
+            <PartnershipsSection />
+        </>
     );
 };
 

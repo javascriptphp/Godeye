@@ -13,6 +13,10 @@ import {
     sellAreaColor,
     upBorderColor,
     upColor,
+    indicatorColor,
+    priceColor,
+    legendTextColor,
+    gridLineColor,
 } from "@/utils/global_constant";
 import type { TFunction } from "i18next";
 import { calculateAreaRanges, calculateLineTimestamp } from "@/configs/common";
@@ -46,29 +50,26 @@ const GlobalFunctions = (t: TFunction) => {
               })
             : [];
         return {
-            // title: {
-            //     text: title,
-            //     textStyle: {
-            //         fontSize: "26px",
-            //     },
-            //     left: "center",
-            //     top: 25,
-            // },
             legend: {
                 data: [
-                    `${t("text_indicator")}`,
-                    `${symbol} ${t("text_price")}`,
                     {
-                        name: t("text_buy_area"), // 图例项名称
-                        icon: "rect", // 图例项图标设置为矩形
-                        itemStyle: {
-                            color: buyAreaColor,
-                            opacity: 0.9,
-                        },
+                        name: `${t("text_indicator")}`,
+                        icon: "rect",
+                    },
+                    {
+                        name: `${symbol} ${t("text_price")}`,
+                        icon: "rect",
+                    },
+                    {
+                        name: t("text_buy_area"),
+                        icon: "rect",
                     },
                 ],
                 left: "center",
-                top: 55,
+                top: 20,
+                textStyle: {
+                    color: legendTextColor,
+                },
             },
             grid: {
                 top: "90", // 将图表的绘制区域向下移动，避免与legend重叠
@@ -131,8 +132,13 @@ const GlobalFunctions = (t: TFunction) => {
             },
             xAxis: {
                 type: "category",
-                splitLine: { show: false },
+                splitLine: {
+                    show: false,
+                },
                 data: timestamps,
+                axisLabel: {
+                    color: legendTextColor,
+                },
             },
             yAxis: [
                 {
@@ -140,8 +146,15 @@ const GlobalFunctions = (t: TFunction) => {
                     nameLocation: "end",
                     nameTextStyle: {
                         fontSize: 14,
+                        color: legendTextColor,
                     },
                     type: "value",
+                    splitLine: {
+                        show: true,
+                        lineStyle: {
+                            color: gridLineColor,
+                        },
+                    },
                     min: (value: any) => {
                         return Math.min(threshold * 0.9, value.min * 0.95); // Y 轴最小值为数据最小值的 90%
                     },
@@ -149,6 +162,7 @@ const GlobalFunctions = (t: TFunction) => {
                         return value.max * 1.05; // Y 轴最小值为数据最小值的 90%
                     },
                     axisLabel: {
+                        color: legendTextColor,
                         formatter: (value: any) => {
                             // 保留3位小数
                             return value.toFixed(2);
@@ -160,16 +174,14 @@ const GlobalFunctions = (t: TFunction) => {
                     nameLocation: "end",
                     nameTextStyle: {
                         fontSize: 14,
+                        color: legendTextColor,
                     },
-                    // alignTicks: true,
                     type: "value",
-                    min: (value: any) => {
-                        return value.min * 0.95; // Y 轴最小值为数据最小值的 90%
-                    },
-                    max: (value: any) => {
-                        return value.max * 1.05; // Y 轴最小值为数据最小值的 90%
+                    splitLine: {
+                        show: false,
                     },
                     axisLabel: {
+                        color: legendTextColor,
                         formatter: function (value) {
                             // 将数值转换为4到6位有效数字
                             if (value >= 1000) {
@@ -192,7 +204,7 @@ const GlobalFunctions = (t: TFunction) => {
                         focus: "series",
                     },
                     itemStyle: {
-                        color: "#e98734",
+                        color: indicatorColor,
                     },
                     markLine: includeMark
                         ? {
@@ -221,7 +233,7 @@ const GlobalFunctions = (t: TFunction) => {
                         focus: "series",
                     },
                     itemStyle: {
-                        color: "#939393",
+                        color: priceColor,
                     },
                     data: priceData,
                 },
@@ -323,29 +335,26 @@ const GlobalFunctions = (t: TFunction) => {
         });
 
         return {
-            title: {
-                text: title,
-                textStyle: {
-                    fontSize: "26px",
-                },
-                left: "center",
-                top: 25,
-            },
             legend: {
                 data: [
-                    `${t("text_indicator")}`,
-                    `${kLine}`,
                     {
-                        name: t("text_sell_area"), // 图例项名称
-                        icon: "rect", // 图例项图标设置为矩形
-                        itemStyle: {
-                            color: sellAreaColor,
-                            opacity: 0.9,
-                        },
+                        name: `${t("text_indicator")}`,
+                        icon: "rect",
+                    },
+                    {
+                        name: `${kLine}`,
+                        icon: "rect",
+                    },
+                    {
+                        name: t("text_sell_area"),
+                        icon: "rect",
                     },
                 ],
                 left: "center",
-                top: 55,
+                top: 20,
+                textStyle: {
+                    color: legendTextColor,
+                },
                 itemStyle: {
                     borderColor: "#008F28",
                 },
@@ -394,16 +403,30 @@ const GlobalFunctions = (t: TFunction) => {
                 data: timestamps,
                 boundaryGap: false,
                 axisLine: { onZero: false },
-                splitLine: { show: false },
+                splitLine: {
+                    show: false,
+                },
                 min: "dataMin",
                 max: "dataMax",
+                axisLabel: {
+                    color: legendTextColor,
+                },
             },
             yAxis: [
                 {
                     name: t("text_indicator"),
                     scale: true,
-                    splitArea: {
+                    nameTextStyle: {
+                        color: legendTextColor,
+                    },
+                    axisLabel: {
+                        color: legendTextColor,
+                    },
+                    splitLine: {
                         show: true,
+                        lineStyle: {
+                            color: gridLineColor,
+                        },
                     },
                 },
                 {
@@ -411,8 +434,12 @@ const GlobalFunctions = (t: TFunction) => {
                     nameLocation: "end",
                     nameTextStyle: {
                         fontSize: 14,
+                        color: legendTextColor,
                     },
                     type: "value",
+                    splitLine: {
+                        show: false,
+                    },
                     min: (value: any) => {
                         return value.min * 0.999; // Y 轴最小值为数据最小值的 99.9%
                     },
@@ -420,6 +447,7 @@ const GlobalFunctions = (t: TFunction) => {
                         return value.max * 1.001; // Y 轴最大值为数据最大值的 100.1%
                     },
                     axisLabel: {
+                        color: legendTextColor,
                         formatter: function (value) {
                             // 将数值转换为4到6位有效数字
                             if (value >= 1000) {
@@ -442,6 +470,7 @@ const GlobalFunctions = (t: TFunction) => {
                     smooth: true,
                     lineStyle: {
                         opacity: 0.7,
+                        color: indicatorColor,
                     },
                     markArea: includeMark
                         ? {

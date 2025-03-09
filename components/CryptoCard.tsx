@@ -48,13 +48,11 @@ const CryptoCard: React.FC<CryptoCardProps> = ({
                         <div className="text-theme-color text-sm lg:text-base">
                             {description}
                         </div>
-                        <div className="text-theme-color text-xs lg:text-sm mt-1 max-w-md lg:max-w-lg">
-                            {t("shortDescription")}
-                        </div>
                     </div>
                     <div className="self-end sm:self-auto">
                         <SwitchButton
                             icon={<RetweetOutlined />}
+                            disabled={symbol !== "BTC"}
                             onClick={() => onSwitchMetric()}
                         >
                             {metric.toUpperCase()}

@@ -73,16 +73,6 @@ const FormContainer = styled.div`
     z-index: 10;
     width: 90%;
     max-width: 400px;
-    background: rgba(17, 23, 41, 0.7);
-    backdrop-filter: blur(10px);
-    border-radius: 16px;
-    padding: 30px;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-    border: 1px solid rgba(255, 255, 255, 0.05);
-
-    @media (max-width: 500px) {
-        padding: 20px;
-    }
 `;
 
 const Footer = styled.footer`

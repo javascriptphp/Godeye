@@ -6,7 +6,7 @@ export const sidebarWidth = "200px";
 export const chartWidth = "100%";
 export const chartHeight = "500px"; // 默认高度，会被媒体查询覆盖
 export const introductionWidth = "100%";
-export const footerText = `\u00A9 2024 Godeye Ltd. All rights reserved.`;
+export const footerText = `\u00A9 2025 Godeye Ltd. All rights reserved.`;
 
 export const downColor = "#ec0000";
 export const downBorderColor = "#8A0000";

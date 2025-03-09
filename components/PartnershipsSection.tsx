@@ -97,9 +97,9 @@ const PartnershipsSection: React.FC<PartnershipsSectionProps> = ({
     const defaultPartnerships: Partnership[] = [
         {
             id: "godeye-virtual",
-            leftText: "Godeye",
+            leftText: "Godeye Powered by",
             rightLogo: "/images/virtual.webp",
-            rightText: "Virtual Protocol",
+            rightText: "Virtuals Protocol",
         },
     ];
 
@@ -142,11 +142,11 @@ const PartnershipsSection: React.FC<PartnershipsSectionProps> = ({
                                     </GodeyeLogo>
                                 ) : null}
 
-                                <CrossSymbol>
+                                {/* <CrossSymbol>
                                     <CloseOutlined
                                         style={{ fontSize: "18px" }}
                                     />
-                                </CrossSymbol>
+                                </CrossSymbol> */}
 
                                 {partnership.rightLogo ? (
                                     <LogoContainer>

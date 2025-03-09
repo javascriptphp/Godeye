@@ -10,6 +10,7 @@ import useWebSocket from "react-use-websocket";
 import { getRealtimeDataUrl } from "@/service";
 import { RealtimeResponse, RealtimeSellData, SELL } from "@/types";
 import { formatTimestampToString } from "@/utils/time";
+import ChartOverlay from "@/components/ChartOverlay";
 
 interface RealtimeSellItem {
     timestamps: string[];
@@ -84,16 +85,18 @@ const RealtimeSellChart = ({
 
     const render = () => {
         return (
-            <div
-                id="RealtimeSellChart"
-                ref={chartContainerRef}
-                style={{
-                    width: chartWidth,
-                    height: chartHeight,
-                    maxWidth: "100%",
-                }}
-                className="chart-container"
-            />
+            <ChartOverlay>
+                <div
+                    id="RealtimeSellChart"
+                    ref={chartContainerRef}
+                    style={{
+                        width: chartWidth,
+                        height: chartHeight,
+                        maxWidth: "100%",
+                    }}
+                    className="chart-container"
+                />
+            </ChartOverlay>
         );
     };
 

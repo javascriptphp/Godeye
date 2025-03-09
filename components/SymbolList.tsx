@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import styled from "styled-components";
-import { LeftOutlined, RightOutlined } from "@ant-design/icons";
-
+import { LeftOutlined, RightOutlined, SearchOutlined } from "@ant-design/icons";
+import { useTranslation } from "react-i18next";
 interface SymbolListProps {
     symbols: {
         symbol: string;
@@ -18,9 +18,18 @@ const SymbolList: React.FC<SymbolListProps> = ({
     activeSymbol,
     onSymbolChange,
 }) => {
+    const { t } = useTranslation();
     const containerRef = useRef<HTMLDivElement>(null);
     const [showLeftArrow, setShowLeftArrow] = useState(false);
     const [showRightArrow, setShowRightArrow] = useState(true);
+    const [searchTerm, setSearchTerm] = useState("");
+
+    // Filter symbols based on search term
+    const filteredSymbols = symbols.filter(
+        (item) =>
+            item.symbol.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            item.name.toLowerCase().includes(searchTerm.toLowerCase())
+    );
 
     // 检查是否需要显示箭头
     const checkScrollPosition = () => {
@@ -55,8 +64,25 @@ const SymbolList: React.FC<SymbolListProps> = ({
         containerRef.current.scrollBy({ left: 300, behavior: "smooth" });
     };
 
+    // Handle search input change
+    const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setSearchTerm(e.target.value);
+    };
+
     return (
         <Container>
+            <SearchContainer>
+                <SearchIconWrapper>
+                    <SearchOutlined />
+                </SearchIconWrapper>
+                <SearchInput
+                    type="text"
+                    placeholder={t("searchPlaceholder")}
+                    value={searchTerm}
+                    onChange={handleSearchChange}
+                />
+            </SearchContainer>
+
             {showLeftArrow && (
                 <ArrowButton className="left" onClick={scrollLeft}>
                     <LeftOutlined />
@@ -64,7 +90,7 @@ const SymbolList: React.FC<SymbolListProps> = ({
             )}
 
             <SymbolsContainer ref={containerRef} onScroll={handleScroll}>
-                {symbols.map((item) => (
+                {filteredSymbols.map((item) => (
                     <SymbolCard
                         key={item.symbol}
                         active={item.symbol === activeSymbol}
@@ -166,6 +192,44 @@ const Container = styled.div`
     width: 100%;
     margin: 20px 0;
     padding: 10px 0;
+`;
+
+const SearchContainer = styled.div`
+    position: relative;
+    width: 90%;
+    margin: 0 auto 15px;
+    display: flex;
+    align-items: center;
+`;
+
+const SearchIconWrapper = styled.div`
+    position: absolute;
+    left: 15px;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 18px;
+    z-index: 1;
+`;
+
+const SearchInput = styled.input`
+    width: 100%;
+    height: 45px;
+    background: rgba(20, 20, 20, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 25px;
+    padding: 0 20px 0 45px;
+    color: white;
+    font-size: 16px;
+    outline: none;
+    transition: all 0.3s ease;
+
+    &:focus {
+        border-color: rgba(177, 251, 131, 0.5);
+        box-shadow: 0 0 5px rgba(40, 232, 155, 0.3);
+    }
+
+    &::placeholder {
+        color: rgba(255, 255, 255, 0.5);
+    }
 `;
 
 const ArrowButton = styled.button`

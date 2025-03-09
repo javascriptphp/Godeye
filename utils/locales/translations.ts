@@ -156,12 +156,8 @@ export const translations = {
         en: "T3 Indicator",
     },
     priceUltimate: {
-        zh: "(30+169) 美元/季",
-        en: "(30+169) USD/quarter",
-    },
-    noteUltimate: {
-        zh: "说明：先支付30 USDT，获得三个月使用权限，赚钱后再补齐169 USDT",
-        en: "Note: Pay 30 USDT first to gain three months of access, then pay an additional 169 USDT after making a profit",
+        zh: "199 美元/季",
+        en: "199 USD/quarter",
     },
     notePrimary: {
         zh: "说明：注册后可免费查看T1数据",
@@ -498,6 +494,34 @@ export const translations = {
     scrollToSeeMore: {
         zh: "滑动查看更多",
         en: "Swipe to see more",
+    },
+    searchPlaceholder: {
+        zh: "搜索你感兴趣的代币",
+        en: "Search for the token you are interested in",
+    },
+    upgradeRequired: {
+        zh: "升级解锁T2图表",
+        en: "Upgrade to Unlock T2 Chart",
+    },
+    upgradeChartDescription: {
+        zh: "升级到上帝视角版以查看完整的{{chartType}}数据和分析",
+        en: "Upgrade to God's View Version to access complete {{chartType}} data and analysis",
+    },
+    upgradeNow: {
+        zh: "立即升级",
+        en: "Upgrade Now",
+    },
+    historicalBuyChart: {
+        zh: "历史买入指标",
+        en: "Historical Buy Indicator",
+    },
+    historicalSellChart: {
+        zh: "历史卖出指标",
+        en: "Historical Sell Indicator",
+    },
+    comingSoon: {
+        zh: "敬请期待",
+        en: "Coming Soon",
     },
 } as {
     [key: string]: {

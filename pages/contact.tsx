@@ -63,7 +63,7 @@ const ContactPage = () => {
                                     icon={<TwitterOutlined />}
                                     onClick={() => {
                                         window.open(
-                                            "https://x.com/btcnnn199?t=sTvR8AI1MmiIkx6OepZuRQ&s=09",
+                                            "https://x.com/Godeye2099?t=Mw2llnDrfEcrNB9MvfWEEw&s=09",
                                             "_blank"
                                         );
                                     }}

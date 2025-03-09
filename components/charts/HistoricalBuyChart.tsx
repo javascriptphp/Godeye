@@ -9,6 +9,7 @@ import useStore from "@/utils/store";
 import { getHistoricalData } from "@/service";
 import { BUY } from "@/types";
 import { formatTimestampToString } from "@/utils/time";
+import ChartUpgrade from "@/components/ChartUpgrade";
 
 const initialHistoricalData: HistoricalData = {
     timestamps: [],
@@ -27,6 +28,7 @@ const HistoricalBuyChart = ({
     const [historicalData, setHistoricalData] = useState<HistoricalData>(
         initialHistoricalData
     );
+    const [showUpgrade, setShowUpgrade] = useState(false);
     const { t } = useTranslation();
     const Functions = GlobalFunctions(t);
     const { getUserContext } = useStore();
@@ -36,6 +38,13 @@ const HistoricalBuyChart = ({
 
     useEffect(() => {
         initData();
+
+        // Check if user is logged in
+        if (!userContext) {
+            setShowUpgrade(true);
+            return;
+        }
+
         fetchData();
 
         // 添加窗口大小变化监听
@@ -57,21 +66,34 @@ const HistoricalBuyChart = ({
     }, [metric, symbol, userContext]);
 
     useEffect(() => {
-        buildChart();
-    }, [historicalData]);
+        if (!showUpgrade && historicalData.timestamps.length > 0) {
+            buildChart();
+        }
+    }, [historicalData, showUpgrade]);
 
     const render = () => {
         return (
             <div
-                id="HistoricalBuyChart"
-                ref={chartContainerRef}
                 style={{
+                    position: "relative",
                     width: chartWidth,
                     height: chartHeight,
                     maxWidth: "100%",
                 }}
-                className="chart-container"
-            />
+            >
+                <div
+                    id="HistoricalBuyChart"
+                    ref={chartContainerRef}
+                    style={{
+                        width: "100%",
+                        height: "100%",
+                    }}
+                    className="chart-container"
+                />
+                {showUpgrade && (
+                    <ChartUpgrade chartType={t("historicalBuyChart")} />
+                )}
+            </div>
         );
     };
 
@@ -82,11 +104,15 @@ const HistoricalBuyChart = ({
     const fetchData = async () => {
         try {
             const response: any = await getHistoricalData(symbol, metric);
-            if (response) {
+            if (response && response.values && response.values.length > 0) {
                 processData(response.values);
+                setShowUpgrade(false);
+            } else {
+                setShowUpgrade(true);
             }
         } catch (e) {
             console.error(e);
+            setShowUpgrade(true);
         }
     };
 

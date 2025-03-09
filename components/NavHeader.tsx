@@ -78,52 +78,52 @@ const NavHeader: React.FC = () => {
 
                 {/* Mobile Navigation */}
                 <div
-                    className={`fixed inset-0 bg-background-color bg-opacity-95 z-40 flex flex-col items-center justify-center transition-all duration-300 ${
+                    className={`fixed inset-0 bg-background-color bg-opacity-95 z-40 flex flex-col overflow-y-auto transition-all duration-300 ${
                         mobileMenuOpen
                             ? "opacity-100 visible"
                             : "opacity-0 invisible"
                     } md:hidden`}
                 >
-                    <nav className="flex flex-col items-center space-y-6">
+                    <nav className="flex flex-col items-center py-16 min-h-full">
                         <Link
                             href="/"
-                            className="font-custom text-xl hover:text-gray-300"
+                            className="font-custom text-xl hover:text-gray-300 py-2"
                             onClick={() => setMobileMenuOpen(false)}
                         >
                             {t("home")}
                         </Link>
                         <Link
                             href="/chat"
-                            className="font-custom text-xl hover:text-gray-300"
+                            className="font-custom text-xl hover:text-gray-300 py-2"
                             onClick={() => setMobileMenuOpen(false)}
                         >
                             {t("chatGPT")}
                         </Link>
                         <Link
                             href="/exchange"
-                            className="font-custom text-xl hover:text-gray-300"
+                            className="font-custom text-xl hover:text-gray-300 py-2"
                             onClick={() => setMobileMenuOpen(false)}
                         >
                             {t("exchangeDepositsAndWithdrawals")}
                         </Link>
                         <Link
                             href="/pay"
-                            className="font-custom text-xl hover:text-gray-300"
+                            className="font-custom text-xl hover:text-gray-300 py-2"
                             onClick={() => setMobileMenuOpen(false)}
                         >
                             {t("pricing")}
                         </Link>
                         <Link
                             href="/contact"
-                            className="font-custom text-xl hover:text-gray-300"
+                            className="font-custom text-xl hover:text-gray-300 py-2"
                             onClick={() => setMobileMenuOpen(false)}
                         >
                             {t("contactUs")}
                         </Link>
 
-                        <div className="mt-8 flex flex-col space-y-4 items-center">
+                        <div className="mt-6 flex flex-col space-y-3 items-center pb-8">
                             <button
-                                className="text-white hover:text-[#B1FB83] transition-colors"
+                                className="text-white hover:text-[#B1FB83] transition-colors py-2"
                                 onClick={toggleLanguage}
                                 aria-label="Toggle language"
                             >

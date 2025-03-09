@@ -105,7 +105,7 @@ export const translations = {
     },
     signInWithWalletButtonText: {
         zh: "使用钱包登录",
-        en: "Sign In With Wallet",
+        en: "Sign In with Wallet",
     },
     noAccount: {
         zh: "没有账号？",

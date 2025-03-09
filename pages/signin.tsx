@@ -8,8 +8,7 @@ import useStore from "@/utils/store";
 import { useTranslation } from "react-i18next";
 import { MailOutlined, LockOutlined } from "@ant-design/icons";
 import Link from "next/link";
-import Head from "next/head";
-import {WalletProvider} from "@/components/wallet/WalletProvider";
+import { WalletProvider } from "@/components/wallet/WalletProvider";
 import ConnectWalletModal from "@/components/wallet/ConnectWalletModal";
 
 // 登录页面组件
@@ -46,7 +45,6 @@ const SignIn: React.FC = () => {
 
     const onSignInWithWallet = () => {
         setShowWalletList(true);
-        console.log(showWalletList);
     };
 
     return (
@@ -114,17 +112,22 @@ const SignIn: React.FC = () => {
                 </SignupSection>
 
                 <SignInWithWalletButton
-                  type="primary"
-                  onClick={onSignInWithWallet}
-                  loading={loading}
+                    type="primary"
+                    onClick={onSignInWithWallet}
+                    loading={loading}
                 >
                     {t("signInWithWalletButtonText")}
                 </SignInWithWalletButton>
             </LoginCard>
 
-            <WalletProvider>
-                <ConnectWalletModal isShow={showWalletList}/>
-            </WalletProvider>
+            {showWalletList && (
+                <WalletProvider>
+                    <ConnectWalletModal
+                        onClose={() => setShowWalletList(false)}
+                    />
+                </WalletProvider>
+            )}
+
             <Footer>{footerText}</Footer>
         </PageContainer>
     );

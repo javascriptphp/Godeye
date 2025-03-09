@@ -14,6 +14,7 @@ import {
     SELL,
 } from "@/types";
 import { formatTimestampToString } from "@/utils/time";
+import ChartUpgrade from "@/components/ChartUpgrade";
 
 interface HistoricalSellItem {
     timestamps: string[];
@@ -37,6 +38,7 @@ const HistoricalSellChart = ({
     symbol: string;
 }) => {
     const [historicalData, setHistoricalData] = useState(initialHistoricalData);
+    const [showUpgrade, setShowUpgrade] = useState(false);
     const { t } = useTranslation();
     const Functions = GlobalFunctions(t);
     const { getUserContext } = useStore();
@@ -46,6 +48,13 @@ const HistoricalSellChart = ({
 
     useEffect(() => {
         initData();
+
+        // Check if user is logged in
+        if (!userContext) {
+            setShowUpgrade(true);
+            return;
+        }
+
         fetchData();
 
         // 添加窗口大小变化监听
@@ -67,15 +76,34 @@ const HistoricalSellChart = ({
     }, [metric, symbol, userContext]);
 
     useEffect(() => {
-        buildChart();
-    }, [historicalData]);
+        if (!showUpgrade && historicalData.timestamps.length > 0) {
+            buildChart();
+        }
+    }, [historicalData, showUpgrade]);
 
     const render = () => {
         return (
             <div
-                id="HistoricalSellChart"
-                style={{ width: chartWidth, height: chartHeight }}
-            />
+                style={{
+                    position: "relative",
+                    width: chartWidth,
+                    height: chartHeight,
+                    maxWidth: "100%",
+                }}
+            >
+                <div
+                    id="HistoricalSellChart"
+                    ref={chartContainerRef}
+                    style={{
+                        width: "100%",
+                        height: "100%",
+                    }}
+                    className="chart-container"
+                />
+                {showUpgrade && (
+                    <ChartUpgrade chartType={t("historicalSellChart")} />
+                )}
+            </div>
         );
     };
 
@@ -89,15 +117,20 @@ const HistoricalSellChart = ({
 
             if (isErrorTypeEnum(response)) {
                 console.error("Error fetching historical sell data");
+                setShowUpgrade(true);
                 return;
             }
 
             const sellData = response as HistoricalSellData;
-            if (sellData.values) {
+            if (sellData.values && sellData.values.length > 0) {
                 processData(sellData.values);
+                setShowUpgrade(false);
+            } else {
+                setShowUpgrade(true);
             }
         } catch (e) {
             console.error("Error in fetchData:", e);
+            setShowUpgrade(true);
         }
     };
 

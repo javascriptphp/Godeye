@@ -119,18 +119,7 @@ const Pricing: React.FC = () => {
                             title={t("ultimateVersion")}
                             $isActive={true}
                         >
-                            <PriceTag>
-                                {t("priceUltimate")}
-                                <StyledTooltip title={t("noteUltimate")}>
-                                    <QuestionCircleOutlined
-                                        style={{
-                                            marginLeft: "8px",
-                                            fontSize: "16px",
-                                            color: "#a0a0a0",
-                                        }}
-                                    />
-                                </StyledTooltip>
-                            </PriceTag>
+                            <PriceTag>{t("priceUltimate")}</PriceTag>
 
                             <PriceDescription>
                                 {t("descriptionUltimate")}

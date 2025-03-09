@@ -10,13 +10,15 @@ interface LayoutProps {
 const Layout = ({ children }: LayoutProps) => {
     return (
         <div className="bg-background-color relative w-full min-h-screen">
-            <NavHeader />
+            <div className="relative z-50">
+                <NavHeader />
+            </div>
             <div className="absolute top-[-50px] sm:top-[-75px] md:top-[-100px] left-[-100px] sm:left-[-150px] md:left-[-200px] h-auto overflow-hidden">
                 <Image
                     src={circuitImage}
                     alt="Circuit decoration"
                     width={300}
-                    className="object-contain opacity-90 w-[250px] sm:w-[350px] md:w-[500px]"
+                    className="object-contain opacity-90 w-[250px] sm:w-[350px] md:w-[500px] z-[-1]"
                 />
             </div>
 
@@ -25,7 +27,7 @@ const Layout = ({ children }: LayoutProps) => {
                     src={circuitImage}
                     alt="Circuit decoration"
                     width={700}
-                    className="object-contain opacity-90 w-[300px] sm:w-[500px] md:w-[700px]"
+                    className="object-contain opacity-90 w-[300px] sm:w-[500px] md:w-[700px] z-[-1]"
                 />
             </div>
 

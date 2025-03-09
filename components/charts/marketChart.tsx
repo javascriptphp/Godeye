@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import * as echarts from "echarts";
+import { legendTextColor, gridLineColor } from "@/utils/global_constant";
 
 interface ChartProps {
     dates: string[];
@@ -21,17 +22,20 @@ const DepositWithdrawalChart: React.FC<ChartProps> = ({
             const chart = echarts.init(chartRef.current);
 
             const options = {
-                title: {
-                    text: "Price relation with Deposits & Withdrawals",
-                    left: "center",
-                },
+                // title: {
+                //     text: "Price relation with Deposits & Withdrawals",
+                //     left: "center",
+                // },
                 tooltip: {
                     trigger: "axis",
                     axisPointer: { type: "shadow" },
                 },
                 legend: {
                     data: ["Deposit", "Withdrawals", "Price"],
-                    top: "6%",
+                    top: "3%",
+                    textStyle: {
+                        color: legendTextColor,
+                    },
                 },
                 grid: {
                     left: "5%",
@@ -39,23 +43,47 @@ const DepositWithdrawalChart: React.FC<ChartProps> = ({
                     bottom: "15%",
                     containLabel: true,
                 },
-                xAxis: [
-                    {
-                        type: "category",
-                        data: dates,
+                xAxis: {
+                    type: "category",
+                    data: dates,
+                    axisLabel: {
+                        color: legendTextColor,
                     },
-                ],
+                },
                 yAxis: [
                     {
                         type: "value",
                         name: "Volume",
                         position: "left",
+                        nameTextStyle: {
+                            color: legendTextColor,
+                        },
+                        axisLabel: {
+                            color: legendTextColor,
+                        },
+                        splitLine: {
+                            show: true,
+                            lineStyle: {
+                                color: gridLineColor,
+                            },
+                        },
                     },
                     {
                         type: "value",
                         name: "Price",
                         position: "right",
-                        splitLine: { show: false },
+                        nameTextStyle: {
+                            color: legendTextColor,
+                        },
+                        axisLabel: {
+                            color: legendTextColor,
+                        },
+                        splitLine: {
+                            show: false,
+                            lineStyle: {
+                                color: gridLineColor,
+                            },
+                        },
                     },
                 ],
                 dataZoom: [
@@ -101,7 +129,13 @@ const DepositWithdrawalChart: React.FC<ChartProps> = ({
         }
     }, [dates, deposits, withdrawals, prices]);
 
-    return <div ref={chartRef} style={{ width: "100%", height: "500px" }} />;
+    return (
+        <div
+            ref={chartRef}
+            style={{ width: "100%", height: "500px" }}
+            className="chart-container"
+        />
+    );
 };
 
 export default DepositWithdrawalChart;

@@ -1,5 +1,5 @@
 import type { TFunction } from "i18next";
-import { buyAreaColor } from "@/utils/global_constant";
+import { legendTextColor, gridLineColor } from "@/utils/global_constant";
 
 export const buildCustomConfig = function ({
     symbol,
@@ -94,6 +94,9 @@ export const buildCustomConfig = function ({
                 type: "category",
                 splitLine: { show: false },
                 data: data.timestamps,
+                axisLabel: {
+                    color: legendTextColor,
+                },
             },
             // {
             //     gridIndex: 1,
@@ -105,16 +108,24 @@ export const buildCustomConfig = function ({
         yAxis: [
             {
                 gridIndex: 0,
-                name: `${symbol}` + t("pricing"),
+                name: `${symbol} ${t("text_price")}`,
                 nameLocation: "end",
                 nameTextStyle: {
                     fontSize: 14,
+                    color: legendTextColor,
                 },
                 type: "value",
+                splitLine: {
+                    show: true,
+                    lineStyle: {
+                        color: gridLineColor,
+                    },
+                },
                 min: (value: any) => value.min * 0.999,
                 max: (value: any) => value.max * 1.0001,
                 axisLabel: {
                     formatter: (value: any) => value.toFixed(3),
+                    color: legendTextColor,
                 },
             },
             // {
@@ -135,7 +146,10 @@ export const buildCustomConfig = function ({
         legend: {
             data: [`${symbol} ${t("text_1hourK")}`],
             left: "center",
-            top: 55,
+            top: 20,
+            textStyle: {
+                color: legendTextColor,
+            },
         },
         series: [
             {

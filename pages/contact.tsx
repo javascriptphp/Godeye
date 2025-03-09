@@ -1,128 +1,87 @@
 import React from "react";
-import { Row, Col, Button, Typography, Form, Space } from "antd";
-import {
-    TwitterOutlined,
-    YoutubeOutlined,
-    MailOutlined,
-    FormOutlined,
-    SendOutlined,
-} from "@ant-design/icons";
-import PageFrame from "@/components/PageFrame";
+import { Row, Col, Button, Card, Space } from "antd";
+import { TwitterOutlined, MailOutlined } from "@ant-design/icons";
+import Layout from "@/components/Layout";
 import styled from "styled-components";
 import { useTranslation } from "react-i18next";
 
-const Heading = styled.h1`
-    margin: 60px 0;
+const ContactCard = styled(Card)`
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+
+    .ant-card-body {
+        padding: 24px;
+    }
+`;
+
+const CardTitle = styled.h3`
     text-align: center;
-    font-size: 32px;
+    margin-bottom: 30px;
+    font-size: 20px;
+    font-family: "YouSheBiaoTiHei", sans-serif;
+`;
+
+const ContactButton = styled(Button)`
+    width: 100%;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+
+    .anticon {
+        font-size: 20px;
+        margin-right: 8px;
+    }
 `;
 
 const ContactPage = () => {
     const { t } = useTranslation();
     return (
-        <PageFrame>
-            <Heading>{t("contactTitle")}</Heading>
-            <Space direction="vertical" size={50} style={{ display: "flex" }}>
+        <Layout>
+            <div
+                style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    minHeight: "calc(100vh - 300px)",
+                }}
+            >
                 <Row justify="center">
-                    {/* Twitter */}
-                    <Col
-                        xs={24}
-                        sm={12}
-                        style={{
-                            justifyContent: "center",
-                            display: "flex",
-                            alignItems: "center",
-                        }}
-                    >
-                        <Button
-                            type="default"
-                            icon={<TwitterOutlined />}
-                            block
-                            style={{
-                                height: "60px",
-                                backgroundColor: "#fff",
-                                borderColor: "#1890ff",
-                                color: "#1890ff",
-                                fontSize: "16px",
-                            }}
-                            className="custom-button"
-                            onClick={() => {
-                                window.open(
-                                    "https://x.com/btcnnn199?t=sTvR8AI1MmiIkx6OepZuRQ&s=09",
-                                    "_blank"
-                                );
-                            }}
-                        >
-                            {t("followTwitter")}
-                        </Button>
+                    <Col xs={22} sm={18} md={14} lg={10}>
+                        <ContactCard>
+                            <CardTitle>{t("contactTitle")}</CardTitle>
+                            <Space
+                                direction="vertical"
+                                style={{ width: "100%" }}
+                            >
+                                <ContactButton
+                                    type="text"
+                                    icon={<TwitterOutlined />}
+                                    onClick={() => {
+                                        window.open(
+                                            "https://x.com/Godeye2099?t=Mw2llnDrfEcrNB9MvfWEEw&s=09",
+                                            "_blank"
+                                        );
+                                    }}
+                                >
+                                    {t("followTwitter")}
+                                </ContactButton>
+                                <ContactButton
+                                    type="text"
+                                    icon={<MailOutlined />}
+                                >
+                                    {t("emailContact")}
+                                </ContactButton>
+                            </Space>
+                        </ContactCard>
                     </Col>
-                    {/*<Col xs={24} sm={1}></Col>*/}
-                    {/*<Col xs={24} sm={6} style={{ justifyContent: 'center', display: 'flex', alignItems: 'center' }}>*/}
-                    {/*	<Button*/}
-                    {/*		type="default"*/}
-                    {/*		icon={<SendOutlined />}*/}
-                    {/*		block*/}
-                    {/*		style={{*/}
-                    {/*			height: '60px',*/}
-                    {/*			backgroundColor: '#fff',*/}
-                    {/*			borderColor: '#1890ff',*/}
-                    {/*			color: '#1890ff',*/}
-                    {/*			fontSize: '16px',*/}
-                    {/*		}}*/}
-                    {/*		className="custom-button"*/}
-                    {/*	>*/}
-                    {/*		点击加入 Telegram*/}
-                    {/*	</Button>*/}
-                    {/*</Col>*/}
                 </Row>
-                <Row justify="center">
-                    {/* Twitter */}
-                    <Col
-                        xs={24}
-                        sm={12}
-                        style={{
-                            justifyContent: "center",
-                            display: "flex",
-                            alignItems: "center",
-                        }}
-                    >
-                        <Button
-                            type="default"
-                            icon={<MailOutlined />}
-                            block
-                            style={{
-                                height: "60px",
-                                backgroundColor: "#fff",
-                                borderColor: "#1890ff",
-                                color: "#1890ff",
-                                fontSize: "16px",
-                            }}
-                            className="custom-button"
-                        >
-                            {t("emailContact")}
-                        </Button>
-                    </Col>
-                    {/*<Col xs={24} sm={1}></Col>*/}
-                    {/*<Col xs={24} sm={6} style={{ justifyContent: 'center', display: 'flex', alignItems: 'center' }}>*/}
-                    {/*	<Button*/}
-                    {/*		type="default"*/}
-                    {/*		icon={<FormOutlined />}*/}
-                    {/*		block*/}
-                    {/*		style={{*/}
-                    {/*			height: '60px',*/}
-                    {/*			backgroundColor: '#fff',*/}
-                    {/*			borderColor: '#1890ff',*/}
-                    {/*			color: '#1890ff',*/}
-                    {/*			fontSize: '16px',*/}
-                    {/*		}}*/}
-                    {/*		className="custom-button"*/}
-                    {/*	>*/}
-                    {/*		点击提交建议*/}
-                    {/*	</Button>*/}
-                    {/*</Col>*/}
-                </Row>
-            </Space>
-        </PageFrame>
+            </div>
+        </Layout>
     );
 };
 

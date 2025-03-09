@@ -14,6 +14,13 @@ const nextConfig = {
         // your project has ESLint errors.
         ignoreDuringBuilds: true,
     },
+    // webpack: (config) => {
+    //     config.watchOptions = {
+    //         poll: 1000, // 检查更改的频率
+    //         aggregateTimeout: 300, // 防抖时间
+    //     };
+    //     return config;
+    // },
     // images: {},
     // output: "standalone",
     // async rewrites() {

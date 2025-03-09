@@ -1,5 +1,9 @@
 import type { TFunction } from "i18next";
-import { buyAreaColor } from "@/utils/global_constant";
+import {
+    buyAreaColor,
+    indicatorColor,
+    priceColor,
+} from "@/utils/global_constant";
 import { calculateAreaRanges, calculateLineTimestamp } from "@/configs/common";
 
 export const buildCustomConfig = function ({
@@ -69,7 +73,7 @@ export const buildCustomConfig = function ({
                     focus: "series",
                 },
                 itemStyle: {
-                    color: "#e98734",
+                    color: indicatorColor,
                 },
                 markLine: {
                     symbol: "none",
@@ -94,7 +98,7 @@ export const buildCustomConfig = function ({
                     focus: "series",
                 },
                 itemStyle: {
-                    color: "#939393",
+                    color: priceColor,
                 },
                 data: data.price,
                 markPoint: {

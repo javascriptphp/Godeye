@@ -31,6 +31,10 @@ export const translations = {
         zh: "退出登录",
         en: "Log Out",
     },
+    home: {
+        zh: "首页",
+        en: "Home",
+    },
     buyMetric: {
         zh: "买入指标",
         en: "Buy Metric",
@@ -79,10 +83,6 @@ export const translations = {
         zh: "欢迎回来！请使用您的邮箱登录",
         en: "Welcome back! Please log in with your email.",
     },
-    signInTitle: {
-        zh: "Godeye登录",
-        en: "Sign In",
-    },
     signInAlert: {
         zh: "登录后即可使用该功能",
         en: "Sign in to use this feature",
@@ -100,8 +100,12 @@ export const translations = {
         en: "Forget your Password?",
     },
     signInButtonText: {
-        zh: "登 录",
+        zh: "登录",
         en: "Sign In",
+    },
+    noAccount: {
+        zh: "没有账号？",
+        en: "No account?",
     },
     signUpNow: {
         zh: "立即注册",
@@ -127,7 +131,7 @@ export const translations = {
         zh: "上帝视角版",
         en: "God's View Version",
     },
-    price: {
+    pricePrimary: {
         zh: "免费",
         en: "Free",
     },
@@ -152,12 +156,8 @@ export const translations = {
         en: "T3 Indicator",
     },
     priceUltimate: {
-        zh: "(30+169) 美元/季",
-        en: "(30+169) USD/quarter",
-    },
-    noteUltimate: {
-        zh: "说明：先支付30 USDT，获得三个月使用权限，赚钱后再补齐169 USDT",
-        en: "Note: Pay 30 USDT first to gain three months of access, then pay an additional 169 USDT after making a profit",
+        zh: "199 美元/季",
+        en: "199 USD/quarter",
     },
     notePrimary: {
         zh: "说明：注册后可免费查看T1数据",
@@ -203,7 +203,6 @@ export const translations = {
         zh: "升级订阅",
         en: "Upgrade Subscription",
     },
-
     contactTitle: {
         zh: "联系方式",
         en: "Contact Information",
@@ -308,17 +307,21 @@ export const translations = {
         zh: "已经注册了？",
         en: "Already registered?",
     },
-    loginLinkText: {
-        zh: "登录",
-        en: "Sign In",
-    },
     registrationStepTitle: {
-        zh: "输入注册信息",
-        en: "Enter Registration Info",
+        zh: "账号注册",
+        en: "Account Registration",
+    },
+    registrationStepDescription: {
+        zh: "填写基本信息",
+        en: "Fill in basic information",
     },
     emailVerificationStepTitle: {
         zh: "邮箱验证",
         en: "Email Verification",
+    },
+    emailVerificationStepDescription: {
+        zh: "验证您的邮箱",
+        en: "Verify your email",
     },
     text_indicator: {
         zh: "指标",
@@ -373,8 +376,8 @@ export const translations = {
         en: "Please enter the verification code",
     },
     verificationCodeSent: {
-        zh: "验证码已发送",
-        en: "Verification code sent",
+        zh: "验证码已发送到您的邮箱，请查收并在下方输入6位验证码",
+        en: "The verification code has been sent to your email. Please check your email and enter the 6-digit code below.",
     },
     verificationResendLink: {
         zh: "重新发送",
@@ -421,8 +424,8 @@ export const translations = {
         en: "FDV",
     },
     exchangeDepositsAndWithdrawals: {
-        zh: "交易所存取数据",
-        en: "Exchange Deposits & Withdrawals",
+        zh: "交易所",
+        en: "Exchange",
     },
     tokenExplorerTitle: {
         zh: "代币浏览器",
@@ -455,6 +458,74 @@ export const translations = {
     chatGPTDescription: {
         zh: "欢迎向我提问，了解最新币圈市场趋势。",
         en: "Ask me anything about the latest coin market trends.",
+    },
+    nextStep: {
+        zh: "下一步",
+        en: "Next",
+    },
+    emailVerificationTitle: {
+        zh: "验证您的邮箱",
+        en: "Verify your email",
+    },
+    verificationCodeLength: {
+        zh: "验证码应为6位数字",
+        en: "The verification code should be 6 digits",
+    },
+    verificationCodePlaceholder: {
+        zh: "请输入6位验证码",
+        en: "Please enter the 6-digit verification code",
+    },
+    resendCode: {
+        zh: "重新发送",
+        en: "Resend",
+    },
+    resendCodeIn: {
+        zh: "重新发送倒计时",
+        en: "Resend Countdown",
+    },
+    verificationCodeResent: {
+        zh: "验证码已重新发送",
+        en: "Verification code resent",
+    },
+    completeRegistration: {
+        zh: "完成注册",
+        en: "Complete Registration",
+    },
+    verificationFailed: {
+        zh: "验证失败，请检查验证码",
+        en: "Verification failed, please check the verification code",
+    },
+    scrollToSeeMore: {
+        zh: "滑动查看更多",
+        en: "Swipe to see more",
+    },
+    searchPlaceholder: {
+        zh: "搜索你感兴趣的代币",
+        en: "Search for the token you are interested in",
+    },
+    upgradeRequired: {
+        zh: "升级解锁T2图表",
+        en: "Upgrade to Unlock T2 Chart",
+    },
+    upgradeChartDescription: {
+        zh: "升级到上帝视角版以查看完整的{{chartType}}数据和分析",
+        en: "Upgrade to God's View Version to access complete {{chartType}} data and analysis",
+    },
+    upgradeNow: {
+        zh: "立即升级",
+        en: "Upgrade Now",
+    },
+    historicalBuyChart: {
+        zh: "历史买入指标",
+        en: "Historical Buy Indicator",
+    },
+    historicalSellChart: {
+        zh: "历史卖出指标",
+        en: "Historical Sell Indicator",
+    },
+    comingSoon: {
+        zh: "敬请期待",
+        en: "Coming Soon",
     },
 } as {
     [key: string]: {

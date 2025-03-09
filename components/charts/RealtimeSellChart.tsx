@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import * as echarts from "echarts";
 import { EChartsOption } from "echarts";
 import { chartHeight, chartWidth } from "@/utils/global_constant";
@@ -10,6 +10,7 @@ import useWebSocket from "react-use-websocket";
 import { getRealtimeDataUrl } from "@/service";
 import { RealtimeResponse, RealtimeSellData, SELL } from "@/types";
 import { formatTimestampToString } from "@/utils/time";
+import ChartOverlay from "@/components/ChartOverlay";
 
 interface RealtimeSellItem {
     timestamps: string[];
@@ -39,6 +40,9 @@ const RealtimeSellChart = ({
     const { getUserContext } = useStore();
     const userContext = getUserContext();
     const [url, setUrl] = useState<string>("");
+    const chartRef = useRef<echarts.ECharts | null>(null);
+    const chartContainerRef = useRef<HTMLDivElement>(null);
+
     const { lastMessage } = useWebSocket(url, {
         onOpen: () => console.log("Connected to WebSocket for Sell Chart"),
         reconnectInterval: 5000,
@@ -49,6 +53,23 @@ const RealtimeSellChart = ({
     useEffect(() => {
         initData();
         fetchData();
+
+        // 添加窗口大小变化监听
+        const handleResize = () => {
+            if (chartRef.current) {
+                chartRef.current.resize();
+            }
+        };
+        window.addEventListener("resize", handleResize);
+
+        return () => {
+            window.removeEventListener("resize", handleResize);
+            // 清理图表实例
+            if (chartRef.current) {
+                chartRef.current.dispose();
+                chartRef.current = null;
+            }
+        };
     }, [metric, symbol, userContext]);
 
     useEffect(() => {
@@ -64,30 +85,18 @@ const RealtimeSellChart = ({
 
     const render = () => {
         return (
-            <div
-                id="RealtimeSellChart"
-                style={{ width: chartWidth, height: chartHeight }}
-            >
+            <ChartOverlay>
                 <div
+                    id="RealtimeSellChart"
+                    ref={chartContainerRef}
                     style={{
-                        position: "absolute",
-                        top: 0,
-                        left: 0,
-                        width: "100%",
-                        height: "100%",
-                        backgroundColor: "rgba(255, 255, 255, 0.8)",
-                        backdropFilter: "blur(10px)",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        fontSize: "1.5em",
-                        color: "#333",
-                        zIndex: 1,
+                        width: chartWidth,
+                        height: chartHeight,
+                        maxWidth: "100%",
                     }}
-                >
-                    {t("metricUpdateInfo")}
-                </div>
-            </div>
+                    className="chart-container"
+                />
+            </ChartOverlay>
         );
     };
 
@@ -151,11 +160,27 @@ const RealtimeSellChart = ({
             ...buildCustomConfig({
                 symbol,
             }),
+            // 添加响应式配置
+            grid: {
+                left: "5%",
+                right: "5%",
+                top: "15%",
+                bottom: "15%",
+                containLabel: true,
+            },
         } as EChartsOption;
 
         const chartDom = document.getElementById("RealtimeSellChart");
-        const myChart = echarts.init(chartDom);
-        echartsOption && myChart.setOption(echartsOption);
+        if (chartDom) {
+            // 如果已经有图表实例，先销毁
+            if (chartRef.current) {
+                chartRef.current.dispose();
+            }
+            // 创建新的图表实例
+            chartRef.current = echarts.init(chartDom);
+            // 设置图表选项
+            echartsOption && chartRef.current.setOption(echartsOption);
+        }
     };
 
     return render();

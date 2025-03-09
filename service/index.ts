@@ -3,8 +3,8 @@ import {
     ErrorTypeEnum,
     HistoricalBuyData,
     HistoricalSellData,
-    LoginData,
-    RegisterData,
+    LoginData, LoginWithWalletResponse,
+    RegisterData, SupportWallet,
     ThreeMonthBuyData,
     ThreeMonthSellData,
 } from "@/types";
@@ -284,3 +284,15 @@ export const getChatClearance = async (message: string): Promise<string> => {
         (data) => data
     );
 };
+export const loginWithWallet = async (
+    wallet: SupportWallet,
+    wallet_address: string,
+    messageApi?: MessageInstance
+) : Promise<LoginWithWalletResponse | ErrorTypeEnum> => {
+    return fetchApi(
+      "/api/user/login-wallet",
+      {wallet, wallet_address},
+      (data) => data,
+      messageApi
+    )
+}

@@ -46,6 +46,18 @@ export type RegisterData = {
     role?: string;
 };
 
+export type LoginWithWalletResponse = {
+    code: number;
+    message: string;
+    message_level: string;
+    data: LoginWithWalletData | null;
+};
+
+export type LoginWithWalletData = {
+    email?: string;
+    role?: string;
+};
+
 export type LoginData = RegisterData;
 
 export type LoginResponse = RegisterResponse;
@@ -210,6 +222,36 @@ export enum ErrorTypeEnum {
     INVALID_VERIFICATION_CODE,
     INVALID_CREDENTIALS,
     SYSTEM_ERROR,
+}
+
+export class SupportWallet {
+    private constructor() {}
+
+    static readonly OKX = new SupportWallet();
+    static readonly METAMASK = new SupportWallet();
+
+    private static readonly _names: { [key: string]: SupportWallet } = {
+        'com.okex.wallet': SupportWallet.OKX,
+        'io.metamask': SupportWallet.METAMASK
+    };
+
+    private static readonly _values: { [key: string]: string } = {
+        'com.okex.wallet': "OKX",
+        'io.metamask': "METAMASK"
+    };
+
+    static fromName(name: string): SupportWallet {
+        return SupportWallet._names[name];
+    }
+
+    getName(): string {
+        for (const name in SupportWallet._values) {
+            if (SupportWallet._values[name] && this === SupportWallet._names[name]) {
+                return SupportWallet._values[name];
+            }
+        }
+        throw new Error('Invalid color instance');
+    }
 }
 
 export type XaxisType = {

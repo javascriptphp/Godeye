@@ -12,9 +12,9 @@ const UserAccountStyle = styled.div`
     user-select: none;
 `;
 const WalletsContainer = styled.div`
-    display: flex;
-    flex-flow: row nowrap;
-    justify-content: flex-start;
+    //display: flex;
+    //flex-flow: row nowrap;
+    //justify-content: flex-start;
 
     padding: 0.6em 1.2em;
     margin-bottom: 0.5em;
@@ -41,10 +41,10 @@ export const SelectedWallet = () => {
 				<>
 					<WalletsContainer>
 						<SelectedWalletImg src={selectedWallet.info?.icon} alt={selectedWallet.info?.name || "Wallet Icon"}/>
-						<div>{selectedWallet.info?.name || "Unknown Wallet"}</div>
-						<div>({formatAddress(selectedAccount)})</div>
-						<div><strong>uuid:</strong> {selectedWallet.info?.uuid || "N/A"}</div>
-						<div><strong>rdns:</strong> {selectedWallet.info?.rdns || "N/A"}</div>
+						<p>{selectedWallet.info?.name || "Unknown Wallet"}</p>
+						<p>({selectedAccount})</p>
+						<p><strong>uuid:</strong> {selectedWallet.info?.uuid || "N/A"}</p>
+						<p><strong>rdns:</strong> {selectedWallet.info?.rdns || "N/A"}</p>
 					</WalletsContainer>
 					<button onClick={disconnectWallet}>Disconnect Wallet</button>
 				</>

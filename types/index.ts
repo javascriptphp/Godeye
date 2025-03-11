@@ -236,8 +236,8 @@ export class SupportWallet {
     };
 
     private static readonly _values: { [key: string]: string } = {
-        'com.okex.wallet': "OKX",
-        'io.metamask': "METAMASK"
+        'com.okex.wallet': "okx",
+        'io.metamask': "metamask"
     };
 
     static fromName(name: string): SupportWallet {

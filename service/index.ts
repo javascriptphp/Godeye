@@ -285,12 +285,12 @@ export const getChatClearance = async (message: string): Promise<string> => {
     );
 };
 export const loginWithWallet = async (
-    wallet: SupportWallet,
+    wallet: string,
     wallet_address: string,
     messageApi?: MessageInstance
 ) : Promise<LoginWithWalletResponse | ErrorTypeEnum> => {
     return fetchApi(
-      "/api/user/login-wallet",
+      "/api/loginWithWallet",
       {wallet, wallet_address},
       (data) => data,
       messageApi

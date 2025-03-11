@@ -1,15 +1,16 @@
-import React, {useContext, useEffect, useState} from "react";
+import React, {useContext, useEffect} from "react";
 import {Button, Col, message, Modal, Row, Space} from "antd";
 import {InfoCircleOutlined} from "@ant-design/icons";
 import {WalletProviderContext} from "@/components/wallet/WalletProvider";
 import {loginWithWallet} from "@/service";
 import {SupportWallet} from "@/types";
+import useStore from "@/utils/store";
 
-const ConnectWalletModal = ({onClose}: { onClose: () => void }) => {
+const ConnectWalletModal = ({onClose, onSuccess}: { onClose: VoidFunction, onSuccess: (r: any) => void }) => {
 	const useWalletProvider = () => useContext(WalletProviderContext);
 	const {wallets, connectWallet} = useWalletProvider();
-	const {selectedWallet, selectedAccount, disconnectWallet} =
-		useWalletProvider();
+	const { loginHandler } = useStore();
+	const {selectedWallet, selectedAccount} = useWalletProvider();
 	const [messageApi, contextHolder] = message.useMessage();
 
 	const handleCloseModal = () => {
@@ -22,16 +23,12 @@ const ConnectWalletModal = ({onClose}: { onClose: () => void }) => {
 			loginWithWallet(
 				SupportWallet.fromName(walletName).getName(),
 				selectedAccount,
+				loginHandler,
 				messageApi
-			)
-				.then((r) => {
-					console.log(r);
+			).then((r) => {
 					handleCloseModal();
-					//todo 登录成功的回调
+					onSuccess(r);
 				})
-				.catch((e) => {
-					console.error(e);
-				});
 		}
 	}, [selectedWallet, selectedAccount]);
 	return (

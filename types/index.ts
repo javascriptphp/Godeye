@@ -209,6 +209,7 @@ export interface UserContext {
     email: string | "";
     username: string | "";
     role: string | "";
+    type: "NORMAL" | "WALLET";
 }
 export interface SystemContext {
     language?: string;

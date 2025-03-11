@@ -3,7 +3,7 @@ import {
     ErrorTypeEnum,
     HistoricalBuyData,
     HistoricalSellData,
-    LoginData, LoginWithWalletResponse,
+    LoginData, LoginWithWalletData, LoginWithWalletResponse,
     RegisterData, SupportWallet,
     ThreeMonthBuyData,
     ThreeMonthSellData,
@@ -141,6 +141,7 @@ export const invokeLogin = async (
                 email: loginInfo.email,
                 username: data.user || "",
                 role: data.role || "",
+                type: "NORMAL"
             });
             return data as LoginData;
         },
@@ -287,12 +288,21 @@ export const getChatClearance = async (message: string): Promise<string> => {
 export const loginWithWallet = async (
     wallet: string,
     wallet_address: string,
+    loginHandler: UserContextHandler,
     messageApi?: MessageInstance
 ) : Promise<LoginWithWalletResponse | ErrorTypeEnum> => {
     return fetchApi(
       "/api/loginWithWallet",
       {wallet, wallet_address},
-      (data) => data,
+      (data) => {
+          loginHandler({
+              email: data.email,
+              username: data.user || "",
+              role: data.role || "",
+              type: "WALLET"
+          });
+          return data as LoginWithWalletResponse;
+      },
       messageApi
     )
 }

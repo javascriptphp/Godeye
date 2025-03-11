@@ -42,6 +42,15 @@ const SignIn: React.FC = () => {
                 setLoading(false);
             });
     };
+    const onWalletLoginSuccess = (r: any) => {
+        if (r.email) {
+            message.success(t("signInSuccessfully"));
+            router.push("/");
+        } else {
+            message.error(t("signInFailed"));
+        }
+        setLoading(false);
+    };
 
     const onSignInWithWallet = () => {
         setShowWalletList(true);
@@ -124,6 +133,7 @@ const SignIn: React.FC = () => {
                 <WalletProvider>
                     <ConnectWalletModal
                         onClose={() => setShowWalletList(false)}
+                        onSuccess={onWalletLoginSuccess}
                     />
                 </WalletProvider>
             )}

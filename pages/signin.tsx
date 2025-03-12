@@ -8,7 +8,8 @@ import useStore from "@/utils/store";
 import { useTranslation } from "react-i18next";
 import { MailOutlined, LockOutlined } from "@ant-design/icons";
 import Link from "next/link";
-import Head from "next/head";
+import { WalletProvider } from "@/components/wallet/WalletProvider";
+import ConnectWalletModal from "@/components/wallet/ConnectWalletModal";
 
 // 登录页面组件
 const SignIn: React.FC = () => {
@@ -18,6 +19,7 @@ const SignIn: React.FC = () => {
     const { loginHandler } = useStore();
     const { t } = useTranslation();
     const [loading, setLoading] = useState(false);
+    const [showWalletList, setShowWalletList] = useState(false);
 
     // 表单提交处理
     const onFinish = (values: any) => {
@@ -39,6 +41,19 @@ const SignIn: React.FC = () => {
             .finally(() => {
                 setLoading(false);
             });
+    };
+    const onWalletLoginSuccess = (r: any) => {
+        if (r.email) {
+            message.success(t("signInSuccessfully"));
+            router.push("/");
+        } else {
+            message.error(t("signInFailed"));
+        }
+        setLoading(false);
+    };
+
+    const onSignInWithWallet = () => {
+        setShowWalletList(true);
     };
 
     return (
@@ -104,7 +119,24 @@ const SignIn: React.FC = () => {
                     {t("noAccount")}{" "}
                     <Link href="/signup">{t("signUpNow")}</Link>
                 </SignupSection>
+
+                <SignInWithWalletButton
+                    type="primary"
+                    onClick={onSignInWithWallet}
+                    loading={loading}
+                >
+                    {t("signInWithWalletButtonText")}
+                </SignInWithWalletButton>
             </LoginCard>
+
+            {showWalletList && (
+                <WalletProvider>
+                    <ConnectWalletModal
+                        onClose={() => setShowWalletList(false)}
+                        onSuccess={onWalletLoginSuccess}
+                    />
+                </WalletProvider>
+            )}
 
             <Footer>{footerText}</Footer>
         </PageContainer>
@@ -282,6 +314,32 @@ const SubmitButton = styled(Button)`
     font-weight: 500;
     font-size: 16px;
     margin-bottom: 20px;
+    color: #000;
+
+    &:hover {
+        background: linear-gradient(90deg, #c5fc9e 0%, #3dfbad 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(40, 232, 155, 0.3);
+        color: #000;
+    }
+
+    &:active {
+        transform: translateY(0);
+    }
+
+    &.ant-btn-loading {
+        opacity: 0.8;
+    }
+`;
+const SignInWithWalletButton = styled(Button)`
+    width: 100%;
+    height: 45px;
+    background: linear-gradient(90deg, #b1fb83 0%, #28e89b 100%);
+    border: none;
+    border-radius: 6px;
+    font-weight: 500;
+    font-size: 16px;
+    margin-top: 20px;
     color: #000;
 
     &:hover {

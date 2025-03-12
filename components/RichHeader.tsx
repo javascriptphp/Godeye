@@ -6,7 +6,7 @@ import React from "react";
 import LoginedAvatar from "@/components/login/LoginedAvatar";
 import useStore from "@/utils/store";
 import { useTranslation } from "react-i18next";
-import { GlobalOutlined } from "@ant-design/icons";
+import { GithubOutlined, GlobalOutlined } from "@ant-design/icons";
 
 const HeaderContainer = styled.header`
     display: flex;
@@ -137,6 +137,7 @@ const RichHeader = () => {
                             style={{ fontSize: "18px", cursor: "pointer" }}
                         />
                     </Dropdown>
+                    <GithubOutlined />
                     {userContext ? (
                         <LoginedAvatar />
                     ) : (

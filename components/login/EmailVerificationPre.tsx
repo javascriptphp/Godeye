@@ -125,6 +125,7 @@ const EmailVerification = ({ userInfo }: { userInfo: UserInfo }) => {
         invokeRegister(
             {
                 ...userInfo,
+                username: "",
                 verification_code: form.getFieldValue("verification_code"),
             },
             messageApi

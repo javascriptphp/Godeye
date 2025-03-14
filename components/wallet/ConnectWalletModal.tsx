@@ -5,23 +5,29 @@ import {WalletProviderContext} from "@/components/wallet/WalletProvider";
 import {loginWithWallet} from "@/service";
 import {SupportWallet} from "@/types";
 import useStore from "@/utils/store";
+import {useTranslation} from "react-i18next";
 
 const ConnectWalletModal = ({onClose, onSuccess}: { onClose: VoidFunction, onSuccess: (r: any) => void }) => {
 	const useWalletProvider = () => useContext(WalletProviderContext);
 	const {wallets, connectWallet} = useWalletProvider();
 	const { loginHandler } = useStore();
 	const {selectedWallet, selectedAccount} = useWalletProvider();
+	const { t } = useTranslation();
 	const [messageApi, contextHolder] = message.useMessage();
 
 	const handleCloseModal = () => {
 		onClose();
 	};
 
+	console.log(Object.values(wallets).map((provider: EIP6963ProviderDetail)=>{
+		return provider.info;
+	}));
+	console.log(SupportWallet.rdnses());
 	useEffect(() => {
 		const walletName = selectedWallet?.info.rdns as string;
 		if (selectedAccount && selectedWallet) {
 			loginWithWallet(
-				SupportWallet.fromName(walletName).getName(),
+				SupportWallet.fromRdns(walletName).getName(),
 				selectedAccount,
 				loginHandler,
 				messageApi
@@ -67,53 +73,62 @@ const ConnectWalletModal = ({onClose, onSuccess}: { onClose: VoidFunction, onSuc
 						size={20}
 						style={{display: "flex"}}
 					>
-						{Object.keys(wallets).length <= 0
-							? "No Detected Wallet"
-							: Object.values(wallets).map(
-								(provider: EIP6963ProviderDetail) => {
+						{
+
+							SupportWallet.names().map(
+								(walletName: string, index: number) => {
+									const installedWallets = Object.values(wallets).map((provider: EIP6963ProviderDetail)=>{
+										return provider.info.rdns as string;
+									});
+									const isInstalled = (installedWallets.indexOf(SupportWallet.fromName(walletName).getRdns()) !== -1) as boolean;
+									
 									return (
 										<Row
-											key={provider.info.uuid}
-											style={{
-												marginBottom: "10px",
-												alignItems: "center",
-											}}
+											key={index}
+											style={{marginBottom: "10px", alignItems: "center",}}
 										>
 											<Col span={2}>
-												<img
-													src={provider.info.icon}
-													alt={provider.info.name}
-												/>
+												<img src={SupportWallet.fromName(walletName).getIcon()} alt={walletName}/>
 											</Col>
 											<Col span={1}></Col>
-											<Col
-												span={14}
-												style={{
-													color: "white",
-													fontSize: "16px",
-													fontWeight: "bold",
-												}}
-											>
-												<div>
-													{provider.info.name}
-												</div>
+											<Col span={14} style={{color: "white", fontSize: "16px", fontWeight: "bold",}}>
+												<div>{walletName}</div>
 											</Col>
+											
 											<Col span={6}>
-												<Button
-													type="primary"
-													onClick={() =>
-														connectWallet(
-															provider.info.rdns
-														)
-													}
-												>
-													INSTALLED
-												</Button>
-											</Col>
+												{	
+													isInstalled ?
+													<Button block={true} type="primary" onClick={() => connectWallet(SupportWallet.fromName(walletName).getRdns())}>{t("connectWallet")}</Button>
+													:
+													<Button block={true} disabled={true} type="default" onClick={()=>{}}>{t("installWallet")}</Button>
+												}
+												</Col>
 										</Row>
-									);
+									);								
 								}
-							)}
+							)
+						}
+						{/*{Object.keys(wallets).length <= 0*/}
+						{/*	? "No Detected Wallet"*/}
+						{/*	: Object.values(wallets).map(*/}
+						{/*		(provider: EIP6963ProviderDetail) => {*/}
+						{/*			return (*/}
+						{/*				<Row*/}
+						{/*					key={provider.info.uuid}*/}
+						{/*					style={{marginBottom: "10px", alignItems: "center",}}*/}
+						{/*				>*/}
+						{/*					<Col span={2}>*/}
+						{/*						<img src={provider.info.icon} alt={provider.info.name}/>*/}
+						{/*					</Col>*/}
+						{/*					<Col span={1}></Col>*/}
+						{/*					<Col span={14} style={{color: "white", fontSize: "16px", fontWeight: "bold",}}>*/}
+						{/*						<div>{provider.info.name}</div>*/}
+						{/*					</Col>*/}
+						{/*					<Col span={6}><Button type="primary" onClick={() => connectWallet(provider.info.rdns)}>INSTALLED</Button></Col>*/}
+						{/*				</Row>*/}
+						{/*			);*/}
+						{/*		}*/}
+						{/*	)}*/}
 					</Space>
 				</div>
 			</Modal>

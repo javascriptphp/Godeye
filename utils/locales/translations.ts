@@ -107,6 +107,14 @@ export const translations = {
         zh: "使用钱包登录",
         en: "Sign In with Wallet",
     },
+    connectWallet: {
+        zh: "连接",
+        en: "Connect"
+    },
+    installWallet: {
+        zh: "未安装",
+        en: "Not Installed"
+    },
     noAccount: {
         zh: "没有账号？",
         en: "No account?",

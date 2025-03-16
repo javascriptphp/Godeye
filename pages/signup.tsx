@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import { footerText } from "@/utils/global_constant";
-import { Steps } from "antd";
+import { message } from "antd";
 import EmailVerification from "@/components/login/EmailVerification";
 import Register from "@/components/login/Register";
 import { useTranslation } from "react-i18next";
+import { getVerificationCode } from "@/service";
 
 export interface UserInfo {
     email: string;
@@ -13,20 +14,34 @@ export interface UserInfo {
 
 const SignUp: React.FC = () => {
     const [isRegistered, setIsRegistered] = useState(false);
+    const [messageApi, contextHolder] = message.useMessage();
     const [userInfo, setUserInfo] = useState<UserInfo>({
         email: "",
         password: "",
     });
     const { t } = useTranslation();
 
-    const handleRegister = (info: UserInfo) => {
+    const handleRegister = async (info: UserInfo) => {
+        if (!(await sendVerificationCode(info.email))) return;
         setIsRegistered(true);
         setUserInfo(info);
+    };
+
+    const sendVerificationCode = async (email: string) => {
+        const res = await getVerificationCode(email, messageApi);
+        if (res && res.code === 500) return false;
+        messageApi.open({
+            type: "success",
+            content: t("verificationSuccess"),
+            duration: 2,
+        });
+        return true;
     };
 
     return (
         <PageContainer>
             <MainContent>
+                {contextHolder}
                 <FormContainer>
                     {isRegistered ? (
                         <EmailVerification userInfo={userInfo} />

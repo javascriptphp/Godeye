@@ -33,19 +33,16 @@ const EmailVerification: React.FC<EmailVerificationProps> = ({ userInfo }) => {
 
     useEffect(() => {
         if (userInfo && userInfo.email) {
-            getVerificationCode(userInfo.email, messageApi).then(
-                (isSuccess) => {
-                    if (isSuccess) {
-                        messageApi
-                            .open({
-                                type: "success",
-                                content: t("verificationSuccess"),
-                                duration: 2,
-                            })
-                            .then((r) => r);
-                    }
-                }
-            );
+            getVerificationCode(userInfo.email, messageApi).then((data) => {
+                if (data && data.code === 500) return;
+                messageApi
+                    .open({
+                        type: "success",
+                        content: t("verificationSuccess"),
+                        duration: 2,
+                    })
+                    .then((r) => r);
+            });
         }
     }, []);
 

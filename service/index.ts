@@ -44,6 +44,7 @@ async function fetchApi<T>(
                         content: responseData.message,
                         duration: 3,
                     });
+                return responseData;
             }
         }
 
@@ -107,14 +108,13 @@ export const getRealtimeDataUrl = async (
 export const getVerificationCode = async (
     email: string,
     messageApi: MessageInstance
-): Promise<boolean> => {
-    const res = fetchApi(
+): Promise<any> => {
+    return fetchApi(
         "/api/getVerificationCode",
         { email },
-        () => true,
+        (data) => data,
         messageApi
     );
-    return Boolean(res);
 };
 
 export const invokeRegister = async (

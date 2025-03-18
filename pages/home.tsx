@@ -17,6 +17,7 @@ import RealtimeSellChart from "@/components/charts/RealtimeSellChart";
 // Utilities
 import useStore from "@/utils/store";
 import { MetricType } from "@/types";
+import { getAllCoinsData } from "@/utils/validCoins";
 
 const ChartContainer = styled.div`
     margin: 0 auto;
@@ -34,31 +35,8 @@ const HomePage = () => {
     const [metric, setMetric] = useState(MetricType.BUY);
     const userContext = useStore().getUserContext();
 
-    // 示例币种数据
-    const symbolsData = [
-        { symbol: "BTC", name: "Bitcoin", price: "61298.22" },
-        { symbol: "ETH", name: "Ethereum", price: "2612.45" },
-        { symbol: "SOL", name: "Solana", price: "142.78" },
-        { symbol: "OP", name: "Optimism", price: "3.25" },
-        { symbol: "DOGE", name: "Dogecoin", price: "0.17" },
-        { symbol: "BONK", name: "Bonk", price: "0.00" },
-        { symbol: "PEPE", name: "Pepe", price: "0.00" },
-        { symbol: "WIF", name: "Wif", price: "0.00" },
-        { symbol: "FLOKI", name: "Floki", price: "0.00" },
-        { symbol: "SUI", name: "Sui", price: "0.00" },
-        { symbol: "SEI", name: "Sei", price: "0.00" },
-        { symbol: "FTM", name: "Fantom", price: "0.00" },
-        { symbol: "ARKM", name: "Arkime", price: "0.00" },
-        { symbol: "ORDI", name: "Ordinals", price: "0.00" },
-        { symbol: "PENDLE", name: "Pendle", price: "0.00" },
-        { symbol: "STX", name: "Stacks", price: "0.00" },
-        { symbol: "ONDO", name: "Ondo", price: "0.00" },
-        { symbol: "OM", name: "Om", price: "0.00" },
-        { symbol: "ENA", name: "Ena", price: "0.00" },
-        { symbol: "ZRX", name: "Zrx", price: "0.00" },
-        { symbol: "TAO", name: "Tao", price: "0.00" },
-        { symbol: "CKB", name: "Ckb", price: "0.00" },
-    ];
+    // 使用统一的币种数据源
+    const symbolsData = getAllCoinsData();
 
     // 处理币种变更
     const handleSymbolChange = (newSymbol: string) => {

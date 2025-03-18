@@ -5,7 +5,7 @@ import { MailOutlined, CheckCircleOutlined } from "@ant-design/icons";
 import { useRouter } from "next/router";
 import { useTranslation } from "react-i18next";
 import { UserInfo } from "@/pages/signup";
-import { getVerificationCode, invokeRegister } from "@/service";
+import { invokeRegister } from "@/service";
 interface EmailVerificationProps {
     userInfo: UserInfo;
 }
@@ -30,24 +30,6 @@ const EmailVerification: React.FC<EmailVerificationProps> = ({ userInfo }) => {
             setCanResend(true);
         }
     }, [countdown, canResend]);
-
-    useEffect(() => {
-        if (userInfo && userInfo.email) {
-            getVerificationCode(userInfo.email, messageApi).then(
-                (isSuccess) => {
-                    if (isSuccess) {
-                        messageApi
-                            .open({
-                                type: "success",
-                                content: t("verificationSuccess"),
-                                duration: 2,
-                            })
-                            .then((r) => r);
-                    }
-                }
-            );
-        }
-    }, []);
 
     // 重新发送验证码
     const handleResendCode = () => {

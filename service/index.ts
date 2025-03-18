@@ -3,8 +3,9 @@ import {
     ErrorTypeEnum,
     HistoricalBuyData,
     HistoricalSellData,
-    LoginData, LoginWithWalletData, LoginWithWalletResponse,
-    RegisterData, SupportWallet,
+    LoginData,
+    LoginWithWalletResponse,
+    RegisterData,
     ThreeMonthBuyData,
     ThreeMonthSellData,
 } from "@/types";
@@ -43,6 +44,7 @@ async function fetchApi<T>(
                         content: responseData.message,
                         duration: 3,
                     });
+                return responseData;
             }
         }
 
@@ -106,14 +108,13 @@ export const getRealtimeDataUrl = async (
 export const getVerificationCode = async (
     email: string,
     messageApi: MessageInstance
-): Promise<boolean> => {
-    const res = fetchApi(
+): Promise<any> => {
+    return fetchApi(
         "/api/getVerificationCode",
         { email },
-        () => true,
+        (data) => data,
         messageApi
     );
-    return Boolean(res);
 };
 
 export const invokeRegister = async (
@@ -141,7 +142,7 @@ export const invokeLogin = async (
                 email: loginInfo.email,
                 username: data.user || "",
                 role: data.role || "",
-                type: "NORMAL"
+                type: "NORMAL",
             });
             return data as LoginData;
         },
@@ -285,24 +286,25 @@ export const getChatClearance = async (message: string): Promise<string> => {
         (data) => data
     );
 };
+
 export const loginWithWallet = async (
     wallet: string,
     wallet_address: string,
     loginHandler: UserContextHandler,
     messageApi?: MessageInstance
-) : Promise<LoginWithWalletResponse | ErrorTypeEnum> => {
+): Promise<LoginWithWalletResponse | ErrorTypeEnum> => {
     return fetchApi(
-      "/api/loginWithWallet",
-      {wallet, wallet_address},
-      (data) => {
-          loginHandler({
-              email: data.email,
-              username: data.user || "",
-              role: data.role || "",
-              type: "WALLET"
-          });
-          return data as LoginWithWalletResponse;
-      },
-      messageApi
-    )
-}
+        "/api/loginWithWallet",
+        { wallet, wallet_address },
+        (data) => {
+            loginHandler({
+                email: data.email,
+                username: data.user || "",
+                role: data.role || "",
+                type: "WALLET",
+            });
+            return data as LoginWithWalletResponse;
+        },
+        messageApi
+    );
+};

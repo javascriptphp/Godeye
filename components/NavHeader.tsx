@@ -1,11 +1,11 @@
+import React, { useState, useContext } from "react";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
 import router from "next/router";
 import useStore from "@/utils/store";
 import { invokeLogout } from "@/service";
 import { GlobalOutlined, MenuOutlined, CloseOutlined } from "@ant-design/icons";
-import {useContext, useState} from "react";
-import {WalletProviderContext} from "@/components/wallet/WalletProvider";
+import { WalletProviderContext } from "@/components/wallet/WalletProvider";
 
 const NavHeader = () => {
     const { t } = useTranslation();
@@ -14,14 +14,14 @@ const NavHeader = () => {
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
     const useWalletProvider = () => useContext(WalletProviderContext);
-    console.log(useWalletProvider());
-    const { disconnectWallet } = useWalletProvider();
+
     const logoutHandlerProxy = () => {
         if (userContext?.type === "WALLET") {
+            const { disconnectWallet } = useWalletProvider();
             disconnectWallet();
         }
         logoutHandler();
-    }
+    };
 
     const toggleLanguage = () => {
         const currentLanguage = localStorage.getItem("systemContext")
@@ -196,7 +196,10 @@ const NavHeader = () => {
                         <button
                             className="font-custom text-white py-1 px-4 lg:px-6 rounded text-sm lg:text-base transition-all hover:bg-gradient-to-r hover:from-[#B1FB83] hover:to-[#28E89B] hover:text-black whitespace-nowrap"
                             onClick={() =>
-                                invokeLogout(userContext.email, logoutHandlerProxy)
+                                invokeLogout(
+                                    userContext.email,
+                                    logoutHandlerProxy
+                                )
                             }
                         >
                             {t("logout")}

@@ -6,7 +6,6 @@ interface SymbolListProps {
     symbols: {
         symbol: string;
         name: string;
-        price: string;
         logo?: string;
     }[];
     activeSymbol: string;
@@ -107,7 +106,6 @@ const SymbolList: React.FC<SymbolListProps> = ({
                         </SymbolLogo>
                         <SymbolInfo>
                             <SymbolName>{item.name}</SymbolName>
-                            {/* <SymbolPrice>${item.price}</SymbolPrice> */}
                         </SymbolInfo>
                         <PriceChart>
                             {/* 背景竖线 */}
@@ -341,11 +339,6 @@ const SymbolName = styled.div`
     font-size: 16px;
     font-weight: 600;
     color: white;
-`;
-
-const SymbolPrice = styled.div`
-    font-size: 14px;
-    color: #28e89b;
 `;
 
 const PriceChart = styled.div`

@@ -13,3 +13,6 @@ export function formatTimestampToString(timestamp: number): string {
     // Format the date string
     return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 }
+export function formatTimestampToDate(timestamp: number) {
+    return formatTimestampToString(timestamp).split(' ')[0];
+}

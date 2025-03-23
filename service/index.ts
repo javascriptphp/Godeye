@@ -7,7 +7,7 @@ import {
     LoginWithWalletResponse,
     RegisterData,
     ThreeMonthBuyData,
-    ThreeMonthSellData,
+    ThreeMonthSellData, TweetPostDataResponse,
 } from "@/types";
 import axios, { AxiosResponse } from "axios";
 import { UserContextHandler } from "@/utils/store";
@@ -308,3 +308,13 @@ export const loginWithWallet = async (
         messageApi
     );
 };
+
+export const getTweetPostData = async (
+  user: string,
+) : Promise<TweetPostDataResponse | ErrorTypeEnum> => {
+    return fetchApi(
+      "/api/getTweetPostData",
+      {user},
+      (data) => data,
+    );
+}

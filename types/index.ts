@@ -320,3 +320,38 @@ export function isHistoricalSellValues(
 ): data is HistoricalSellValues {
     return Array.isArray((data as HistoricalSellValues).threshold);
 }
+
+
+export type BTCPrice = {
+    timestamp: number;
+    price: number;
+}
+
+export type TweetPost = {
+    id: string;
+    text: string;
+    sentiment: string;
+    bookmarkCount: number;
+    likeCount: number;
+    retweetCount: number;
+    replyCount: number;
+    viewCount: number;
+    createdAt: string;
+    keywords: string[];
+    url: string;
+    twitterUrl: string;
+    
+    createTimeStamp: number | undefined;
+    createDate: string | undefined;
+    createDateTime: string | undefined;
+};
+
+
+export type TweetPostDataResponse = {
+    code: number;
+    message: string;
+    message_level: string;
+    data: TweetPostData[] | null;
+};
+
+export type TweetPostData = TweetPost;

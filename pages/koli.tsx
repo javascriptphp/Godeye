@@ -10,7 +10,7 @@ import {KoliHeader} from "@/components/koli/KoliHeader";
 import {KoliPieChart} from "@/components/koli/KoliPieChart";
 
 const user = "test";
-export default function KOLIPage() {
+const KOLIPage : React.FC = () => {
 	const [priceData, setPriceData] = useState<BTCPrice[]>([]);
 	const [tweetData, setTweetData] = useState<TweetPost[]>([]);
 
@@ -86,3 +86,4 @@ export default function KOLIPage() {
 		</div>
 	)
 }
+export default KOLIPage;

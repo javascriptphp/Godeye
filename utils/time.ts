@@ -16,3 +16,8 @@ export function formatTimestampToString(timestamp: number): string {
 export function formatTimestampToDate(timestamp: number) {
     return formatTimestampToString(timestamp).split(' ')[0];
 }
+
+export function nYearsBeforeNowTimestamp(n: number): number {
+    const now = new Date();
+    return Math.floor(new Date(now.setFullYear(now.getFullYear() - n)).getTime());
+}

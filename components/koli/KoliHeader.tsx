@@ -1,6 +1,8 @@
 import React from "react";
+import {useTranslation} from "react-i18next";
 
 export const KoliHeader = () => {
+	const {t} = useTranslation();
 	return (
 		<div style={{
 			textAlign: 'center',
@@ -16,7 +18,7 @@ export const KoliHeader = () => {
 				lineHeight: 1.4,
 				marginBottom: 16
 			}}>
-				KOL指数（KOLI）
+				{t('KoliHeader_koli')}（KOLI）
 			</h1>
 
 			{/* 副标题 */}
@@ -26,7 +28,7 @@ export const KoliHeader = () => {
 				lineHeight: 1.6,
 				margin: 0
 			}}>
-				本指数旨在分析KOL过去5年推文与比特币行情的关联
+				{t('KoliHeader_viceTitle')}
 			</p>
 		</div>
 	);

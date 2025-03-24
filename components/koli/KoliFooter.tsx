@@ -1,9 +1,11 @@
 import {Col, Row, Typography} from "antd";
 import React from "react";
+import {useTranslation} from "react-i18next";
 
 
 const {Text, Link} = Typography;
 export const KoliFooter = () => {
+	const {t} = useTranslation();
 	return (
 		<footer style={{
 			marginTop: '50px',
@@ -22,16 +24,16 @@ export const KoliFooter = () => {
 							// color: 'rgba(0, 0, 0, 0.85)',
 							marginBottom: 12
 						}}>
-							关于KOL指数（KOLI）
+							{t('KoliFooter_aboutKoli')}
 						</Text>
 						<Text type="secondary" style={{
 							fontSize: 12,
 							lineHeight: '22px',
 							// color: 'rgba(0, 0, 0, 0.65)'
 						}}>
-							KOL指数灵感来自杜均先生和不管不理的员的<Link href={""}>这条推文</Link>，通过实现KOL推文和比特币走势的可视化，帮助用户快速了解KOL和洞察市场行情的变化。
+							{t('KoliFooter_aboutKoli_paragraph')}
 							<br/>
-							对于早期捐赠用户和优质KOL我们未来将进行大量空投。捐赠地址(仅限usdt，不少于10usdt):
+							{t('KoliFooter_aboutKoli_donate')}
 							<br/>
 							TRC20 ：TCUrNtyVxS4ELtZSN5TvJQK4yN3EK4Xxue
 							<br/>
@@ -49,7 +51,7 @@ export const KoliFooter = () => {
 							// color: 'rgba(0, 0, 0, 0.85)',
 							marginBottom: 12
 						}}>
-							相关链接
+							{t('KoliFooter_relatedLinks')}
 						</Text>
 						<div style={{lineHeight: '28px'}}>
 							<Link
@@ -57,7 +59,7 @@ export const KoliFooter = () => {
 								target="_blank"
 								style={{fontSize: 12}}
 							>
-								KOL指数灵感来源
+								{t('KoliFooter_koliInspire')}
 							</Link>
 							<br/>
 							<Link
@@ -88,7 +90,7 @@ export const KoliFooter = () => {
 							// color: 'rgba(0, 0, 0, 0.85)',
 							marginBottom: 12
 						}}>
-							联系我们
+							{t('KoliFooter_contactUs')}
 						</Text>
 						<div style={{lineHeight: '28px'}}>
 							<Text style={{fontSize: 12,}}>
@@ -120,7 +122,7 @@ export const KoliFooter = () => {
 				}}>
 					powered by Virtuals protocol
 					<br/>
-					©2025 KOL指数 KOLI
+					©2025 KOLI
 				</Text>
 			</div>
 		</footer>

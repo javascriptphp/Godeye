@@ -535,6 +535,66 @@ export const translations = {
         zh: "敬请期待",
         en: "Coming Soon",
     },
+    BitcoinChart_date: {
+        zh: '日期',
+        en: 'Date',
+    },
+    BitcoinChart_price: {
+        zh: '价格',
+        en: 'Price',
+    },
+    KoliHeader_koli: {
+        zh: 'KOL指数',
+        en: 'KOL Index',
+    },
+    KoliHeader_viceTitle: {
+        zh: '本指数旨在分析KOL过去5年推文与比特币行情的关联',
+        en: 'The purpose of this index is to analyze the correlation between the tweets of KOLs over the past 5 years and the Bitcoin market trends.',
+    },
+    KoliFooter_aboutKoli: {
+        zh: '关于KOL指数',
+        en: 'About KOLI',
+    },
+    KoliFooter_aboutKoli_paragraph: {
+        zh: 'KOL指数灵感来自杜均先生和这条推文x.com/LongLongLongBTC/status/1900130458467524904。通过实现KOL推文和比特币走势的可视化，帮助用户快速了解KOL和洞察市场行情的变化。',
+        en: 'The inspiration for the KOL Index comes from Mr. Du Jun. and the post x.com/LongLongLongBTC/status/1900130458467524904. By visualizing the correlation between KOL tweets and Bitcoin price trends, it helps users quickly understand the influence of KOLs and gain insights into market dynamics.',
+    },
+    KoliFooter_koliInspire: {
+        zh: 'KOL指数灵感来源',
+        en: 'Inspiration of KOLI',
+    },
+    KoliFooter_aboutKoli_donate: {
+        zh: '对于早期捐赠用户和优质KOL我们未来将进行大量空投。捐赠地址(仅限usdt，不少于10usdt):',
+        en: 'For early contributors and high-quality KOLs, we will conduct a significant airdrop in the future. Donation address (USDT only, minimum 10 USDT):',
+    },
+    KoliFooter_relatedLinks: {
+        zh: '相关链接',
+        en: 'Related Links',
+    },
+    KoliFooter_contactUs: {
+        zh: '联系我们',
+        en: 'Contact Us',
+    },
+    TweetModal_postDetail: {
+        zh: '推文详情',
+        en: 'Post Detail',
+    },
+    TweetModal_postTags: {
+        zh: '标签',
+        en: 'Tags',
+    },
+    TweetModal_postUrl: {
+        zh: '原贴链接',
+        en: 'Post URL',
+    },
+    TweetModal_btcPrice: {
+        zh: '比特币价格',
+        en: 'BTC Price',
+    },
+    TweetModal_postSentiment: {
+        zh: '情感',
+        en: 'Sentiment',
+    },
 } as {
     [key: string]: {
         zh?: string;

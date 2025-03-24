@@ -2,6 +2,7 @@ import {Button, Modal, Space, Tag, Typography} from "antd";
 import {CloseOutlined, LikeOutlined, MessageOutlined, ShareAltOutlined} from "@ant-design/icons";
 import React from "react";
 import {BTCPrice, TweetPost} from "@/types";
+import {useTranslation} from "react-i18next";
 
 export const TweetModal = ({isModalVisible, setIsModalVisible, prices, tweets, selectedTweet}: {
 	isModalVisible: boolean,
@@ -10,6 +11,7 @@ export const TweetModal = ({isModalVisible, setIsModalVisible, prices, tweets, s
 	tweets: TweetPost[],
 	selectedTweet: TweetPost
 }) => {
+	const {t} = useTranslation();
 	return (
 		<Modal
 			open={isModalVisible}
@@ -30,7 +32,7 @@ export const TweetModal = ({isModalVisible, setIsModalVisible, prices, tweets, s
 				// alignItems: 'center',
 				marginBottom: 24
 			}}>
-				<Typography.Title level={3}>推文详情</Typography.Title>
+				<Typography.Title level={3}>{t('TweetModal_postDetail')}</Typography.Title>
 				<Button
 					type="text"
 					icon={<CloseOutlined/>}
@@ -56,9 +58,9 @@ export const TweetModal = ({isModalVisible, setIsModalVisible, prices, tweets, s
 					</Typography.Paragraph>
 
 					<Space size={[8, 16]} wrap>
-						标签：
+						{t('TweetModal_postTags')}：
 						{selectedTweet.keywords.map(tag => (
-							<Tag key={tag} bordered={false} style={{}}>
+							<Tag key={tag} bordered={false} style={{color: '#fff'}}>
 								{tag}
 							</Tag>
 						))}
@@ -73,7 +75,7 @@ export const TweetModal = ({isModalVisible, setIsModalVisible, prices, tweets, s
 								<Typography.Text type="secondary">{selectedTweet.createDateTime}</Typography.Text>
 							</div>
 							<div>
-								<Typography.Link href={selectedTweet.url}>原贴链接</Typography.Link>
+								<Typography.Link href={selectedTweet.url}>{t('TweetModal_postUrl')}</Typography.Link>
 							</div>
 						</Space>
 						<Space size={24} style={{marginTop: 10}}>
@@ -98,9 +100,15 @@ export const TweetModal = ({isModalVisible, setIsModalVisible, prices, tweets, s
 						</Space>
 						<Space size={36}>
 							<div>
-								<Typography.Text strong>比特币价格：</Typography.Text>
+								<Typography.Text strong>{t('TweetModal_btcPrice')}：</Typography.Text>
 								<Typography.Text strong style={{color: '#389e0d'}}>
-									{prices[tweets.indexOf(selectedTweet)]?.price}
+									{/*{`当前日期：${selectedTweet.createDate},当前时间戳：${selectedTweet.createTimeStamp},当天的比特币价格：${prices.find(item => item.timestamp === selectedTweet.createTimeStamp)}`}*/}
+									{
+										prices.find(item => {
+											const itemDate = new Date(item.timestamp).toISOString().split('T')[0];
+											return itemDate === new Date(selectedTweet.createTimeStamp).toISOString().split('T')[0];
+										})?.price || '-'
+									}
 								</Typography.Text>
 							</div>
 
@@ -114,7 +122,7 @@ export const TweetModal = ({isModalVisible, setIsModalVisible, prices, tweets, s
 										color: '#cf1322'
 									}}
 								>
-									情感分析：{selectedTweet.sentiment}
+									{t('TweetModal_postSentiment')}：{selectedTweet.sentiment}
 								</Tag>
 							</div>
 						</Space>

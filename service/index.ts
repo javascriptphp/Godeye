@@ -311,10 +311,12 @@ export const loginWithWallet = async (
 
 export const getTweetPostData = async (
   user: string,
+  startTimestamp: number,
+  endTimestamp: number
 ) : Promise<TweetPostDataResponse | ErrorTypeEnum> => {
     return fetchApi(
       "/api/getTweetPostData",
-      {user},
+      {user, "start_ts_in_ms":startTimestamp, "end_ts_in_ms":endTimestamp},
       (data) => data,
     );
 }

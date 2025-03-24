@@ -1,15 +1,14 @@
-import React, {useRef, useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import * as echarts from 'echarts/core';
 import {LineChart, ScatterChart} from 'echarts/charts';
-import {
-	TooltipComponent,
-	DataZoomComponent,
-	GridComponent, TitleComponent
-} from 'echarts/components';
+import {DataZoomComponent, GridComponent, TitleComponent, TooltipComponent} from 'echarts/components';
 import {SVGRenderer} from 'echarts/renderers';
-import {BTCPrice, TweetPost} from "@/types";
+import {BTCPrice, DataRange, TweetPost} from "@/types";
 import {formatTimestampToDate} from "@/utils/time";
 import {TweetModal} from "@/components/koli/TweetModal";
+import {useTranslation} from "react-i18next";
+import {Flex, Radio} from 'antd';
+import useStore from "@/utils/store";
 
 // 注册必要组件
 echarts.use([LineChart, TooltipComponent, DataZoomComponent, GridComponent, SVGRenderer, TitleComponent, ScatterChart]);
@@ -23,17 +22,28 @@ const colorOfSentiment = (sentiment: string): string => {
 		return "#666666";
 	}
 };
-export const BitcoinChart = ({prices, tweets}: { prices: BTCPrice[], tweets: TweetPost[] }) => {
+export const BitcoinChart = ({prices, tweets, onSelectedRange}: { prices: BTCPrice[], tweets: TweetPost[], onSelectedRange: (range: number)=>void }) => {
+	// console.log('prices', prices.map(item => [formatTimestampToDate(item.timestamp), item.price]))
+	// console.log('tweets', tweets.map(item => [item.createDate, item.url]))
+	const [prevProps, setPrevProps] = useState({prices,tweets});
 	const chartRef = useRef<HTMLDivElement>(null);
 	const [isModalVisible, setIsModalVisible] = useState(false);
 	const [selectedTweet, setSelectedTweet] = useState<TweetPost>();
+	const [dataRange, setDataRange] = useState<DataRange>(DataRange.ONE_YEAR); // 默认显示全部数据
+	const {t} = useTranslation();
+	const { systemContext } = useStore();
 
+	const handleRangeChange = (range: DataRange) => {
+		setDataRange(range);
+		// 这里可以根据range参数重新请求数据
+		onSelectedRange(range.nYearsBefore)
+	};
 
 	useEffect(() => {
 		if (!chartRef.current) return;
-
 		if (!prices || prices.length === 0 || !tweets || tweets.length === 0) return;
-		console.log(prices)
+		if (prices === prevProps.prices || tweets === prevProps.tweets) return;
+		setPrevProps({prices,tweets});
 		const chart = echarts.init(chartRef.current);
 		// 添加点击事件监听器
 		chart.on('click', (params) => {
@@ -57,24 +67,24 @@ export const BitcoinChart = ({prices, tweets}: { prices: BTCPrice[], tweets: Twe
 			tooltip: {
 				trigger: 'axis',
 				formatter: (params: any) => {
-					return `日期：${params[0].value[0]}<br/>价格: $${params[0].value[1].toFixed(2)}`;
+					if (!params || !params[0] || !params[0].value || params[0].value.length === 0 || !params[0].value[1]) return;
+					return t('BitcoinChart_date')+`：${params[0].value[0]}<br/>`+t('BitcoinChart_price')+`: $${params[0].value[1].toFixed(2)}`;
 				}
 			},
-			dataZoom: [{
-				type: 'slider',
-				xAxisIndex: 0,
-				start: 0,
-				end: 100,
-				bottom: 20,
-				height: 24,
-				backgroundColor: '#f5f5f5',
-				fillerColor: 'rgba(24,144,255,0.2)',
-				borderColor: '#d9d9d9',
-				handleStyle: {
-					color: '#1890ff',
-					borderWidth: 0
-				}
-			}],
+			dataZoom: [
+				{
+					show: true,
+					realtime: true,
+					start: 0,
+					end: 100,
+				},
+				{
+					type: "inside",
+					realtime: true,
+					start: 0,
+					end: 100,
+				},
+			],
 			series: [
 				{
 					type: 'line',
@@ -103,12 +113,6 @@ export const BitcoinChart = ({prices, tweets}: { prices: BTCPrice[], tweets: Twe
 						borderWidth: 1.5          // 描边宽度
 					},
 					z: 2,
-					tooltip: {
-						formatter: (params: any) => {
-							const tweet = tweets[params.dataIndex];
-							return `sentiment: ${tweet.sentiment}<br/>时间: ${tweet.createDate}`;
-						}
-					}
 				},
 			]
 		};
@@ -120,11 +124,22 @@ export const BitcoinChart = ({prices, tweets}: { prices: BTCPrice[], tweets: Twe
 		};
 
 		window.addEventListener('resize', handleResize);
-
 	}, [prices, tweets]);
 
 	return (
 		<>
+			{/*<Flex justify="center" style={{ marginBottom: 16 }}>*/}
+			{/*	<Radio.Group*/}
+			{/*		value={dataRange}*/}
+			{/*		onChange={(e) => handleRangeChange(e.target.value)}*/}
+			{/*		buttonStyle="solid"*/}
+			{/*	>*/}
+			{/*		<Radio.Button value={DataRange.ONE_YEAR}>{DataRange.ONE_YEAR.showText[systemContext?.language || 'en']}</Radio.Button>*/}
+			{/*		<Radio.Button value={DataRange.TWO_YEARS}>{DataRange.TWO_YEARS.showText[systemContext?.language || 'en']}</Radio.Button>*/}
+			{/*		<Radio.Button value={DataRange.FIVE_YEARS}>{DataRange.FIVE_YEARS.showText[systemContext?.language || 'en']}</Radio.Button>*/}
+			{/*		<Radio.Button value={DataRange.ALL}>{DataRange.ALL.showText[systemContext?.language || 'en']}</Radio.Button>*/}
+			{/*	</Radio.Group>*/}
+			{/*</Flex>*/}
 			<div ref={chartRef} style={{width: '100%', height: 700}}/>
 			{isModalVisible && selectedTweet && (
 				<TweetModal isModalVisible={isModalVisible} setIsModalVisible={setIsModalVisible} prices={prices}

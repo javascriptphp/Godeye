@@ -341,9 +341,9 @@ export type TweetPost = {
     url: string;
     twitterUrl: string;
     
-    createTimeStamp: number | undefined;
-    createDate: string | undefined;
-    createDateTime: string | undefined;
+    createTimeStamp: number;
+    createDate: string;
+    createDateTime: string;
 };
 
 
@@ -355,3 +355,21 @@ export type TweetPostDataResponse = {
 };
 
 export type TweetPostData = TweetPost;
+
+export class DataRange {
+    // 属性
+    nYearsBefore: number; // 表示多少年前
+    showText: {[index:string]:string}; // 中英文显示文本
+
+    // 构造函数
+    constructor(nYearsBefore: number, showText: { zh: string; en: string }) {
+        this.nYearsBefore = nYearsBefore;
+        this.showText = showText;
+    }
+
+    // 静态对象
+    static ONE_YEAR = new DataRange(1, { zh: "1年", en: "1 Year" });
+    static TWO_YEARS = new DataRange(2, { zh: "2年", en: "2 Years" });
+    static FIVE_YEARS = new DataRange(5, { zh: "5年", en: "5 Years" });
+    static ALL = new DataRange(-1, { zh: "全部", en: "All" }); // -1 表示全部数据
+}

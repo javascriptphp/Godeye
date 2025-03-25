@@ -5,7 +5,7 @@ import {useTranslation} from "react-i18next";
 
 const {Text, Link} = Typography;
 export const KoliFooter = () => {
-	const {t} = useTranslation();
+	const {t} = useTranslation(undefined, {lng:'zh'});
 	return (
 		<footer style={{
 			marginTop: '50px',

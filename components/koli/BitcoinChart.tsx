@@ -23,14 +23,12 @@ const colorOfSentiment = (sentiment: string): string => {
 	}
 };
 export const BitcoinChart = ({prices, tweets, onSelectedRange}: { prices: BTCPrice[], tweets: TweetPost[], onSelectedRange: (range: number)=>void }) => {
-	// console.log('prices', prices.map(item => [formatTimestampToDate(item.timestamp), item.price]))
-	// console.log('tweets', tweets.map(item => [item.createDate, item.url]))
 	const [prevProps, setPrevProps] = useState({prices,tweets});
 	const chartRef = useRef<HTMLDivElement>(null);
 	const [isModalVisible, setIsModalVisible] = useState(false);
 	const [selectedTweet, setSelectedTweet] = useState<TweetPost>();
 	const [dataRange, setDataRange] = useState<DataRange>(DataRange.ONE_YEAR); // 默认显示全部数据
-	const {t} = useTranslation();
+	const {t} = useTranslation(undefined, {lng:'zh'});
 	const { systemContext } = useStore();
 
 	const handleRangeChange = (range: DataRange) => {
@@ -134,10 +132,10 @@ export const BitcoinChart = ({prices, tweets, onSelectedRange}: { prices: BTCPri
 			{/*		onChange={(e) => handleRangeChange(e.target.value)}*/}
 			{/*		buttonStyle="solid"*/}
 			{/*	>*/}
-			{/*		<Radio.Button value={DataRange.ONE_YEAR}>{DataRange.ONE_YEAR.showText[systemContext?.language || 'en']}</Radio.Button>*/}
-			{/*		<Radio.Button value={DataRange.TWO_YEARS}>{DataRange.TWO_YEARS.showText[systemContext?.language || 'en']}</Radio.Button>*/}
-			{/*		<Radio.Button value={DataRange.FIVE_YEARS}>{DataRange.FIVE_YEARS.showText[systemContext?.language || 'en']}</Radio.Button>*/}
-			{/*		<Radio.Button value={DataRange.ALL}>{DataRange.ALL.showText[systemContext?.language || 'en']}</Radio.Button>*/}
+			{/*		<Radio.Button value={DataRange.ONE_YEAR}>{DataRange.ONE_YEAR.showText['zh']}</Radio.Button>*/}
+			{/*		<Radio.Button value={DataRange.TWO_YEARS}>{DataRange.TWO_YEARS.showText['zh']}</Radio.Button>*/}
+			{/*		<Radio.Button value={DataRange.FIVE_YEARS}>{DataRange.FIVE_YEARS.showText['zh']}</Radio.Button>*/}
+			{/*		<Radio.Button value={DataRange.ALL}>{DataRange.ALL.showText['zh']}</Radio.Button>*/}
 			{/*	</Radio.Group>*/}
 			{/*</Flex>*/}
 			<div ref={chartRef} style={{width: '100%', height: 700}}/>

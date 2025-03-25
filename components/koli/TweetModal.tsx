@@ -11,7 +11,7 @@ export const TweetModal = ({isModalVisible, setIsModalVisible, prices, tweets, s
 	tweets: TweetPost[],
 	selectedTweet: TweetPost
 }) => {
-	const {t} = useTranslation();
+	const {t} = useTranslation(undefined, {lng:'zh'});
 	return (
 		<Modal
 			open={isModalVisible}

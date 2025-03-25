@@ -1,8 +1,8 @@
 import React from "react";
 import {useTranslation} from "react-i18next";
 
-export const KoliHeader = () => {
-	const {t} = useTranslation();
+export const KoliHeader = ({nick}: { nick: string }) => {
+	const {t} = useTranslation(undefined, {lng:'zh'});
 	return (
 		<div style={{
 			textAlign: 'center',
@@ -18,7 +18,7 @@ export const KoliHeader = () => {
 				lineHeight: 1.4,
 				marginBottom: 16
 			}}>
-				{t('KoliHeader_koli')}（KOLI）
+				{nick + " " + t('KoliHeader_koli')}
 			</h1>
 
 			{/* 副标题 */}

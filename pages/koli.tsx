@@ -22,8 +22,9 @@ const KOLIPage : React.FC = () => {
 	const router = useRouter();
 	const { query } = router;
 	// query 是一个对象，包含了所有的查询参数
-	const { userName } = query;
+	const { userName, displayName } = query;
 	const user = userName as string || "DujunX";
+	const nick = displayName as string || "Du Jun";
 	const [allPriceData, setAllPriceData] = useState<BTCPrice[]>([]);
 	const [priceData, setPriceData] = useState<BTCPrice[]>([]);
 	const [tweetData, setTweetData] = useState<TweetPost[]>([]);
@@ -31,8 +32,6 @@ const KOLIPage : React.FC = () => {
 	const endTimestamp = new Date().getTime(); // 获取当前时间
 	const oneYearBeforeNowTimestamp = nYearsBeforeNowTimestamp(1);
 	const [startTimestamp, setStartTimestamp] = useState(oneYearBeforeNowTimestamp);
-	const twoYearBeforeNowTimestamp = nYearsBeforeNowTimestamp(2);
-	const fiveYearBeforeNowTimestamp = nYearsBeforeNowTimestamp(5);
 	const onSelectedDataRange = async (range: number) => {
 		setLoading(true); // 开始加载
 		if (range === -1) {
@@ -40,12 +39,8 @@ const KOLIPage : React.FC = () => {
 		} else if (range === 1 || range === 2 || range === 5) {
 			setStartTimestamp(nYearsBeforeNowTimestamp(range));
 		}
-		console.log(range)
-		console.log(startTimestamp)
 		await fetchTweetData();
-		await fetchBtcPrice();
-		console.log(priceData)
-		console.log(tweetData)
+		processBtcPriceData();
 		setLoading(false); // 结束加载
 	};
 	const fetchBtcPrice = async () => {
@@ -59,14 +54,14 @@ const KOLIPage : React.FC = () => {
 			setPriceData(formatPriceData(filteredData));
 		}
 	};
-	// const processBtcPriceData = () => {
-	// 	if (!allPriceData) return;
-	// 	// 过滤数据
-	// 	const filteredData = allPriceData.filter((item: any) => {
-	// 		return item.timestamp >= startTimestamp && item.timestamp <= endTimestamp;
-	// 	});
-	// 	setPriceData(filteredData);
-	// }
+	const processBtcPriceData = () => {
+		if (!allPriceData) return;
+		// 过滤数据
+		const filteredData = allPriceData.filter((item: any) => {
+			return item.timestamp >= startTimestamp && item.timestamp <= endTimestamp;
+		});
+		setPriceData(filteredData);
+	}
 	const fetchTweetData = async () => {
 		const data: any = await getTweetPostData(user, startTimestamp, endTimestamp);
 		if (data && data.length > 0) {
@@ -81,7 +76,7 @@ const KOLIPage : React.FC = () => {
 					replyCount: item?.replyCount,
 					viewCount: item?.viewCount,
 					createdAt: item?.createdAt,
-					keywords: Array.of(item?.keywords),
+					keywords: item?.keywords,
 					url: item?.url,
 					twitterUrl: item?.twitterUrl,
 					createTimeStamp: Date.parse(item?.createdAt),
@@ -103,7 +98,7 @@ const KOLIPage : React.FC = () => {
 
 	return (
 		<div style={{padding: '20px 100px'}}>
-			<KoliHeader/>
+			<KoliHeader nick={nick}/>
 
 			<Card>
 				<div style={{position: 'relative'}}>

@@ -9,6 +9,7 @@ import {KoliFooter} from "@/components/koli/KoliFooter";
 import {KoliHeader} from "@/components/koli/KoliHeader";
 import {KoliPieChart} from "@/components/koli/KoliPieChart";
 import {useRouter} from "next/router";
+import {GetServerSidePropsContext} from "next";
 
 const formatPriceData = (data: any): BTCPrice[] => {
 	return data.map((item: any) => {
@@ -18,13 +19,42 @@ const formatPriceData = (data: any): BTCPrice[] => {
 		}
 	})
 }
-const KOLIPage : React.FC = () => {
-	const router = useRouter();
-	const { query } = router;
-	// query 是一个对象，包含了所有的查询参数
+export async function getServerSideProps(context: GetServerSidePropsContext) {
+	const { query } = context;
+	console.log(query);
+	// 确保 query 存在，并安全解构 userName 和 displayName
+	if (!query || (!('userName' in query) && !('displayName' in query))) {
+		return {
+			props: {}
+		};
+	}
 	const { userName, displayName } = query;
-	const user = userName as string || "DujunX";
-	const nick = displayName as string || "Du Jun";
+
+	// 检查 userName 和 displayName 是否同时存在或同时不存在
+	const hasUserName = !!userName;
+	const hasDisplayName = !!displayName;
+
+	if (hasUserName !== hasDisplayName) {
+		// 如果两者状态不一致，返回 404
+		return {
+			notFound: true,
+		};
+	}
+
+	// 如果参数存在，继续渲染页面
+	return {
+		props: {
+			userName,
+			displayName,
+		},
+	};
+}
+
+const KOLIPage : React.FC = () => {
+	const { query } = useRouter();
+	// query 是一个对象，包含了所有的查询参数
+	const [userName, setUserName] = useState<string>("");
+	const [displayName, setDisplayName] = useState<string>("");
 	const [allPriceData, setAllPriceData] = useState<BTCPrice[]>([]);
 	const [priceData, setPriceData] = useState<BTCPrice[]>([]);
 	const [tweetData, setTweetData] = useState<TweetPost[]>([]);
@@ -63,7 +93,7 @@ const KOLIPage : React.FC = () => {
 		setPriceData(filteredData);
 	}
 	const fetchTweetData = async () => {
-		const data: any = await getTweetPostData(user, startTimestamp, endTimestamp);
+		const data: any = await getTweetPostData(userName, startTimestamp, endTimestamp);
 		if (data && data.length > 0) {
 			const formattedTweetData = data.map((item: any) => {
 				return {
@@ -88,17 +118,27 @@ const KOLIPage : React.FC = () => {
 		}
 	};
 	useEffect(() => {
+		if (Object.keys(query).length > 0) {
+			setUserName(query["userName"] as string);
+			setDisplayName(query["displayName"] as string);
+		}else{
+			setUserName("DujunX");
+			setDisplayName("Du Jun");
+		}
+	}, [query]);
+	useEffect(() => {
+		if (!userName || !displayName) return;
 		fetchBtcPrice().then(r => {
 			fetchTweetData().then(r => {
 				setLoading(false);
 			});
 		});
 		
-	}, []);
+	}, [userName,displayName]);
 
 	return (
 		<div style={{padding: '20px 100px'}}>
-			<KoliHeader nick={nick}/>
+			<KoliHeader nick={displayName}/>
 
 			<Card>
 				<div style={{position: 'relative'}}>

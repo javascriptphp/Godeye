@@ -1,8 +1,7 @@
 import React, {useEffect, useState} from 'react';
-import {Card, Col, Row, Spin} from 'antd';
-import {TweetCard} from "@/components/koli/TweetCard";
+import {Card, Col, Flex, Radio, Row, Spin} from 'antd';
 import {getHistoricalData, getTweetPostData} from "@/service";
-import {BTCPrice, MetricType, TweetPost} from "@/types";
+import {BTCPrice, DataRange, MetricType, TweetPost} from "@/types";
 import {formatTimestampToDate, formatTimestampToString, nYearsBeforeNowTimestamp} from "@/utils/time";
 import {BitcoinChart} from "@/components/koli/BitcoinChart";
 import {KoliFooter} from "@/components/koli/KoliFooter";
@@ -62,17 +61,29 @@ const KOLIPage : React.FC = () => {
 	const endTimestamp = new Date().getTime(); // 获取当前时间
 	const oneYearBeforeNowTimestamp = nYearsBeforeNowTimestamp(1);
 	const [startTimestamp, setStartTimestamp] = useState(oneYearBeforeNowTimestamp);
-	const onSelectedDataRange = async (range: number) => {
+	const [dataRange, setDataRange] = useState<DataRange>(DataRange.ONE_YEAR); // 默认显示全部数据
+
+	const handleRangeChange = async (dataRange: DataRange) => {
+		setDataRange(dataRange);
+		const range = dataRange.nYearsBefore;
+		// 这里可以根据range参数重新请求数据
 		setLoading(true); // 开始加载
 		if (range === -1) {
 			setStartTimestamp(0);
 		} else if (range === 1 || range === 2 || range === 5) {
 			setStartTimestamp(nYearsBeforeNowTimestamp(range));
 		}
-		await fetchTweetData();
-		processBtcPriceData();
-		setLoading(false); // 结束加载
 	};
+	const onUpdateFinished = () => {
+		setLoading(false);
+	};
+	
+	useEffect(() => {
+		console.log("当前时间戳："+formatTimestampToString(startTimestamp));
+		fetchTweetData().then(r => r);
+		processBtcPriceData();
+	}, [startTimestamp]);
+	
 	const fetchBtcPrice = async () => {
 		const response: any = await getHistoricalData("BTC", MetricType.BUY);
 		if (response && response.values && response.values.length > 0) {
@@ -141,6 +152,19 @@ const KOLIPage : React.FC = () => {
 			<KoliHeader nick={displayName}/>
 
 			<Card>
+				<Flex justify="center" style={{ marginBottom: 16 }}>
+					<Radio.Group
+						value={dataRange}
+						onChange={async (e) => await handleRangeChange(e.target.value)}
+						buttonStyle="solid"
+						disabled={loading}
+					>
+						<Radio.Button value={DataRange.ONE_YEAR}>{DataRange.ONE_YEAR.showText['zh']}</Radio.Button>
+						<Radio.Button value={DataRange.TWO_YEARS}>{DataRange.TWO_YEARS.showText['zh']}</Radio.Button>
+						<Radio.Button value={DataRange.FIVE_YEARS}>{DataRange.FIVE_YEARS.showText['zh']}</Radio.Button>
+						<Radio.Button value={DataRange.ALL}>{DataRange.ALL.showText['zh']}</Radio.Button>
+					</Radio.Group>
+				</Flex>
 				<div style={{position: 'relative'}}>
 					{loading && (
 						<div style={{
@@ -160,7 +184,7 @@ const KOLIPage : React.FC = () => {
 							<Spin size="large"/>
 						</div>
 					)}
-					<BitcoinChart prices={priceData} tweets={tweetData} onSelectedRange={onSelectedDataRange}/>
+					<BitcoinChart prices={priceData} tweets={tweetData} onUpdateFinished={onUpdateFinished}/>
 				</div>
 			</Card>
 

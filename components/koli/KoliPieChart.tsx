@@ -1,5 +1,5 @@
 import { EChartsOption } from "echarts";
-import React, { useEffect, useRef } from "react";
+import React, {useEffect, useRef, useState} from "react";
 import * as echarts from "echarts/core";
 import { PieChart } from "echarts/charts";
 import { LegendComponent } from "echarts/components";
@@ -9,9 +9,13 @@ echarts.use([PieChart, LegendComponent]);
 
 export const KoliPieChart = ({ data,type }: { data: Array<string>, type: '关键词'|'情感' }) => {
 	const chartRef = useRef<HTMLDivElement>(null);
+	const [prevProps, setPrevProps] = useState({data});
 
 	useEffect(() => {
 		if (!chartRef.current || !data || data.length === 0) return;
+		if (!data || data.length === 0) return;
+		if (data === prevProps.data) return;
+		setPrevProps({data});
 
 		const chart = echarts.init(chartRef.current);
 

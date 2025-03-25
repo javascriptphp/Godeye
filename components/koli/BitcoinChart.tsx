@@ -3,12 +3,10 @@ import * as echarts from 'echarts/core';
 import {LineChart, ScatterChart} from 'echarts/charts';
 import {DataZoomComponent, GridComponent, TitleComponent, TooltipComponent} from 'echarts/components';
 import {SVGRenderer} from 'echarts/renderers';
-import {BTCPrice, DataRange, TweetPost} from "@/types";
+import {BTCPrice, TweetPost} from "@/types";
 import {formatTimestampToDate} from "@/utils/time";
 import {TweetModal} from "@/components/koli/TweetModal";
 import {useTranslation} from "react-i18next";
-import {Flex, Radio} from 'antd';
-import useStore from "@/utils/store";
 
 // 注册必要组件
 echarts.use([LineChart, TooltipComponent, DataZoomComponent, GridComponent, SVGRenderer, TitleComponent, ScatterChart]);
@@ -22,26 +20,19 @@ const colorOfSentiment = (sentiment: string): string => {
 		return "#666666";
 	}
 };
-export const BitcoinChart = ({prices, tweets, onSelectedRange}: { prices: BTCPrice[], tweets: TweetPost[], onSelectedRange: (range: number)=>void }) => {
+export const BitcoinChart = ({prices, tweets, onUpdateFinished}: { prices: BTCPrice[], tweets: TweetPost[], onUpdateFinished: VoidFunction}) => {
 	const [prevProps, setPrevProps] = useState({prices,tweets});
 	const chartRef = useRef<HTMLDivElement>(null);
 	const [isModalVisible, setIsModalVisible] = useState(false);
 	const [selectedTweet, setSelectedTweet] = useState<TweetPost>();
-	const [dataRange, setDataRange] = useState<DataRange>(DataRange.ONE_YEAR); // 默认显示全部数据
 	const {t} = useTranslation(undefined, {lng:'zh'});
-	const { systemContext } = useStore();
-
-	const handleRangeChange = (range: DataRange) => {
-		setDataRange(range);
-		// 这里可以根据range参数重新请求数据
-		onSelectedRange(range.nYearsBefore)
-	};
 
 	useEffect(() => {
 		if (!chartRef.current) return;
 		if (!prices || prices.length === 0 || !tweets || tweets.length === 0) return;
 		if (prices === prevProps.prices || tweets === prevProps.tweets) return;
 		setPrevProps({prices,tweets});
+		
 		const chart = echarts.init(chartRef.current);
 		// 添加点击事件监听器
 		chart.on('click', (params) => {
@@ -116,6 +107,7 @@ export const BitcoinChart = ({prices, tweets, onSelectedRange}: { prices: BTCPri
 		};
 
 		chart.setOption(option);
+		onUpdateFinished();
 
 		const handleResize = () => {
 			chart.resize();
@@ -126,18 +118,6 @@ export const BitcoinChart = ({prices, tweets, onSelectedRange}: { prices: BTCPri
 
 	return (
 		<>
-			{/*<Flex justify="center" style={{ marginBottom: 16 }}>*/}
-			{/*	<Radio.Group*/}
-			{/*		value={dataRange}*/}
-			{/*		onChange={(e) => handleRangeChange(e.target.value)}*/}
-			{/*		buttonStyle="solid"*/}
-			{/*	>*/}
-			{/*		<Radio.Button value={DataRange.ONE_YEAR}>{DataRange.ONE_YEAR.showText['zh']}</Radio.Button>*/}
-			{/*		<Radio.Button value={DataRange.TWO_YEARS}>{DataRange.TWO_YEARS.showText['zh']}</Radio.Button>*/}
-			{/*		<Radio.Button value={DataRange.FIVE_YEARS}>{DataRange.FIVE_YEARS.showText['zh']}</Radio.Button>*/}
-			{/*		<Radio.Button value={DataRange.ALL}>{DataRange.ALL.showText['zh']}</Radio.Button>*/}
-			{/*	</Radio.Group>*/}
-			{/*</Flex>*/}
 			<div ref={chartRef} style={{width: '100%', height: 700}}/>
 			{isModalVisible && selectedTweet && (
 				<TweetModal isModalVisible={isModalVisible} setIsModalVisible={setIsModalVisible} prices={prices}

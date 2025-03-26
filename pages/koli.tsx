@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Card, Col, Flex, Radio, Row, Spin} from 'antd';
+import {Button, Card, Col, Flex, Radio, Row, Spin} from 'antd';
 import {getHistoricalData, getTweetPostData} from "@/service";
 import {BTCPrice, DataRange, MetricType, TweetPost} from "@/types";
 import {formatTimestampToDate, formatTimestampToString, nYearsBeforeNowTimestamp} from "@/utils/time";
@@ -9,6 +9,8 @@ import {KoliHeader} from "@/components/koli/KoliHeader";
 import {KoliPieChart} from "@/components/koli/KoliPieChart";
 import {useRouter} from "next/router";
 import {GetServerSidePropsContext} from "next";
+import Link from "next/link";
+import styled from "styled-components";
 
 const formatPriceData = (data: any): BTCPrice[] => {
 	return data.map((item: any) => {
@@ -48,7 +50,32 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
 		},
 	};
 }
+const NavButton = styled(Button)`
+    width: 100%;
+    height: 45px;
+    background: linear-gradient(90deg, #b1fb83 0%, #28e89b 100%);
+    border: none;
+    border-radius: 6px;
+    font-weight: 500;
+    font-size: 16px;
+    margin-top: 20px;
+    color: #000;
 
+    &:hover {
+        background: linear-gradient(90deg, #c5fc9e 0%, #3dfbad 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(40, 232, 155, 0.3);
+        color: #000;
+    }
+
+    &:active {
+        transform: translateY(0);
+    }
+
+    &.ant-btn-loading {
+        opacity: 0.8;
+    }
+`;
 const KOLIPage : React.FC = () => {
 	const { query } = useRouter();
 	// query 是一个对象，包含了所有的查询参数
@@ -149,6 +176,11 @@ const KOLIPage : React.FC = () => {
 
 	return (
 		<div style={{padding: '20px 100px'}}>
+			<Row justify="end">
+				<Col span={2} >
+					<NavButton href={"https://www.godeye.top/NFTmint"}>NFT Mint</NavButton>
+				</Col>
+			</Row>
 			<KoliHeader nick={displayName}/>
 
 			<Card>

@@ -76,6 +76,42 @@ const NavButton = styled(Button)`
         opacity: 0.8;
     }
 `;
+// 响应式导航按钮容器
+const ResponsiveNavRow = styled(Row)`
+  && {
+    justify-content: center;
+    
+    @media (min-width: 576px) {
+      justify-content: flex-end;
+    }
+  }
+`;
+
+// 响应式导航列
+const ResponsiveNavCol = styled(Col)`
+  && {
+    width: auto;
+    flex: 0 0 auto;
+    
+    @media (max-width: 575px) {
+      margin-bottom: 16px;
+    }
+  }
+`;
+
+// 响应式导航按钮
+const ResponsiveNavButton = styled(NavButton)`
+  && {
+    white-space: nowrap;
+    padding: 8px 16px;
+    font-size: 14px;
+    
+    @media (min-width: 576px) {
+      padding: 8px 24px;
+      font-size: 16px;
+    }
+  }
+`;
 const KOLIPage : React.FC = () => {
 	const { query } = useRouter();
 	// query 是一个对象，包含了所有的查询参数
@@ -175,12 +211,14 @@ const KOLIPage : React.FC = () => {
 	}, [userName,displayName]);
 
 	return (
-		<div style={{padding: '20px 100px'}}>
-			<Row justify="end">
-				<Col span={2} >
-					<NavButton href={"https://www.godeye.top/NFTmint"}>NFT Mint</NavButton>
-				</Col>
-			</Row>
+		<PageContainer>
+			<ResponsiveNavRow>
+				<ResponsiveNavCol>
+					<ResponsiveNavButton href={"https://www.godeye.top/NFTmint"}>
+						NFT Mint
+					</ResponsiveNavButton>
+				</ResponsiveNavCol>
+			</ResponsiveNavRow>
 			<KoliHeader nick={displayName}/>
 
 			<Card>
@@ -220,8 +258,8 @@ const KOLIPage : React.FC = () => {
 				</div>
 			</Card>
 
-			<Row gutter={24} style={{marginTop: 24}}>
-				<Col span={12}>
+			<Row gutter={[24, 24]} style={{marginTop: 24}}>
+				<Col xs={24} sm={24} md={12} lg={12} xl={12}>
 					<Card>
 						<div style={{position: 'relative'}}>
 							{loading && (
@@ -234,9 +272,9 @@ const KOLIPage : React.FC = () => {
 									display: 'flex',
 									justifyContent: 'center',
 									alignItems: 'center',
-									background: 'radial-gradient(circle, rgba(20, 20, 20, 0.8), rgba(0, 0, 0, 0))', // 径向渐变
-									backdropFilter: 'blur(8px)', // 高斯模糊效果
-									WebkitBackdropFilter: 'blur(8px)', // 兼容 Safari
+									background: 'radial-gradient(circle, rgba(20, 20, 20, 0.8), rgba(0, 0, 0, 0))',
+									backdropFilter: 'blur(8px)',
+									WebkitBackdropFilter: 'blur(8px)',
 									zIndex: 1000,
 								}}>
 									<Spin size="large"/>
@@ -246,7 +284,7 @@ const KOLIPage : React.FC = () => {
 						</div>
 					</Card>
 				</Col>
-				<Col span={12}>
+				<Col xs={24} sm={24} md={12} lg={12} xl={12}>
 					<Card>
 						<div style={{position: 'relative'}}>
 							{loading && (
@@ -259,9 +297,9 @@ const KOLIPage : React.FC = () => {
 									display: 'flex',
 									justifyContent: 'center',
 									alignItems: 'center',
-									background: 'radial-gradient(circle, rgba(20, 20, 20, 0.8), rgba(0, 0, 0, 0))', // 径向渐变
-									backdropFilter: 'blur(8px)', // 高斯模糊效果
-									WebkitBackdropFilter: 'blur(8px)', // 兼容 Safari
+									background: 'radial-gradient(circle, rgba(20, 20, 20, 0.8), rgba(0, 0, 0, 0))',
+									backdropFilter: 'blur(8px)',
+									WebkitBackdropFilter: 'blur(8px)',
 									zIndex: 1000,
 								}}>
 									<Spin size="large"/>
@@ -278,7 +316,20 @@ const KOLIPage : React.FC = () => {
 			{/*</Card>*/}
 
 			<KoliFooter/>
-		</div>
+		</PageContainer>
 	)
 }
 export default KOLIPage;
+const PageContainer = styled.div`
+    padding: 20px;
+    max-width: 100%;
+    overflow-x: hidden;
+
+    @media (min-width: 576px) {
+		    padding: 20px 40px;
+		}
+
+    @media (min-width: 992px) {
+        padding: 20px 100px;
+    }
+`;

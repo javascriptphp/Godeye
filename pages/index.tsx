@@ -1,10 +1,7 @@
-import Layout from "@/components/Layout";
-import HomePage from "@/pages/home";
+import KOLIPage from "@/pages/koli";
 
 export default function Home() {
-    return (
-        <Layout>
-            <HomePage />
-        </Layout>
-    );
+	return (
+		<KOLIPage/>
+	);
 }

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Button, Card, Col, Flex, Radio, Row, Spin, Tooltip} from 'antd';
+import {Button, Card, Col, Flex, Radio, Row, Spin, Tooltip, Popover} from 'antd';
 import { QuestionCircleOutlined } from "@ant-design/icons";
 import {getHistoricalData, getTweetPostData} from "@/service";
 import {BTCPrice, DataRange, MetricType, TweetPost} from "@/types";
@@ -213,15 +213,32 @@ const KOLIPage : React.FC = () => {
 
 	const urlSearch = new URLSearchParams(query);
 
+	const rewardContent = (
+		<div style={{width: 400}}>
+		  <p>由于推特API成本很高，目前每人每天仅可免费使用2次。</p>
+		  <p>您可以通过打赏获取更多的使用次数，打赏完成后请发送您的打赏截图和推特账号到godeye2099@outlook.com，我们将帮您增加使用次数。</p>
+		  <p>您打赏的金额越多，未来获得的Token空投越多！</p>
+		  <br/>
+		  <p>打赏地址(仅限usdt，不少于10usdt):TRC20 ：TCUrNtyVxS4ELtZSN5TvJQK4yN3EK4Xxue；Ethereum/Optimism/Arbitrum ：0x16fe461fca0c3cd993f2fa8ef8b7daf27909a72a</p>
+		</div>
+	  );
+
 	return (
 		<PageContainer>
 			<ResponsiveNavRow>
+			<ResponsiveNavCol className='mr-4'>
+					<Popover content={rewardContent} title="" trigger="hover" open>
+						<ResponsiveNavButton>
+							打赏
+						</ResponsiveNavButton>
+					</Popover>
+				</ResponsiveNavCol>	
 				<ResponsiveNavCol>
 					<Tooltip placement="top" title={'如果您认为此KOL质量较高，可以为此KOL mint NFT，后续您和此KOL将获得更多的空投代币奖励。'}>
-+						<ResponsiveNavButton href={`/mint?${urlSearch}`}>
-+							Support KOL
-+						</ResponsiveNavButton>
-+					</Tooltip>
+						<ResponsiveNavButton href={`/mint?${urlSearch}`}>
+							Support KOL
+						</ResponsiveNavButton>
+					</Tooltip>
 				</ResponsiveNavCol>
 			</ResponsiveNavRow>
 			<KoliHeader nick={displayName}/>

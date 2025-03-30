@@ -7,7 +7,7 @@ export const KoliHeader = ({nick}: { nick: string }) => {
 		<div style={{
 			textAlign: 'center',
 			maxWidth: 800,
-			margin: '40px auto',
+			margin: '-40px auto 40px auto', //为了和nft mint按钮并排临时处理
 			padding: '0 24px'
 		}}>
 			{/* 主标题 */}

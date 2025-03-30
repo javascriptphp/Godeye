@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import {Button, Card, Col, Flex, Radio, Row, Spin} from 'antd';
+import {Button, Card, Col, Flex, Radio, Row, Spin, Tooltip} from 'antd';
+import { QuestionCircleOutlined } from "@ant-design/icons";
 import {getHistoricalData, getTweetPostData} from "@/service";
 import {BTCPrice, DataRange, MetricType, TweetPost} from "@/types";
 import {formatTimestampToDate, formatTimestampToString, nYearsBeforeNowTimestamp} from "@/utils/time";
@@ -210,13 +211,17 @@ const KOLIPage : React.FC = () => {
 		
 	}, [userName,displayName]);
 
+	const urlSearch = new URLSearchParams(query);
+
 	return (
 		<PageContainer>
 			<ResponsiveNavRow>
 				<ResponsiveNavCol>
-					<ResponsiveNavButton href={"https://www.godeye.top/NFTmint"}>
-						NFT Mint
-					</ResponsiveNavButton>
+					<Tooltip placement="top" title={'如果您认为此KOL质量较高，可以为此KOL mint NFT，后续您和此KOL将获得更多的空投代币奖励。'}>
++						<ResponsiveNavButton href={`/mint?${urlSearch}`}>
++							Support KOL
++						</ResponsiveNavButton>
++					</Tooltip>
 				</ResponsiveNavCol>
 			</ResponsiveNavRow>
 			<KoliHeader nick={displayName}/>
